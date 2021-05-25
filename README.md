@@ -1,4 +1,4 @@
-Server IP : 	3.129.93.221
+Server IP : 	http://157.175.103.0/
 
 Database Root Password : Ommmmmm@909090
 
