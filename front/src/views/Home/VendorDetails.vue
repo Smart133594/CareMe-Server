@@ -180,7 +180,8 @@ export default {
             this.products = products;
             let servicies = response.data.data.servicies;
             this.servicies = servicies;
-            this.filteredProducts = response.data.data.servicies;
+
+            this.filteredProducts = response.data.data.products;
             this.filteredServicies = response.data.data.servicies;
           }
         })
@@ -222,7 +223,6 @@ export default {
               this.filteredProducts = this.products;
               this.filteredServicies = this.servicies;
           }
-
       }
   }
 };
