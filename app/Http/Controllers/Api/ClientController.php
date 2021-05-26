@@ -135,7 +135,10 @@ class ClientController extends Controller{
         $categories = Category::where('active', true)->orderBy('id')->get();
         $cities = City::orderBy('id')->get();
         foreach ($categories as $category) {
-            $category->vendors;
+            $vendors = $category->vendors;
+            foreach ($vendors as $vendor) {
+                $vendor->departments;
+            }
         }
 
         $result = ['cities' => $cities, 'categories' => $categories];
@@ -149,6 +152,7 @@ class ClientController extends Controller{
         $vendor = Vendor::find($vendor_id);
         $vendor->images;
         $vendor->city;
+        $vendor->departments;
 
         $servicies = DB::table('services')
             ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
@@ -187,15 +191,24 @@ class ClientController extends Controller{
         $selected_categories = $request->selected_categories;
         $selected_pricies = $request->selected_pricies;
         $selected_vendors = $request->selected_vendors;
+        $selected_departments = $request->selected_departments;
         $selected_discount = $request->selected_discount;
 
         $query = DB::table('services')
             ->where('services.active', true)
             ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
-            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id');
+            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->where('departments.active', true)
+            ->where('vendors.active', true)
+            ->where('categories.active', true);
+
+        if(count($selected_departments)){
+            $query = $query->whereIn('departments.id', $selected_departments);
+        }
 
         if(count($selected_vendors)){
-            $query = $query-> whereIn('vendors.id', $selected_vendors);
+            $query = $query->whereIn('vendors.id', $selected_vendors);
         }
 
         if(count($selected_cities)){
@@ -204,8 +217,7 @@ class ClientController extends Controller{
         }
 
         if(count($selected_categories)){
-            $query = $query->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
-                    ->whereIn('categories.id', $selected_categories);
+            $query = $query->whereIn('categories.id', $selected_categories);
         }
 
         if(count($selected_pricies)){
@@ -232,12 +244,21 @@ class ClientController extends Controller{
         $selected_categories = $request->selected_categories;
         $selected_pricies = $request->selected_pricies;
         $selected_vendors = $request->selected_vendors;
+        $selected_departments = $request->selected_departments;
         $selected_discount = $request->selected_discount;
 
         $query = DB::table('products')
             ->where('products.active', true)
             ->leftJoin('departments', 'departments.id', '=', 'products.department_id')
-            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id');
+            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->where('departments.active', true)
+            ->where('vendors.active', true)
+            ->where('categories.active', true);
+
+        if(count($selected_departments)){
+            $query = $query-> whereIn('departments.id', $selected_departments);
+        }
 
         if(count($selected_vendors)){
             $query = $query-> whereIn('vendors.id', $selected_vendors);
@@ -249,8 +270,7 @@ class ClientController extends Controller{
         }
 
         if(count($selected_categories)){
-            $query = $query->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
-                    ->whereIn('categories.id', $selected_categories);
+            $query = $query->whereIn('categories.id', $selected_categories);
         }
 
         if(count($selected_pricies)){

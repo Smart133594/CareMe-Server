@@ -7,6 +7,7 @@
           :category="true"
           :city="true"
           :vendor="true"
+          :department="true"
           :price="true"
           :discount="true"
           :url="'service'"
@@ -49,7 +50,6 @@ export default {
       if (city_ids != -1) {
         selectedCities = city_ids.split(",");
       }
-
       return selectedCities;
     },
     getVendorIds() {
@@ -60,7 +60,14 @@ export default {
       }
       return selectedVendors;
     },
-
+    getDepartmentIds() {
+      let department_ids = this.$route.params.department_id;
+      let selectedDepartments = [];
+      if (department_ids != "-1") {
+        selectedDepartments = department_ids.split(",");
+      }
+      return selectedDepartments;
+    },
     getFilterPricies() {
       let pricies = this.$route.params.pricies;
       let filterPricies = [];
@@ -95,6 +102,7 @@ export default {
         selected_cities: this.getCityIds,
         selected_categories: this.getCategoryIds,
         selected_vendors: this.getVendorIds,
+        selected_departments: this.getDepartmentIds,
         selected_pricies: this.getFilterPricies,
         selected_discount: this.getFilterDiscount,
       };
@@ -142,6 +150,13 @@ export default {
     },
 
     getVendorIds() {
+      if (this.path != this.$route.path) {
+        this.getServicies();
+        this.path = this.$route.path;
+      }
+    },
+
+    getDepartmentIds() {
       if (this.path != this.$route.path) {
         this.getServicies();
         this.path = this.$route.path;

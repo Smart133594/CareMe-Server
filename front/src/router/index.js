@@ -42,7 +42,7 @@ export default new Router({
                     component: VendorDetails,
                 },
                 {
-                    path: '/servicies/:city_id/:category_id/:vendor_id/:pricies/:discount',
+                    path: '/servicies/:city_id/:category_id/:vendor_id/:department_id/:pricies/:discount',
                     component: Servicies,
                 },
                 {
@@ -50,7 +50,7 @@ export default new Router({
                     component: Service,
                 },
                 {
-                    path: '/products/:city_id/:category_id/:vendor_id/:pricies/:discount',
+                    path: '/products/:city_id/:category_id/:vendor_id/:department_id/:pricies/:discount',
                     component: Products,
                 },
                 {

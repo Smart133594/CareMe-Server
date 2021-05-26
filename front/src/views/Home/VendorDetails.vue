@@ -84,13 +84,45 @@
           </div> -->
         </v-col>
       </v-row>
-
+      <v-divider />
       <v-row class="mt-5">
-        <v-divider />
-        <hot-deals
-          :servicies="servicies"
-          :products="products"
-        ></hot-deals>
+        <v-row>
+          <v-col xl="3" lg="3" md="3" sm="12" cols="12" class="shop-wrapper">
+            <v-card class="shop-filter">
+              <v-list>
+                <app-card>
+                  <div class="filter-tilte">
+                    <h6 class="text-purple font-weight--bold">
+                      {{ $t("message.department") }}
+                    </h6>
+                  </div>
+                  <div class="content" style="max-height:500px">
+                    <v-checkbox
+                      :label="
+                        item[
+                          selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'
+                        ]
+                      "
+                      v-model="selectedDepartments"
+                      :value="item.id"
+                      hide-details
+                      v-for="(item, index) in vendor.departments"
+                      :key="`${index}_department`"
+                    >
+                    </v-checkbox>
+                  </div>
+                </app-card>
+              </v-list>
+            </v-card>
+          </v-col>
+          <v-col xl="9" lg="9" md="9" sm="12" cols="12">
+            <hot-deals
+              :small="true"
+              :servicies="filteredServicies"
+              :products="filteredProducts"
+            ></hot-deals>
+          </v-col>
+        </v-row>
       </v-row>
     </div>
   </div>
@@ -120,8 +152,11 @@ export default {
       mapOptions: {
         disableDefaultUI: true,
       },
-      products:[],
-      servicies:[],
+      products: [],
+      servicies: [],
+      filteredProducts: [],
+      filteredServicies: [],
+      selectedDepartments: [],
     };
   },
   methods: {
@@ -141,11 +176,12 @@ export default {
             this.marker.position.lng = this.vendor.lng;
             this.center.lat = this.marker.position.lat;
             this.center.lng = this.marker.position.lng;
-
             let products = response.data.data.products;
             this.products = products;
             let servicies = response.data.data.servicies;
             this.servicies = servicies;
+            this.filteredProducts = response.data.data.servicies;
+            this.filteredServicies = response.data.data.servicies;
           }
         })
         .catch((error) => {
@@ -176,6 +212,19 @@ export default {
     this.vendor_id = vendor_id;
     this.getVendor();
   },
+
+  watch:{
+      selectedDepartments(){
+          if(this.selectedDepartments.length){
+              this.filteredServicies = this.servicies.filter(service => this.selectedDepartments.includes(service.department_id))
+              this.filteredProducts = this.products.filter(product => this.selectedDepartments.includes(product.department_id))
+          }else{
+              this.filteredProducts = this.products;
+              this.filteredServicies = this.servicies;
+          }
+
+      }
+  }
 };
 </script>
 

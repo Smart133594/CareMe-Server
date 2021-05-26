@@ -34,10 +34,10 @@
           <b-nav-item href="/vendors/-1/-1" class="scroll"
             ><span>{{ $t("message.vendors") }}</span></b-nav-item
           >
-          <b-nav-item href="/servicies/-1/-1/-1/0,0/0,0" class="scroll"
+          <b-nav-item href="/servicies/-1/-1/-1/-1/0,0/0,0" class="scroll"
             ><span>{{ $t("message.servicies") }}</span></b-nav-item
           >
-          <b-nav-item href="/products/-1/-1/-1/0,0/0,0" class="scroll"
+          <b-nav-item href="/products/-1/-1/-1/-1/0,0/0,0" class="scroll"
             ><span>{{ $t("message.products") }}</span></b-nav-item
           >
         </b-navbar-nav>

@@ -60,6 +60,24 @@
           </v-checkbox>
         </div>
       </app-card>
+      <app-card v-if="department">
+        <div class="filter-tilte">
+          <h6 class="text-purple font-weight--bold">
+            {{ $t("message.department") }}
+          </h6>
+        </div>
+        <div class="content">
+          <v-checkbox
+            :label="item[selectedLocale.locale == 'en' ? 'en_name' : 'ar_name']"
+            style="margin-top: -15px"
+            v-model="selectedDepartments"
+            v-for="(item, index) in departments"
+            :key="`${index}_department`"
+            :value="item.id.toString()"
+          >
+          </v-checkbox>
+        </div>
+      </app-card>
       <app-card v-if="price">
         <div class="filter-tilte">
           <h6 class="text-purple font-weight--bold">
@@ -122,6 +140,10 @@ export default {
       required: false,
       default: false,
     },
+    department: {
+      required: false,
+      default: false,
+    },
     price: {
       required: false,
       default: false,
@@ -153,7 +175,9 @@ export default {
       selectedVendors: [],
       selectedPricies: "",
       selectedDiscounts: [],
+      selectedDepartments:[],
       vendors: [],
+      departments: [],
 
       pricies: [
         { id: 1, text: "0 - 10", value: '0,10' },
@@ -191,6 +215,14 @@ export default {
               });
             });
             this.vendors = vendors;
+
+            let departments = [];
+            this.vendors.forEach(vendor => {
+               vendor.departments.forEach(element => {
+                departments.push(element);
+               });
+            });
+            this.departments = departments;
           }
         })
         .finally(() => {
@@ -199,7 +231,6 @@ export default {
     },
 
     checkFilter() {
-        console.log(this.selectedPricies)
       let category_ids = this.selectedCategories.join();
       let city_ids = this.selectedCities.join();
       if (city_ids == "") {
@@ -217,12 +248,17 @@ export default {
           vendor_ids = "-1";
         }
 
+        let department_ids = this.selectedDepartments.join();
+        if (department_ids == "") {
+          department_ids = "-1";
+        }
+
         let pricies = this.selectedPricies;
         let discounts = this.selectedDiscounts;
         if (this.url == "service")
-          path = `/servicies/${city_ids}/${category_ids}/${vendor_ids}/${pricies}/${discounts}`;
+          path = `/servicies/${city_ids}/${category_ids}/${vendor_ids}/${department_ids}/${pricies}/${discounts}`;
         else
-          path = `/products/${city_ids}/${category_ids}/${vendor_ids}/${pricies}/${discounts}`;
+          path = `/products/${city_ids}/${category_ids}/${vendor_ids}/${department_ids}/${pricies}/${discounts}`;
       }
 
       if (this.$route.path != path) {
@@ -245,6 +281,11 @@ export default {
       let vendor_ids = this.$route.params.vendor_id;
       if (vendor_ids != "-1") {
         this.selectedVendors = vendor_ids.split(",");
+      }
+
+      let department_ids = this.$route.params.department_id;
+      if (department_ids != "-1") {
+        this.selectedDepartments = department_ids.split(",");
       }
 
       let pricies = this.$route.params.pricies;
@@ -287,11 +328,42 @@ export default {
       this.checkFilter();
     },
 
-    selectedCities() {
+    selectedVendors() {
+      let departments = [];
+      let selectedDepartments = [];
+
+      this.vendors.forEach((vendor) => {
+        vendor.departments.forEach((element) => {
+          let isOk = false;
+          if (this.selectedVendors.length) {
+            if (this.selectedVendors.includes(vendor.id.toString())) {
+              isOk = true;
+            }
+          } else {
+            isOk = true;
+          }
+
+          if (isOk) {
+            departments.push(element);
+            if (this.selectedDepartments.length) {
+              if (this.selectedDepartments.includes(element.id.toString())) {
+                selectedDepartments.push(element.id.toString());
+              }
+            }
+          }
+        });
+      });
+
+      this.departments = departments;
+      this.selectedDepartments = selectedDepartments;
       this.checkFilter();
     },
 
-    selectedVendors() {
+    selectedDepartments() {
+      this.checkFilter();
+    },
+
+    selectedCities() {
       this.checkFilter();
     },
 
