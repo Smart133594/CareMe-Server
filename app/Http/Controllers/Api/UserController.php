@@ -22,7 +22,7 @@ class UserController extends Controller{
 
     public function makeRandomNumber(){
 
-        return rand(10000000,99999999);
+        return rand(100000,999999);
     }
 
     public function sendCode2Phone($phone) {
@@ -34,7 +34,7 @@ class UserController extends Controller{
             ->create($phone, // to
                     array(
                         "messagingServiceSid" => "MGf0666bf871af98403c71568ac653c139",
-                        "body" => "From CareMe \n Verification code : ".$randomNumber
+                        "body" => "<#> Welcome to AwsomeProject. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/"
                     )
             );
         return $randomNumber;
@@ -51,18 +51,19 @@ class UserController extends Controller{
         $phone = $request->phone;
         $forgot = $request->forgot;
         $email = $request->email;
+
         if($forgot){
             $iCount = User::where(['phone' => $phone])->get()->count();
             if($iCount == 0){
                 return response()->json([
-                    'success'=>0,
+                    'success'=> false,
                 ]);
             }
         }else{
             $iCount = User::where(['phone' => $phone])->orWhere(['email' => $email])->get()->count();
             if($iCount > 0){
                 return response()->json([
-                    'success'=>0,
+                    'success'=> false,
                 ]);
             }
         }
@@ -88,7 +89,6 @@ class UserController extends Controller{
             if($verification){
                 $verify_code = $request->verify_code;
                 if($verification->code == $verify_code){
-                    $phone = $request->phone;
                     return response()->json([
                         'success'=>true,
                     ]);
