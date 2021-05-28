@@ -40,10 +40,28 @@
           <b-nav-item href="/products/-1/-1/-1/-1/0,0/0,0" class="scroll"
             ><span>{{ $t("message.products") }}</span></b-nav-item
           >
+          <b-nav-item
+            v-for="language in languages"
+            :key="language.name"
+            @click="changeLanguage(language)"
+            class="scroll language-nav"
+          >
+            <img
+              class="img-responsive mr-3"
+              :src="`/static/flag-icons/${language.icon}.png`"
+            />
+            <span>{{ language.name }}</span>
+          </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
       <language-provider></language-provider>
+      <b-btn-group class="header-config-wrapper">
+        <b-btn class="header-config" @click="toggleClass('addClass', 'active')"
+          ><i class="far fa-search"></i
+        ></b-btn>
+      </b-btn-group>
     </div>
+    <OffcanvasSearchBox :searchItems="searchItems" />
   </b-navbar>
 </template>
 
@@ -52,17 +70,24 @@ import LanguageProvider from "../Header/LanguageProvider";
 import Vue from "vue";
 import { mapGetters } from "vuex";
 import AppLogo from "Components/AppLogo/AppLogo";
+import OffcanvasSearchBox from "./OffcanvasSearchBox";
+import api from "Api";
+import appConfig from "Constants/AppConfig";
 
 export default {
   components: {
     LanguageProvider,
     AppLogo,
+    OffcanvasSearchBox,
   },
   data() {
-    return {};
+    return {
+      searchItems: null,
+      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+    };
   },
   computed: {
-    ...mapGetters(["getUser"]),
+    ...mapGetters(["getUser", "languages"]),
   },
   mounted() {
     // (function () {
@@ -108,9 +133,38 @@ export default {
       }
     },
     handleScroll() {},
+    changeLanguage(language) {
+      this.$i18n.locale = language.locale;
+      this.$store.dispatch("changeLanguage", language);
+    },
+    toggleClass(addRemoveClass, className) {
+      const el = document.querySelector("#search-overlay");
+      if (addRemoveClass === "addClass") {
+        el.classList.add(className);
+      } else {
+        el.classList.remove(className);
+      }
+    },
+
+    getSearchItems() {
+      api
+        .get("getSearchItems", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            this.searchItems = response.data.data;
+          }
+        })
+    },
   },
   created() {},
   destroyed() {},
+  beforeMount() {
+    this.getSearchItems();
+  },
 };
 </script>
 

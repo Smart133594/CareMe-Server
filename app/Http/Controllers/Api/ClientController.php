@@ -32,6 +32,58 @@ class ClientController extends Controller{
     public function __construct(){
 
     }
+
+    public function getSearchItems(Request $request){
+        $categories = Category::where('active', true)->orderBy('id')->get();
+        $vendors = DB::table('vendors')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->leftJoin('vendor_galleries', 'vendor_galleries.vendor_id', '=', 'vendors.id')
+            ->where('categories.active', true)
+            ->where('vendors.active', true)
+            ->select('vendors.*', 'vendor_galleries.image')
+            ->groupBy('vendors.id')
+            ->orderBy('rating', 'desc')
+            ->orderBy('id')
+            ->get();
+
+            $servicies = DB::table('services')
+            ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
+            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->where('categories.active', true)
+            ->where('vendors.active', true)
+            ->where('departments.active', true)
+            ->where('services.active', true)
+            ->orderBy('rating', 'desc')
+            ->orderBy('id')
+            ->select('services.*')
+            ->get();
+
+        $products = DB::table('products')
+            ->leftJoin('departments', 'departments.id', '=', 'products.department_id')
+            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->where('categories.active', true)
+            ->where('vendors.active', true)
+            ->where('departments.active', true)
+            ->where('products.active', true)
+            ->select('products.*')
+            ->groupBy('vendors.id')
+            ->orderBy('rating', 'desc')
+            ->orderBy('id')
+            ->get();
+
+        $result = [
+            'categories' => $categories,
+            'vendors' => $vendors,
+            'servicies'=>$servicies,
+            'products'=>$products,
+        ];
+        return response()->json([
+            'success'=>true,
+            'data'=>$result
+        ]);
+    }
     // Banners
     public function getFrontData(Request $request){
 

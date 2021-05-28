@@ -160,17 +160,16 @@ export default {
     },
 
     viewAllServicies(){
-        this.$router.push(`/servicies/-1/-1/-1/0,0/0,0`);
+        this.$router.push(`/servicies/-1/-1/-1/-1/0,0/0,0`);
     },
     viewAllProducts(){
-        this.$router.push(`/products/-1/-1/-1/0,0/0,0`);
+        this.$router.push(`/products/-1/-1/-1/-1/0,0/0,0`);
     }
   },
 
   beforeMount() {
     this.getFrontData();
   },
-
   mounted() {},
 };
 </script>

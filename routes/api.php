@@ -23,6 +23,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
+    Route::get('getSearchItems', 'ClientController@getSearchItems');
     Route::get('getFrontData', 'ClientController@getFrontData');
     Route::post('getVendors', 'ClientController@getVendors');
     Route::get('getFilterData', 'ClientController@getFilterData');

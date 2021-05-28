@@ -1,8 +1,8 @@
 <template>
   <div class="container shop-wrapper p-0">
     <app-section-loader :status="loading"></app-section-loader>
-    <v-row class="px-0">
-      <v-col xl="3" lg="3" md="3" sm="0" xs="0" class="shop-wrapper px-0">
+    <v-row class="shop-content">
+      <v-col xl="3" lg="3" md="3" sm="0" xs="0" class="px-0">
         <filter-bar
           :category="true"
           :city="true"
@@ -14,7 +14,7 @@
         >
         </filter-bar>
       </v-col>
-      <v-col xl="9" lg="9" md="9" sm="12" cols="12">
+      <v-col xl="9" lg="9" md="9" sm="12" cols="12" class="item-content">
         <product-items :products="products" :small="true"></product-items>
       </v-col>
     </v-row>
