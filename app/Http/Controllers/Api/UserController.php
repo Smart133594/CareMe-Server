@@ -159,14 +159,12 @@ class UserController extends Controller{
             // $all['customer_id'] = $feedback['data']['id'];
         }
 
-        print_r($feedback);
-        print_r('-----------------------------');
-        print_r(json_decode($feedback));
+        print_r($feedback['data']);
 
-        // User::create($all);
-        return response()->json([
-            'success'=>true,
-        ]);
+        // // User::create($all);
+        // return response()->json([
+        //     'success'=>true,
+        // ]);
     }
 
     public function signin(Request $request){
