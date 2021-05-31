@@ -158,9 +158,10 @@ class UserController extends Controller{
             $all['customer_id'] = $feedback['data']['id'];
         }
 
-        User::create($all);
+        // User::create($all);
         return response()->json([
             'success'=>true,
+            'data'=>$feedback
         ]);
     }
 
