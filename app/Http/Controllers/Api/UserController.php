@@ -155,7 +155,7 @@ class UserController extends Controller{
         $fields['client_customer_id'] = $phone;
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/customers', "POST", json_encode($fields));
         if(!is_null($feedback)){
-            $all['customer_id'] = $feedback['data']['id'];
+            // $all['customer_id'] = $feedback['data']['id'];
         }
 
         // User::create($all);
