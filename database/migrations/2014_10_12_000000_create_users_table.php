@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable()->unique();
             $table->timestamp('phone_verified_at')->nullable();
             $table->enum('role', array('admin', 'provider', 'client'))->default('client');
+            $table->string('customer_id')->nullable();
             $table->string('password')->nullable();
             $table->text('fmc_token')->nullable();
             $table->boolean('active')->default(false);

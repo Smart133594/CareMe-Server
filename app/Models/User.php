@@ -31,6 +31,7 @@ class User extends Authenticatable
         'role',
         'fmc_token',
         'password',
+        'customer_id',
         'active',
         'roles'
     ];

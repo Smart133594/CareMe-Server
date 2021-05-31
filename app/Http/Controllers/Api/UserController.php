@@ -13,9 +13,10 @@ use App\Models\Verification;
 use App\Models\WishList;
 use DB;
 use Twilio\Rest\Client;
+use App\Traits\CommonHelper;
 
 class UserController extends Controller{
-
+    use CommonHelper;
     public function makeRandomString(){
         return Str::random();
     }
@@ -150,6 +151,12 @@ class UserController extends Controller{
         $all['role'] = 'client';
         $all['active'] = true;
         $all['password'] = bcrypt($password);
+
+        $fields['client_customer_id'] = $phone;
+        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/customers', "POST", json_encode($fields));
+        if(!is_null($feedback)){
+            $all['customer_id'] = $feedback['data']['id'];
+        }
 
         User::create($all);
         return response()->json([
