@@ -160,10 +160,10 @@ class UserController extends Controller{
         }
 
 
-        // // User::create($all);
-        // return response()->json([
-        //     'success'=>true,
-        // ]);
+        User::create($all);
+        return response()->json([
+            'success'=>true,
+        ]);
     }
 
     public function signin(Request $request){
