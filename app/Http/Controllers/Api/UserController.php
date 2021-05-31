@@ -159,9 +159,9 @@ class UserController extends Controller{
             // $all['customer_id'] = $feedback['data']['id'];
         }
 
-        print_r($feedback)
-        print_r('-----------------------------')
-        print_r(json_decode($feedback))
+        print_r($feedback);
+        print_r('-----------------------------');
+        print_r(json_decode($feedback));
 
         // User::create($all);
         return response()->json([
