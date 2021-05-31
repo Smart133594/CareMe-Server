@@ -691,7 +691,6 @@ export default {
     viewServiciesProducts: "View Servicies&Products",
     added2WishList: "Item added to wishlist successfully",
     add2wishlist: "Add to wishlist",
-    added2wishlist: "Add to wishlist",
     removefromwishlist: "Remove this item from wishlist",
     removedFWishList: "Item removed from wishlist successfully",
     all: "All",

@@ -11,5 +11,5 @@ export default {
 	localhost: 'http://localhost/',						                    // weather API Id
 	domain: 'http://157.175.103.0/',						                    // weather API Id
 	googleApiKey: 'AIzaSyDHtGrrdXAMG6hAVxjuY5Pit5V8AHLwjyg',				// weather APi key,
-    testMode:false,
+    testMode:true,
 }

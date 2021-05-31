@@ -167,10 +167,6 @@ export default {
       return getBeforePrice(price, discount);
     },
 
-    ifItemExistInCart() {
-      return true;
-    },
-
     addWish() {
       if (this.getUser == null) {
         Vue.notify({

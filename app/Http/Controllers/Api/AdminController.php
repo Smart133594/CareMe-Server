@@ -28,12 +28,13 @@ use App\Models\WishList;
 use App\Models\Coupon;
 use App\Mail\BookingMail;
 
+use App\Traits\CommonHelper;
 use File;
 use DB;
 
 
 class AdminController extends Controller{
-
+    use CommonHelper;
     //getProviders
     public function getProviders(Request $request){
         $users = User::where('role', 'provider')->orderBy('id')->get();
