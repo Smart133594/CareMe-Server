@@ -695,7 +695,7 @@ class ClientController extends Controller{
             ]);
         }
         return response()->json([
-            'success'=> false,
+            'success'=> true,
             'data'=>$session_id
         ]);
     }
