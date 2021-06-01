@@ -691,7 +691,7 @@ class ClientController extends Controller{
 
         return response()->json([
             'success'=>false,
-            'data'=>$stringFields
+            'data'=>$feedback
         ]);
 
         if(!is_null($feedback)){
