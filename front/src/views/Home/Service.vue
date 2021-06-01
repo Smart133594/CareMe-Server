@@ -300,6 +300,7 @@
                   height="50"
                   :outlined="payment != 0"
                   @click="payment = 0"
+                  :disabled="loading"
                   color="primary"
                   >{{ $t("message.insurancePay") }}</v-btn
                 >
@@ -309,6 +310,8 @@
                   height="50"
                   :outlined="payment != 1"
                   @click="gotoPay"
+                  :disabled="loading"
+                  :loading="loading"
                   color="primary"
                   >{{ $t("message.creditCardPay") }}</v-btn
                 >
