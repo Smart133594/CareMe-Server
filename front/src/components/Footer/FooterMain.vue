@@ -220,7 +220,7 @@ export default {
     },
 
     go2Carts(){
-        this.$router.push('/carts')
+        this.$router.push('/carts/1')
     }
   },
   created() {

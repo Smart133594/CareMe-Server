@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Arr;
 use App\Mail\BookingMail;
 use App\Mail\OrderingMail;
 use App\Models\Banner;
@@ -522,6 +522,7 @@ class ClientController extends Controller{
             $coupon->save();
             $result['id'] = $coupon->id;
             $result['coupon_amount'] = $coupon_amount;
+            $result['coupon_percent'] = $coupon->percent;
         }
         return $result;
     }
@@ -691,7 +692,7 @@ class ClientController extends Controller{
         $fields['customer_id'] = $user->customer_id;
 
         $products = [];
-        $product['name'] = "Total : ";
+        $product['name'] = $service->en_name."(+ tax - coupon)";
         $product['unit_amount'] = $amount *1000;
         $product['quantity'] = 1;
         array_push($products, $product);
@@ -808,6 +809,23 @@ class ClientController extends Controller{
 
         $sub_amount = 0;
         $tax_amount = 0;
+        $products = [];
+        $meta_products = [];
+
+        $coupon_amount = 0;
+        $coupon_id = -1;
+        $coupon_percent = 0;
+        if($code != ""){
+            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
+            if($coupon_result == NULL){
+                return response()->json([
+                    'success'=>false,
+                ]);
+            }
+            $coupon_amount = $coupon_result['coupon_amount'];
+            $coupon_id = $coupon_result['id'];
+            $coupon_percent = $coupon_result['coupon_percent'];
+        }
 
         foreach ($carts as $cart) {
             $id = $cart['id'];
@@ -818,33 +836,26 @@ class ClientController extends Controller{
                 $tax = ($price_sub * $product->tax)/100;
                 $sub_amount += $price_sub;
                 $tax_amount += $tax;
+
+                $item['id'] = $id;
+                $item['name'] = $product->en_name."(+ tax -coupon)";
+                $item['unit_amount'] = ($price_sub + $tax - ($price_sub * $coupon_percent)/100)*1000;
+                $item['quantity'] = $quantity;
+
+
+                $item_meta['id'] = $id;
+                $item_meta['quantity'] = $quantity;
+                array_push($products, $item);
+                array_push($meta_products, $item_meta);
             }
         }
 
-        $coupon_amount = 0;
-        $coupon_id = -1;
-        if($code != ""){
-            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
-            if($coupon_result == NULL){
-                return response()->json([
-                    'success'=>false,
-                ]);
-            }
-            $coupon_amount = $coupon_result['coupon_amount'];
-            $coupon_id = $coupon_result['id'];
-        }
 
         $amount = $sub_amount + $tax_amount - $coupon_amount;
-
         $user = Auth::user();
         $fields['client_customer_id'] = $user->id;
         $fields['customer_id'] = $user->customer_id;
 
-        $products = [];
-        $product['name'] = "Total : ";
-        $product['unit_amount'] = $amount *1000;
-        $product['quantity'] = 1;
-        array_push($products, $product);
         $fields['products'] = $products;
         $fields['success_url'] = $success_url;
         $fields['cancel_url'] = $cancel_url;
@@ -853,21 +864,17 @@ class ClientController extends Controller{
         $metadata['type'] = "product"; 
         $metadata['coupon_id'] = $coupon_id; 
        
-      
-        $stringCarts = json_encode($carts);
-        // $stringCarts = str_replace("\"", "\'", $stringCarts);
+        $stringCarts = json_encode($meta_products);
+        $stringCarts = str_replace("\"", "\'", $stringCarts);
 
         $metadata['carts'] = $stringCarts;
         $fields['metadata'] = $metadata;
 
         $secret_key = config('app.THAWANI_SECRET_KEY');
         $stringFields = json_encode($fields);
-        // $stringFields = str_replace("\'", "'", $stringFields);
+        $stringFields = str_replace("\'", "'", $stringFields);
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
         $session_id = "";
-
-        echo $stringCarts;
-        return;
       
         if(!is_null($feedback)){
             $json = json_decode($feedback, true);
@@ -902,8 +909,6 @@ class ClientController extends Controller{
         $items = [];
         $sub_amount = 0;
         $tax_amount = 0;
-
-
 
         foreach ($carts as $cart) {
             $id = $cart['id'];
