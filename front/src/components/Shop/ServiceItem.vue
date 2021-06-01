@@ -238,7 +238,7 @@ export default {
     },
 
     go2Profile(){
-        this.$router.push(`/service/${this.service.id}`)
+        this.$router.push(`/service/${this.service.id}/1`)
     }
   },
 };

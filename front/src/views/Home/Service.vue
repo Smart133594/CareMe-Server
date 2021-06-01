@@ -308,7 +308,7 @@
                   block
                   height="50"
                   :outlined="payment != 1"
-                  @click="payment = 1"
+                  @click="gotoPay"
                   color="primary"
                   >{{ $t("message.creditCardPay") }}</v-btn
                 >
@@ -542,6 +542,7 @@ export default {
         cardYear: "",
         cardCvv: "",
       },
+      type:"",
     };
   },
   methods: {
@@ -557,6 +558,51 @@ export default {
           if (response.data.success) {
             let service = response.data.data;
             this.service = service;
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+
+    getServiceSession(){
+      let model={
+        cancel_url:`${this.baseUrl}service/${this.service_id}`,
+        success_url:`${this.baseUrl}service/${this.service_id}`,
+        service_id: this.service_id,
+        worker_id: this.worker_id,
+        date: this.selected_date,
+        times: this.selected_times,
+        quantity: this.quantity,
+        coupon: this.coupon_percent > 0 ? this.coupon : "",
+        type: "service",
+        lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
+      }
+
+      this.loading = true;
+      api
+        .post(`getServiceSession`, JSON.stringify(model), {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.getUser.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            let session_id = response.data.data;
+            let url = "";
+            if(appConfig.payment_test){
+              url = "https://uatcheckout.thawani.om/pay/"
+            }else{
+              url = "https://checkout.thawani.om/pay/"
+            }
+            window.location.href=`${url}${session_id}?key=${appConfig.payment_public_key}`
+          }else{
+              Vue.notify({
+                group: "center",
+                type: "error",
+                text: this.$t("message.sessionError"),
+              });
           }
         })
         .finally(() => {
@@ -688,6 +734,7 @@ export default {
     beforeStep() {
       this.step--;
     },
+
     chooseFiles(type) {
       this.imageType = type;
       document.getElementById("fileUpload").click();
@@ -741,13 +788,13 @@ export default {
         date: this.selected_date,
         times: this.selected_times,
         quantity: this.quantity,
+        coupon: this.coupon_percent > 0 ? this.coupon : "",
+        type: "service",
+        lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
         company: this.company,
         insurance: this.insurance,
         image: this.image,
         image1: this.image1,
-        coupon: this.coupon_percent > 0 ? this.coupon : "",
-        type: "service",
-        lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
       };
 
       this.loading = true;
@@ -774,13 +821,6 @@ export default {
             this.selected_times = [];
             this.quantity = 1;
             this.selected_date = null;
-             this.formData = {
-              cardName: "",
-              cardNumber: "",
-              cardMonth: "",
-              cardYear: "",
-              cardCvv: "",
-            };
           } else {
             Vue.notify({
               group: "center",
@@ -803,69 +843,16 @@ export default {
         });
     },
 
-    bookingWithCard() {
-      let model = {
-        service_id: this.service_id,
-        worker_id: this.worker_id,
-        date: this.selected_date,
-        times: this.selected_times,
-        quantity: this.quantity,
-        coupon: this.coupon_percent > 0 ? this.coupon : "",
-        type: "service",
-        lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
-        formData: this.formData,
-      };
-      this.loading = true;
-      api
-        .post("bookingWithCard", JSON.stringify(model), {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.getUser.token}`,
-          },
-        })
-        .then((response) => {
-          if (response.data.success) {
-            Vue.notify({
-              group: "center",
-              type: "success",
-              text: this.$t("message.bookingSuccess"),
-            });
-            this.step = 1;
-            this.payment = -1;
-            this.image1 = null;
-            this.image = null;
-            this.company = "";
-            this.insurance = "";
-            this.selected_times = [];
-            this.quantity = 1;
-            this.selected_date = null;
-            this.formData = {
-              cardName: "",
-              cardNumber: "",
-              cardMonth: "",
-              cardYear: "",
-              cardCvv: "",
-            };
-          } else {
-            Vue.notify({
-              group: "center",
-              type: "error",
-              text: this.$t("message.bookingFailed"),
-            });
-          }
-          this.coupon = "";
-          this.coupon_percent = 0;
-        })
-        .catch((error) => {
-          Vue.notify({
-            group: "center",
-            type: "error",
-            text: error,
-          });
-        })
-        .finally(() => {
-          this.loading = false;
+    gotoPay(){
+      if (this.getUser.role != "client") {
+        Vue.notify({
+          group: "center",
+          type: "error",
+          text: this.$t("message.youNeedClientRole"),
         });
+        return;
+      }
+      this.getServiceSession();
     },
 
     submit() {
@@ -880,7 +867,6 @@ export default {
       if (this.payment == 0) {
         this.bookingWithInsurance();
       } else {
-        this.bookingWithCard();
       }
       this.dialog = false;
     },
@@ -934,6 +920,9 @@ export default {
   beforeMount() {
     let service_id = this.$route.params.service_id;
     this.service_id = service_id;
+
+    let type = this.$route.params.type;
+    this.type = type;
     this.getService();
   },
   watch: {

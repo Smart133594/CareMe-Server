@@ -26,6 +26,7 @@ use PDF;
 use File;
 use DB;
 use App;
+use Config;
 
 use App\Traits\CommonHelper;
 
@@ -507,6 +508,8 @@ class ClientController extends Controller{
         $quantity = $request->quantity;
         $times = $request->times;
         $code = $request->coupon;
+        $type = $request->type;
+        
         $sub_amount = $price * $quantity * count($times);
         $tax_amount = 0;
         if($service->tax > 0){
@@ -514,26 +517,17 @@ class ClientController extends Controller{
         }
         $coupon_amount = 0;
         if($code != ""){
-            $type = $request->type;
-            $types = ['cart', $type];
-            $today = date("Y-m-d");
-            $coupon = Coupon::where('code', $code)
-                        ->whereIn('type', $types)
-                        ->whereDate('expire', '>=', $today)
-                        ->first();
-            if($coupon){
-                $coupon_amount = ($sub_amount * $coupon->percent)%100;
-                $coupon->available = false;
-                $coupon->save();
-                $all['coupon_id'] = $coupon->id;
-            }else{
+            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
+            if($coupon_result == NULL){
                 return response()->json([
                     'success'=>false,
                 ]);
             }
+            $coupon_amount = $coupon_result['coupon_amount'];
+            $all['coupon_id'] = $coupon_result['id'];
         }
-        $amount = $sub_amount + $tax_amount - $coupon_amount;
 
+        $amount = $sub_amount + $tax_amount - $coupon_amount;
         $image = $request->image;
         $image1 = $request->image1;
         // $lang = $request->lang;
@@ -619,97 +613,90 @@ class ClientController extends Controller{
         ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
         ->first();
 
-
         $this->sendBookingMailWithPDF($booking);
         return response()->json([
             'success'=>true,
         ]);
     }
 
-    public function bookingWithCard(Request $request){
+    public function getServiceSession(Request $request){
+        $cancel_url = $request->cancel_url;
+        $success_url = $request->success_url;
         $service_id = $request->service_id;
-        $all = $request->all();
+        $worker_id = $request->worker_id;
+        $date = $request->date;
+        $times = $request->times;
+        $quantity = $request->quantity;
+        $code = $request->coupon;
+        $type = $request->type;
+       // $lang = $request->lang;
+        $lang = 'en';
+        App::setlocale($lang);
+
         $service = Service::find($service_id);
         $auto_accept = $service->auto_confirm;
-        $price = $service->price;
-        $quantity = $request->quantity;
-        $times = $request->times;
-        $code = $request->coupon;
-        $cardForm = $request->formData;
+
         $sub_amount = $price * $quantity * count($times);
         $tax_amount = 0;
         if($service->tax > 0){
             $tax_amount = ($sub_amount * $service->tax)/100;
         }
+
         $coupon_amount = 0;
+        $coupon_id = -1;
         if($code != ""){
-            $type = $request->type;
-            $types = ['cart', $type];
-            $today = date("Y-m-d");
-            $coupon = Coupon::where('code', $code)
-                        ->whereIn('type', $types)
-                        ->whereDate('expire', '>=', $today)
-                        ->first();
-            if($coupon){
-                $coupon_amount = ($sub_amount * $coupon->percent)%100;
-                $coupon->available = false;
-                $coupon->save();
-                $all['coupon_id'] = $coupon->id;
-            }else{
+            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
+            if($coupon_result == NULL){
                 return response()->json([
                     'success'=>false,
                 ]);
             }
+            $coupon_amount = $coupon_result['coupon_amount'];
+            $coupon_id = $coupon_result['id'];
         }
+
         $amount = $sub_amount + $tax_amount - $coupon_amount;
-        // $lang = $request->lang;
-        $lang = 'en';
 
-        $all['amount'] = $amount;
-        $all['type'] = 'card';
-        $all['state'] = 'pending';
-        $all['user_id'] = Auth::user()->id;
+        $user = Auth::user();
+        $fields['client_customer_id'] = $user->id;
+        $fields['customer_id'] = $user->customer_id;
 
-        $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
-        $item['price'] = number_format($service->price*count($times), 2, '.', '');
-        $item['quantity'] = $quantity;
-        $item['price_sub'] =  number_format($sub_amount, 2, '.', '');
+        $products = [];
+        $product['name'] = "Total : ";
+        $product['unit_amount'] = $amount;
+        $product['quantity'] = 1;
+        array_push($products, $product);
+        $fields['products'] = $products;
+        $fields['success_url'] = $success_url;
+        $fields['cancel_url'] = $cancel_url;
 
-        $items = [];
-        array_push($items, $item);
+        $metadata['user_id'] = $user->id; 
+        $metadata['type'] = "service"; 
+        $metadata['coupon_id'] = $coupon_id; 
+        $metadata['date'] = $date; 
+        $metadata['times'] = $items; 
+        $metadata['quantity'] = $quantity; 
+        $metadata['service_id'] = $service_id; 
+        $metadata['worker_id'] = $worker_id; 
+        $fields['metadata'] = $metadata;
 
-        $data['total'] = number_format($amount, 2, '.', '');
-        $data['sub_total'] = number_format($sub_amount, 2, '.', '');
-        $data['tax'] = number_format($tax_amount, 2, '.', '');
-        $data['coupon'] = number_format($coupon_amount, 2, '.', '');
-        $data['amount_paid'] = '0.00';
-        $data['items'] = $items;
+        $secret_key = config('app.THAWANI_SECRET_KEY');
 
-        App::setlocale($lang);
-        $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/'.time()."_invoice.pdf";
-        $path = public_path() . "/uploads/invoicies/";
-        if(!File::isDirectory($path)){
-            File::makeDirectory($path, 0777, true, true);
+        $fields['client_customer_id'] = $phone;
+        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/customers', "POST", json_encode($fields));
+        $session_id = "";
+        if(!is_null($feedback)){
+            $feedback = json_decode($feedback, true);
+            $session_id = $feedback['data']['session_id'];
+        }else{
+            return response()->json([
+                'success'=>false,
+            ]);
         }
-        $pdf->save($pdf_name);
-        $all['invoice'] = $pdf_name;
 
-        if($auto_accept){
-            $all['state'] = 'accepted';
-        }
-        $booking = Booking::create($all);
-
-        $booking = DB::table('bookings')
-        ->leftJoin('services', 'services.id', "bookings.service_id")
-        ->leftJoin('users', 'users.id', "bookings.user_id")
-        ->where('bookings.id', $booking->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
-        ->first();
-
-        $this->sendBookingMailWithPDF($booking);
         return response()->json([
-            'success'=>true,
+            'success'=>false,
+            'data'=>$session_id
         ]);
     }
 
@@ -755,11 +742,11 @@ class ClientController extends Controller{
         $code = $request->coupon;
         $type = $request->type;
         $types = ['cart', $type];
-
         $today = date("Y-m-d");
 
         $coupon = Coupon::where('code', $code)
                     ->whereIn('type', $types)
+                    ->where('available', true)
                     ->whereDate('expire', '>=', $today)
                     ->first();
 
@@ -862,6 +849,26 @@ class ClientController extends Controller{
         return response()->json([
             'success'=>true,
         ]);
+    }
+
+    public function getCouponPrice($sub_amount, $coupon, $type){
+        $types = ['cart', $type];
+        $today = date("Y-m-d");
+        $coupon = Coupon::where('code', $code)
+                    ->whereIn('type', $types)
+                    ->where('available', true)
+                    ->whereDate('expire', '>=', $today)
+                    ->first();
+
+        $result = NULL;
+        if($coupon){
+            $coupon_amount = ($sub_amount * $coupon->percent)%100;
+            $coupon->available = false;
+            $coupon->save();
+            $result['id'=>$coupon->id, 'coupon_amount' => $coupon_amount];
+
+        }
+        return $result;
     }
 
     public function sendBookingMail($booking){

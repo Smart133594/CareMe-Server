@@ -134,6 +134,9 @@ return [
     |
     */
 
+    'THAWANI_SECRET_KEY' => "rRQ26GcsZzoEhbrP2HZvLYDbn9C9et",
+    'THAWANI_PUBLIC_KEY' => "HGvTMLDssJghr9tlN9gr4DVYt0qyBy",
+
     'providers' => [
 
         /*

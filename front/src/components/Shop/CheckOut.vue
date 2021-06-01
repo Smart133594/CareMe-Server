@@ -132,41 +132,6 @@
         </div>
       </div>
     </app-card>
-
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="700"
-      content-class="step-dialog"
-    >
-      <div class="d-flex justify-content-end">
-        <v-btn
-          color="white"
-          @click="dialog = false"
-          icon
-          style="
-            background-color: black;
-            position: relative;
-            bottom: -20px;
-            z-index: 999;
-            right: 0;
-          "
-        >
-          <v-icon>close</v-icon>
-        </v-btn>
-      </div>
-      <v-card>
-        <div class="p-4">
-          <CardForm
-            :submitButton="true"
-            :form-data="formData"
-            :randomBackgrounds="false"
-            :loading="loading"
-            @submit="submit"
-          />
-        </div>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -248,8 +213,6 @@ export default {
           text: this.$t("message.youNeedToLoginFirst"),
         });
       } else {
-        //this.dialog = true;
-        //this.$router.push("")
         window.location.href="https://uatcheckout.thawani.om/pay/checkout_cmgkWSc03J0dUJMieAdNWxvWLw3TyblazhD8laM0tqzcpyMGjC?key=HGvTMLDssJghr9tlN9gr4DVYt0qyBy"
       }
     },
@@ -292,61 +255,6 @@ export default {
               text: this.$t("message.invalidCoupon"),
             });
           }
-        })
-        .finally(() => {
-          this.loading = false;
-        });
-    },
-
-    submit() {
-      let model = {
-        type: "product",
-        lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
-        coupon: this.coupon_percent > 0 ? this.coupon : "",
-        carts:this.cart
-      };
-
-      this.loading = true;
-      api
-        .post("orderingWithCard", JSON.stringify(model), {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.getUser.token}`,
-          },
-        })
-        .then((response) => {
-          if (response.data.success) {
-            Vue.notify({
-              group: "center",
-              type: "success",
-              text: this.$t("message.orderingSuccess"),
-            });
-             this.formData = {
-              cardName: "",
-              cardNumber: "",
-              cardMonth: "",
-              cardYear: "",
-              cardCvv: "",
-            };
-            let products = [];
-            this.$store.dispatch("updateCart", products);
-            this.$router.push('/products/-1/-1/-1/0,0/0,0');
-          } else {
-            Vue.notify({
-              group: "center",
-              type: "error",
-              text: this.$t("message.orderingFailed"),
-            });
-          }
-          this.coupon = "";
-          this.coupon_percent = 0;
-        })
-        .catch((error) => {
-          Vue.notify({
-            group: "center",
-            type: "error",
-            text: error,
-          });
         })
         .finally(() => {
           this.loading = false;

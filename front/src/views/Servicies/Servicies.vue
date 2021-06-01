@@ -45,7 +45,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>
                     {{
-                      `${baseUrl}service/${item.id}`
+                      `${baseUrl}service/${item.id}/1`
                     }}
                   </td>
                   <td>

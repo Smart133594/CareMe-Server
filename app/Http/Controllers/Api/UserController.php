@@ -157,6 +157,10 @@ class UserController extends Controller{
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
             $all['customer_id'] = $feedback['data']['id'];
+        }else{
+            return response()->json([
+                'success'=>false,
+            ]);
         }
 
         User::create($all);

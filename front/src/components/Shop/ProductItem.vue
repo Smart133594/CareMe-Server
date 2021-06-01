@@ -256,7 +256,7 @@ export default {
     },
 
     go2Profile() {
-      this.$router.push(`/product/${this.product.id}`);
+      this.$router.push(`/product/${this.product.id}/1`);
     },
   },
 };

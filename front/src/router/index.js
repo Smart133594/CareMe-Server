@@ -46,7 +46,7 @@ export default new Router({
                     component: Servicies,
                 },
                 {
-                    path: '/service/:service_id',
+                    path: '/service/:service_id/:type',
                     component: Service,
                 },
                 {
@@ -54,7 +54,7 @@ export default new Router({
                     component: Products,
                 },
                 {
-                    path: '/product/:product_id',
+                    path: '/product/:product_id/:type',
                     component: Product,
                 },
                 {

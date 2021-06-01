@@ -40,12 +40,10 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::post('removeWish', 'ClientController@removeWish');
     Route::get('getWishes', 'ClientController@getWishes');
     Route::post('bookingWithInsurance', 'ClientController@bookingWithInsurance');
-    Route::post('bookingWithCard', 'ClientController@bookingWithCard');
     Route::get('getMyBookings', 'ClientController@getMyBookings');
     Route::post('cancelBooking', 'ClientController@cancelBooking');
     Route::post('checkCoupon', 'ClientController@checkCoupon');
-
-    Route::post('orderingWithCard', 'ClientController@orderingWithCard');
+    Route::post('getServiceSession', 'ClientController@getServiceSession');
 });
 
 

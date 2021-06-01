@@ -750,5 +750,6 @@ export default {
     used:"Used",
     invoice:"Invoice",
     orderingSuccess:"Ordering Successed. You can check on your dashboard",
-    orderingFailed:"Ordering Failed. please confirm your informations again."
+    orderingFailed:"Ordering Failed. please confirm your informations again.",
+    sessionError:"We can't make session for payment. Try again later"
 }
