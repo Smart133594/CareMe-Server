@@ -692,25 +692,25 @@ class ClientController extends Controller{
             'data'=>$feedback
         ]);
 
-        if(!is_null($feedback)){
-            $json = json_decode($feedback, true);
-            if($json['success']){
-                $session_id = $json['data']['session_id'];
-            }else{
-                return response()->json([
-                    'success'=>false,
-                    'data'=>$feedback
-                ]);
-            }
-        }else{
-            return response()->json([
-                'success'=>false,
-            ]);
-        }
-        return response()->json([
-            'success'=> true,
-            'data'=>$session_id
-        ]);
+        // if(!is_null($feedback)){
+        //     $json = json_decode($feedback, true);
+        //     if($json['success']){
+        //         $session_id = $json['data']['session_id'];
+        //     }else{
+        //         return response()->json([
+        //             'success'=>false,
+        //             'data'=>$feedback
+        //         ]);
+        //     }
+        // }else{
+        //     return response()->json([
+        //         'success'=>false,
+        //     ]);
+        // }
+        // return response()->json([
+        //     'success'=> true,
+        //     'data'=>$session_id
+        // ]);
     }
 
     public function cancelBooking(Request $request){
