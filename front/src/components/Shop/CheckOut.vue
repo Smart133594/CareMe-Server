@@ -248,7 +248,9 @@ export default {
           text: this.$t("message.youNeedToLoginFirst"),
         });
       } else {
-        this.dialog = true;
+        //this.dialog = true;
+        //this.$router.push("")
+        window.location.href="https://uatcheckout.thawani.om/pay/checkout_cmgkWSc03J0dUJMieAdNWxvWLw3TyblazhD8laM0tqzcpyMGjC?key=HGvTMLDssJghr9tlN9gr4DVYt0qyBy"
       }
     },
     applyCoupon() {
