@@ -13,5 +13,5 @@ export default {
 	googleApiKey: 'AIzaSyDHtGrrdXAMG6hAVxjuY5Pit5V8AHLwjyg',				// weather APi key,
 	payment_public_key: 'HGvTMLDssJghr9tlN9gr4DVYt0qyBy',							// PAYMENT APi key,
 	payment_test: true,														// PAYMENT APi key,
-    testMode:true,
+    testMode:false,
 }

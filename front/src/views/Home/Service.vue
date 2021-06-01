@@ -545,7 +545,6 @@ export default {
         cardYear: "",
         cardCvv: "",
       },
-      type:"",
     };
   },
   methods: {
@@ -570,8 +569,8 @@ export default {
 
     getServiceSession(){
       let model={
-        cancel_url:`${this.baseUrl}service/${this.service_id}`,
-        success_url:`${this.baseUrl}service/${this.service_id}`,
+        cancel_url:`${this.baseUrl}service/${this.service_id}/2`,
+        success_url:`${this.baseUrl}service/${this.service_id}/3`,
         service_id: this.service_id,
         worker_id: this.worker_id,
         date: this.selected_date,
@@ -919,13 +918,19 @@ export default {
         });
     },
   },
-  mounted() {},
+  mounted() {
+    let type = this.$route.params.type;
+    if(type == "3"){
+      Vue.notify({
+        group: "center",
+        type: "success",
+        text: this.$t("message.bookingSuccess"),
+      });
+    }
+  },
   beforeMount() {
     let service_id = this.$route.params.service_id;
     this.service_id = service_id;
-
-    let type = this.$route.params.type;
-    this.type = type;
     this.getService();
   },
   watch: {
