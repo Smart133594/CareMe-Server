@@ -865,8 +865,8 @@ class ClientController extends Controller{
             $coupon_amount = ($sub_amount * $coupon->percent)%100;
             $coupon->available = false;
             $coupon->save();
-            $result['id'=>$coupon->id, 'coupon_amount' => $coupon_amount];
-
+            $result['id'] = $coupon->id;
+            $result['coupon_amount'] = $coupon_amount;
         }
         return $result;
     }
