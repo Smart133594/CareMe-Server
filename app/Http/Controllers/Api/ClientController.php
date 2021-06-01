@@ -679,14 +679,18 @@ class ClientController extends Controller{
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
         $stringTimes = json_encode($times);
-        $stringTimes = str_replace("\"", "\'", $stringTimes);
+        $stringTimes = str_replace("\"", "'", $stringTimes);
 
         $metadata['times'] = $stringTimes;
         $fields['metadata'] = $metadata;
         $secret_key = config('app.THAWANI_SECRET_KEY');
 
-        $stringFields = json_encode($fields);
-        $stringFields = str_replace("\'", "'", $stringFields);
+        // $stringFields = json_encode($fields);
+        // $stringFields = json_encode($fields);
+
+        $stringFields = '{"client_customer_id":2,"customer_id":null,"products":[{"name":"Total : ","unit_amount":167200,"quantity":1}],"success_url":"http:\/\/localhost\/service\/6\/3","cancel_url":"http:\/\/localhost\/service\/6\/2","metadata":{"user_id":2,"type":"service","coupon_id":-1,"date":"2021-06-02","quantity":2,"service_id":"6","worker_id":-1,"times":"[{\'from_time\':\'11:21:00\', \'id\':3}]"}}';
+
+        // $stringFields = str_replace("\'", "'", $stringFields);
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", json_encode($fields));
         $session_id = "";
         return response()->json([
