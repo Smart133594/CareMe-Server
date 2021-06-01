@@ -685,6 +685,10 @@ class ClientController extends Controller{
 
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", json_encode($fields));
         $session_id = "";
+        return response()->json([
+            'success'=> false,
+            'data'=>$feedback
+        ]);
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
             // $session_id = $feedback['data']['session_id'];
