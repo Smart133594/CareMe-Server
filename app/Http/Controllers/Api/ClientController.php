@@ -687,7 +687,12 @@ class ClientController extends Controller{
         $session_id = "";
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
-            $session_id = $feedback['data']['session_id'];
+            // $session_id = $feedback['data']['session_id'];
+
+            return response()->json([
+                'success'=> false,
+                'data'=>$feedback
+            ]);
         }else{
             return response()->json([
                 'success'=>false,
