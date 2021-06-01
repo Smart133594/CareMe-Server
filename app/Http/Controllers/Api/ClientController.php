@@ -634,6 +634,7 @@ class ClientController extends Controller{
         App::setlocale($lang);
 
         $service = Service::find($service_id);
+        $price = $service->price;
         $auto_accept = $service->auto_confirm;
 
         $sub_amount = $price * $quantity * count($times);
