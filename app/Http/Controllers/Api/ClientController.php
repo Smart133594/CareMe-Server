@@ -679,7 +679,7 @@ class ClientController extends Controller{
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
         $stringTimes = json_encode($times);
-        // $stringTimes = "'".$stringTimes."'"; 
+        $stringTimes = "'".$stringTimes."'"; 
         $metadata['times'] = $stringTimes;
         $fields['metadata'] = $metadata;
         $secret_key = config('app.THAWANI_SECRET_KEY');
