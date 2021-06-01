@@ -664,7 +664,7 @@ class ClientController extends Controller{
 
         $products = [];
         $product['name'] = "Total : ";
-        $product['unit_amount'] = $amount;
+        $product['unit_amount'] = $amount *1000;
         $product['quantity'] = 1;
         array_push($products, $product);
         $fields['products'] = $products;
@@ -675,24 +675,31 @@ class ClientController extends Controller{
         $metadata['type'] = "service"; 
         $metadata['coupon_id'] = $coupon_id; 
         $metadata['date'] = $date; 
-        // $metadata['times'] = $times; 
         $metadata['quantity'] = $quantity; 
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
+        $stringTimes = json_encode($times);
+        $stringTimes = '"'.$stringTimes.'"'; 
+        $metadata['times'] = $stringTimes;
         $fields['metadata'] = $metadata;
-
         $secret_key = config('app.THAWANI_SECRET_KEY');
-
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", json_encode($fields));
         $session_id = "";
-       
+
+
+        return response()->json([
+            'success'=>false,
+            'data'=>$feedback
+        ]);
+
         if(!is_null($feedback)){
-            $feedback = json_decode($feedback, true);
-            if($feedback['success']){
-                $session_id = $feedback['data']['session_id'];
+            $json = json_decode($feedback, true);
+            if($json['success']){
+                $session_id = $json['data']['session_id'];
             }else{
                 return response()->json([
                     'success'=>false,
+                    'data'=>$feedback
                 ]);
             }
         }else{
