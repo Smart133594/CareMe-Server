@@ -44,7 +44,7 @@ trait CommonHelper
         curl_close($ch);
 
         if ($err) {
-           return NULL;
+           return $err;
         }
         return $response;
     }
