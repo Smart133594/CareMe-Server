@@ -689,29 +689,26 @@ class ClientController extends Controller{
         $stringFields = str_replace("\'", "'", $stringFields);
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
         $session_id = "";
+      
+        if(!is_null($feedback)){
+            $json = json_decode($feedback, true);
+            if($json['success']){
+                $session_id = $json['data']['session_id'];
+            }else{
+                return response()->json([
+                    'success'=>false,
+                    'data'=>$feedback
+                ]);
+            }
+        }else{
+            return response()->json([
+                'success'=>false,
+            ]);
+        }
         return response()->json([
-            'success'=>false,
-            'data'=>$feedback
+            'success'=> true,
+            'data'=>$session_id
         ]);
-        // if(!is_null($feedback)){
-        //     $json = json_decode($feedback, true);
-        //     if($json['success']){
-        //         $session_id = $json['data']['session_id'];
-        //     }else{
-        //         return response()->json([
-        //             'success'=>false,
-        //             'data'=>$feedback
-        //         ]);
-        //     }
-        // }else{
-        //     return response()->json([
-        //         'success'=>false,
-        //     ]);
-        // }
-        // return response()->json([
-        //     'success'=> true,
-        //     'data'=>$session_id
-        // ]);
     }
 
     public function cancelBooking(Request $request){
