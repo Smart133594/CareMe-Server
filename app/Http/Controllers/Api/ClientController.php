@@ -683,7 +683,6 @@ class ClientController extends Controller{
 
         $secret_key = config('app.THAWANI_SECRET_KEY');
 
-        $fields['client_customer_id'] = $phone;
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/customers', "POST", json_encode($fields));
         $session_id = "";
         if(!is_null($feedback)){
