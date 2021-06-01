@@ -675,7 +675,7 @@ class ClientController extends Controller{
         $metadata['type'] = "service"; 
         $metadata['coupon_id'] = $coupon_id; 
         $metadata['date'] = $date; 
-        $metadata['times'] = $items; 
+        $metadata['times'] = $item; 
         $metadata['quantity'] = $quantity; 
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
