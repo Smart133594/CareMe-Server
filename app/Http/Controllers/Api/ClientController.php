@@ -675,7 +675,7 @@ class ClientController extends Controller{
         $metadata['type'] = "service"; 
         $metadata['coupon_id'] = $coupon_id; 
         $metadata['date'] = $date; 
-        // $metadata['times'] = json_encode($times); 
+        $metadata['times'] = json_encode($times); 
         $metadata['quantity'] = $quantity; 
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
@@ -687,11 +687,7 @@ class ClientController extends Controller{
         $session_id = "";
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
-            // $session_id = $feedback['data']['session_id'];
-            return response()->json([
-                'success'=>false,
-                'data'=>$feedback
-            ]);
+            $session_id = $feedback['data']['session_id'];
         }else{
             return response()->json([
                 'success'=>false,
@@ -699,7 +695,7 @@ class ClientController extends Controller{
         }
 
         return response()->json([
-            'success'=>true,
+            'success'=> false,
             'data'=>$session_id
         ]);
     }
