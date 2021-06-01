@@ -44,6 +44,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::post('cancelBooking', 'ClientController@cancelBooking');
     Route::post('checkCoupon', 'ClientController@checkCoupon');
     Route::post('getServiceSession', 'ClientController@getServiceSession');
+    Route::post('getProductSession', 'ClientController@getProductSession');
 });
 
 

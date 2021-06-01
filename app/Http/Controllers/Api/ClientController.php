@@ -481,24 +481,52 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function getCarts(Request $request){
-        $carts = $request->all();
+    // Apply Coupon
+    public function checkCoupon(Request $request){
+        $code = $request->coupon;
+        $type = $request->type;
+        $types = ['cart', $type];
+        $today = date("Y-m-d");
 
-        $products = [];
-        foreach ($carts as $cart) {
-            $product = Product::find($cart['id']);
-            $product['quantity'] = $cart['quantity'];
-            if($product['active']){
-                array_push($products, $product);
-            }
+        $coupon = Coupon::where('code', $code)
+                    ->whereIn('type', $types)
+                    ->where('available', true)
+                    ->whereDate('expire', '>=', $today)
+                    ->first();
+
+        if($coupon){
+            return response()->json([
+                'success'=>true,
+                'data'=>$coupon->percent,
+            ]);
         }
 
         return response()->json([
-            'success'=>true,
-            'data'=> $products
+            'success'=>false,
         ]);
     }
 
+    public function getCouponPrice($sub_amount, $coupon, $type){
+        $types = ['cart', $type];
+        $today = date("Y-m-d");
+        $coupon = Coupon::where('code', $code)
+                    ->whereIn('type', $types)
+                    ->where('available', true)
+                    ->whereDate('expire', '>=', $today)
+                    ->first();
+
+        $result = NULL;
+        if($coupon){
+            $coupon_amount = ($sub_amount * $coupon->percent)%100;
+            $coupon->available = false;
+            $coupon->save();
+            $result['id'] = $coupon->id;
+            $result['coupon_amount'] = $coupon_amount;
+        }
+        return $result;
+    }
+
+    //Booking
     public function bookingWithInsurance(Request $request){
         $service_id = $request->service_id;
         $all = $request->all();
@@ -748,28 +776,117 @@ class ClientController extends Controller{
             'data'=>$bookings,
         ]);
     }
-    // Apply Coupon
-    public function checkCoupon(Request $request){
-        $code = $request->coupon;
-        $type = $request->type;
-        $types = ['cart', $type];
-        $today = date("Y-m-d");
 
-        $coupon = Coupon::where('code', $code)
-                    ->whereIn('type', $types)
-                    ->where('available', true)
-                    ->whereDate('expire', '>=', $today)
-                    ->first();
+    ///Ordering
+    public function getCarts(Request $request){
+        $carts = $request->all();
 
-        if($coupon){
-            return response()->json([
-                'success'=>true,
-                'data'=>$coupon->percent,
-            ]);
+        $products = [];
+        foreach ($carts as $cart) {
+            $product = Product::find($cart['id']);
+            $product['quantity'] = $cart['quantity'];
+            if($product['active']){
+                array_push($products, $product);
+            }
         }
 
         return response()->json([
-            'success'=>false,
+            'success'=>true,
+            'data'=> $products
+        ]);
+    }
+
+    public function getProductSession(Request $request){
+        $cancel_url = $request->cancel_url;
+        $success_url = $request->success_url;
+        $carts = $request->carts;
+        $code = $request->coupon;
+        $type = $request->type;
+       // $lang = $request->lang;
+        $lang = 'en';
+        App::setlocale($lang);
+
+        $sub_amount = 0;
+        $tax_amount = 0;
+
+        foreach ($carts as $cart) {
+            $id = $cart['id'];
+            $quantity = $cart['quantity'];
+            $product = Product::find($id);
+            if($product){
+                $price_sub = $product->price * $quantity;
+                $tax = ($price_sub * $product->tax)/100;
+                $sub_amount += $price_sub;
+                $tax_amount += $tax;
+            }
+        }
+
+        $coupon_amount = 0;
+        $coupon_id = -1;
+        if($code != ""){
+            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
+            if($coupon_result == NULL){
+                return response()->json([
+                    'success'=>false,
+                ]);
+            }
+            $coupon_amount = $coupon_result['coupon_amount'];
+            $coupon_id = $coupon_result['id'];
+        }
+
+        $amount = $sub_amount + $tax_amount - $coupon_amount;
+
+        $user = Auth::user();
+        $fields['client_customer_id'] = $user->id;
+        $fields['customer_id'] = $user->customer_id;
+
+        $products = [];
+        $product['name'] = "Total : ";
+        $product['unit_amount'] = $amount *1000;
+        $product['quantity'] = 1;
+        array_push($products, $product);
+        $fields['products'] = $products;
+        $fields['success_url'] = $success_url;
+        $fields['cancel_url'] = $cancel_url;
+
+        $metadata['user_id'] = $user->id; 
+        $metadata['type'] = "product"; 
+        $metadata['coupon_id'] = $coupon_id; 
+       
+      
+        $stringCarts = json_encode($carts);
+        // $stringCarts = str_replace("\"", "\'", $stringCarts);
+
+        $metadata['carts'] = $stringCarts;
+        $fields['metadata'] = $metadata;
+
+        $secret_key = config('app.THAWANI_SECRET_KEY');
+        $stringFields = json_encode($fields);
+        // $stringFields = str_replace("\'", "'", $stringFields);
+        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
+        $session_id = "";
+
+        echo $stringCarts;
+        return;
+      
+        if(!is_null($feedback)){
+            $json = json_decode($feedback, true);
+            if($json['success']){
+                $session_id = $json['data']['session_id'];
+            }else{
+                return response()->json([
+                    'success'=>false,
+                    'data'=>$feedback
+                ]);
+            }
+        }else{
+            return response()->json([
+                'success'=>false,
+            ]);
+        }
+        return response()->json([
+            'success'=> true,
+            'data'=>$session_id
         ]);
     }
 
@@ -860,26 +977,6 @@ class ClientController extends Controller{
         return response()->json([
             'success'=>true,
         ]);
-    }
-
-    public function getCouponPrice($sub_amount, $coupon, $type){
-        $types = ['cart', $type];
-        $today = date("Y-m-d");
-        $coupon = Coupon::where('code', $code)
-                    ->whereIn('type', $types)
-                    ->where('available', true)
-                    ->whereDate('expire', '>=', $today)
-                    ->first();
-
-        $result = NULL;
-        if($coupon){
-            $coupon_amount = ($sub_amount * $coupon->percent)%100;
-            $coupon->available = false;
-            $coupon->save();
-            $result['id'] = $coupon->id;
-            $result['coupon_amount'] = $coupon_amount;
-        }
-        return $result;
     }
 
     public function sendBookingMail($booking){

@@ -44,7 +44,7 @@
                 <tr v-for="(item, index) in items" :key="`product${item.id}`">
                   <td>{{ index + 1 }}</td>
                   <td>
-                    {{ `${baseUrl}product/${item.id}/1` }}
+                    {{ `${baseUrl}product/${item.id}` }}
                   </td>
                   <td>
                     {{

@@ -54,7 +54,7 @@ export default new Router({
                     component: Products,
                 },
                 {
-                    path: '/product/:product_id/:type',
+                    path: '/product/:product_id',
                     component: Product,
                 },
                 {
@@ -62,7 +62,7 @@ export default new Router({
                     component: Wishes,
                 },
                 {
-                    path: '/carts',
+                    path: '/carts/:type',
                     component: Carts,
                 },
                 {

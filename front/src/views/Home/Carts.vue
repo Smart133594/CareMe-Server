@@ -27,7 +27,7 @@ import { mapGetters } from "vuex";
 import api from "Api";
 import CartItem from "Components/Shop/CartItem";
 import CheckOut from "Components/Shop/CheckOut";
-// import Vue from "vue";
+import Vue from "vue";
 
 export default {
   computed: {
@@ -68,6 +68,15 @@ export default {
 
   mounted() {},
   beforeMount() {
+    let type = this.$route.params.type;
+    if(type == "3"){
+      Vue.notify({
+        group: "center",
+        type: "success",
+        text: this.$t("message.orderingSuccess"),
+      });
+      this.$store.dispatch("updateCart", []);
+    }
     this.getCarts();
   },
 };
