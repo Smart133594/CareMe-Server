@@ -679,16 +679,19 @@ class ClientController extends Controller{
         $metadata['service_id'] = $service_id; 
         $metadata['worker_id'] = $worker_id; 
         $stringTimes = json_encode($times);
-        $stringTimes = "\'".$stringTimes."\'"; 
-        $metadata['times'] = $stringTimes;
+        // $stringTimes = "'".$stringTimes."'"; 
+        $metadata['times'] = $times;
         $fields['metadata'] = $metadata;
         $secret_key = config('app.THAWANI_SECRET_KEY');
-        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", json_encode($fields));
+
+        $stringFields = json_encode($fields);
+        $stringFields = str_replace("\"", '"', $stringFields);
+        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
         $session_id = "";
 
         return response()->json([
             'success'=>false,
-            'data'=>$feedback
+            'data'=>$stringFields
         ]);
 
         if(!is_null($feedback)){
