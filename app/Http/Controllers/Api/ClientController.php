@@ -545,6 +545,8 @@ class ClientController extends Controller{
             $tax_amount = ($sub_amount * $service->tax)/100;
         }
         $coupon_amount = 0;
+        $all['coupon_id'] = -1;
+        
         if($code != ""){
             $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
             if($coupon_result == NULL){
