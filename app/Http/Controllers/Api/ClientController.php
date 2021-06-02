@@ -944,16 +944,16 @@ class ClientController extends Controller{
         ->orderBy('orderings.id', 'desc')
         ->get();
 
-        // foreach ($orderings as $ordering) {
-        //     $carts = json_decode($ordering->carts, true);
-        //     $products = [];
-        //     foreach ($carts as $cart) {
-        //         $product = Product::find($cart['id']);
-        //         $product->quantity = $cart['quantity'];
-        //         array_push($products, $product);
-        //     }
-        //     $ordering->carts = $products;
-        // }
+        foreach ($orderings as $ordering) {
+            $carts = json_decode($ordering->carts, true);
+            $products = [];
+            foreach ($carts as $cart) {
+                $product = Product::find($cart['id']);
+                $product->quantity = $cart['quantity'];
+                array_push($products, $product);
+            }
+            $ordering->carts = $products;
+        }
 
         return response()->json([
             'success'=>true,

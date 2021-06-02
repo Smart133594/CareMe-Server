@@ -17,8 +17,8 @@
                                 <td>
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
-                                <td>{{item.created_at}}
-                                </td>
+                                <td>{{item.created_at}}</td>
+                                <td>{{item.carts}}</td>
                                 <td>
                                     {{ $t("message.currency") }}
                                     {{ parseFloat(item.amount).toFixed(2) }}
@@ -69,6 +69,10 @@ export default {
                     value: "created_at",
                 },
                 {
+                    text: this.$t("message.cart"),
+                    value: "carts",
+                },
+                {
                     text: this.$t("message.amount"),
                     value: "amount",
                 },
@@ -104,34 +108,6 @@ export default {
                 });
         },
 
-        cancelBooking(item) {
-            this.loading = true;
-            api
-                .post("cancelBooking", JSON.stringify({
-                    id: item.id
-                }), {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.getUser.token}`,
-                    },
-                })
-                .then((response) => {
-                    if (response.data.success) {} else {
-                        Vue.notify({
-                            group: "center",
-                            type: "error",
-                            text: this.$t("message.alreadyAccepted"),
-                        });
-                    }
-                    this.getMyBookings();
-                })
-                .catch((error) => {})
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-
-        setting(value) {},
     },
     mounted() {},
     beforeMount() {

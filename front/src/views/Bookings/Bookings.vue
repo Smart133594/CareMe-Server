@@ -37,6 +37,11 @@
                                     </p>
                                 </td>
                                 <td>
+                                    <p class="m-0">
+                                        {{ item.worker_name }}
+                                    </p>
+                                </td>
+                                <td>
                                     {{ $t("message.currency") }}
                                     {{ parseFloat(item.amount).toFixed(2) }}
                                 </td>
@@ -121,6 +126,10 @@ export default {
                 {
                     text: this.$t("message.client"),
                     value: "full_name",
+                },
+                {
+                    text: this.$t("message.worker"),
+                    value: "worker_name",
                 },
                 {
                     text: this.$t("message.amount"),

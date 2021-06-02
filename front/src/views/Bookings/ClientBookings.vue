@@ -85,7 +85,7 @@ export default {
                 },
                 {
                     text: this.$t("message.worker"),
-                    value: "worker",
+                    value: "full_name",
                 },
                 {
                     text: this.$t("message.service"),
