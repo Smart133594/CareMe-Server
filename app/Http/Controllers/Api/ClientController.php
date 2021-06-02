@@ -653,8 +653,10 @@ class ClientController extends Controller{
         $booking = DB::table('bookings')
         ->leftJoin('services', 'services.id', "bookings.service_id")
         ->leftJoin('users', 'users.id', "bookings.user_id")
+        ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
         ->where('bookings.id', $booking->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
+        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone",
+                 "users.email", "transactions.amount", "transactions.payment_status")
         ->first();
 
         $this->sendBookingMailWithPDF($booking);
