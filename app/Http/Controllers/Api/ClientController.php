@@ -930,7 +930,7 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function makeOrdering($meta, $transaction_id){
+    public function makeOrdering($meta, $transaction_id, $payment_status){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -989,7 +989,7 @@ class ClientController extends Controller{
         $all['user_id'] = $user_id;
         $all['transaction_id'] = $transaction_id;
         $all['carts'] =  $carts;
-        $all['payment'] =  $payment_status;
+        $all['payment'] = $payment_status;
         $all['amount'] = $total_amount;
         $all['type'] = 'card';
         $all['invoice'] = $pdf_name;
