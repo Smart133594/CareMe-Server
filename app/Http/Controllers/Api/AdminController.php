@@ -927,9 +927,11 @@ class AdminController extends Controller{
             ->leftJoin('departments', 'departments.id', "services.department_id")
             ->leftJoin('vendors', 'vendors.id', "departments.vendor_id")
             ->leftJoin('workers', 'workers.id', "bookings.worker_id")
+            ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
             ->leftJoin('users', 'users.id', "bookings.user_id")
             ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
-                    "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge")
+                    "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge", "transactions.payment_id", "transactions.amount",
+                    "transactions.payment_status")
             ->orderBy('bookings.id', 'desc')
             ->get();
         }else{
@@ -940,9 +942,11 @@ class AdminController extends Controller{
             ->leftJoin('vendors', 'vendors.id', "departments.vendor_id")
             ->leftJoin('users', 'users.id', "bookings.user_id")
             ->leftJoin('workers', 'workers.id', "bookings.worker_id")
+            ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
             ->whereIn('vendors.id', $roles)
-            ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name",  "users.avatar", "users.phone",
-                    "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge")
+            ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
+                    "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge", "transactions.payment_id", "transactions.amount",
+                    "transactions.payment_status")
             ->orderBy('bookings.id', 'desc')
             ->get();
         }

@@ -210,7 +210,7 @@ export default {
                     `checkCoupon`,
                     JSON.stringify({
                         coupon: this.coupon,
-                        type: "service"
+                        type: "product"
                     }), {
                         headers: {
                             "Content-Type": "application/json",

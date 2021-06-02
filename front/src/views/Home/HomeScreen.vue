@@ -7,7 +7,7 @@
       cycle
       :autoplay="true"
       :loop="true"
-      height="500px"
+      height="600px"
     >
       <v-carousel-item
         v-for="(banner, i) in banners"

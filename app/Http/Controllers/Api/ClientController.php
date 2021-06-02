@@ -508,7 +508,7 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function getCouponPrice($sub_amount, $coupon, $type){
+    public function getCouponPrice($sub_amount, $code, $type){
         $types = ['cart', $type];
         $today = date("Y-m-d");
         $coupon = Coupon::where('code', $code)
