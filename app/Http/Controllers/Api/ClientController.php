@@ -945,6 +945,7 @@ class ClientController extends Controller{
         $date = $meta['date'];
         $quantity = $meta['quantity'];
         $service_id = $meta['service_id'];
+        $worker_id = $meta['worker_id'];
         $times = $meta['times'];
         $times = str_replace("'", "\"", $times);
         $times = json_decode($times, true);
@@ -979,6 +980,12 @@ class ClientController extends Controller{
         $all['user_id'] = $user_id;
         $all['transaction_id'] = $transaction_id;
         $all['payment'] = $payment_status;
+        $all['date'] = $date;
+        $all['worker_id'] = $worker_id;
+        $all['times'] = $times;
+        $all['quantity'] = $quantity;
+        $all['coupon_id'] = $coupon_id;
+        $all['service_id'] = $service_id;
 
         $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
         $item['price'] = number_format($service->price*count($times), 2, '.', '');
