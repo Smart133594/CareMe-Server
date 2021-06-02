@@ -600,10 +600,12 @@ class ClientController extends Controller{
             $image1 = null;
         }
 
+        $user = Auth::user();
+
         $all['amount'] = $amount;
         $all['type'] = 'insurance';
         $all['state'] = 'pending';
-        $all['user_id'] = Auth::user()->id;
+        $all['user_id'] = $user->id;
         $all['image'] = $image;
         $all['image1'] = $image1;
 
@@ -615,6 +617,11 @@ class ClientController extends Controller{
         $items = [];
         array_push($items, $item);
 
+        $data['full_name'] = $user->full_name;
+        $data['email'] = $user->email;
+        $data['phone'] = $user->phone;
+        $nowDate = date("Y-m-d H:i:s");
+        $data['date'] = $nowDate;
         $data['total'] = number_format($amount, 2, '.', '');
         $data['sub_total'] = number_format($sub_amount, 2, '.', '');
         $data['tax'] = number_format($tax_amount, 2, '.', '');
@@ -980,6 +987,12 @@ class ClientController extends Controller{
         $items = [];
         array_push($items, $item);
 
+        $user = User::find($user_id);
+        $data['full_name'] = $user->full_name;
+        $data['email'] = $user->email;
+        $data['phone'] = $user->phone;
+        $nowDate = date("Y-m-d H:i:s");
+        $data['date'] = $nowDate;
         $data['total'] = number_format($amount, 2, '.', '');
         $data['sub_total'] = number_format($sub_amount, 2, '.', '');
         $data['tax'] = number_format($tax_amount, 2, '.', '');
@@ -1050,6 +1063,12 @@ class ClientController extends Controller{
 
         $total_amount = $sub_amount + $tax_amount - $coupon_amount;
 
+        $user = User::find($user_id);
+        $data['full_name'] = $user->full_name;
+        $data['email'] = $user->email;
+        $data['phone'] = $user->phone;
+        $nowDate = date("Y-m-d H:i:s");
+        $data['date'] = $nowDate;
         $data['total'] = number_format($total_amount, 2, '.', '');
         $data['sub_total'] = number_format($sub_amount, 2, '.', '');
         $data['tax'] = number_format($tax_amount, 2, '.', '');
