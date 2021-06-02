@@ -32,6 +32,14 @@ import Vue from "vue";
 export default {
   computed: {
     ...mapGetters(["getUser", "selectedLocale", "cart"]),
+
+    getVendorCart(){
+      return [];
+    },
+
+    getVendors(){
+      return [];
+    }
   },
   components: {
     CartItem,
@@ -41,6 +49,7 @@ export default {
   data: function () {
     return {
       loading: false,
+      vendor_id:-1,
     };
   },
 
@@ -63,7 +72,6 @@ export default {
           this.loading = false;
         });
     },
-
   },
 
   mounted() {},
