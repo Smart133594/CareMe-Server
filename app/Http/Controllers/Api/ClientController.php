@@ -1002,9 +1002,6 @@ class ClientController extends Controller{
             ->select('orderings.*', "users.full_name", "users.phone", "users.email")
             ->first();
         $this->sendOrderingMailWithPDF($ordering);
-        return response()->json([
-            'success'=>true,
-        ]);
     }
 
     public function sendBookingMail($booking){
