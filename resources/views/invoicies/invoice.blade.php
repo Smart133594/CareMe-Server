@@ -102,9 +102,9 @@
     <section style="margin-bottom: 25px;">
         <address contenteditable style="width: 50%; float: left; font-style: normal; margin-bottom: 10px;">
             <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">@lang('invoice.invoice_to')</h3>
-            <span style="font-size: 16px; margin-bottom: 5px;">Bognar Vojislav</span> <br>
-            <span style="font-size: 16px; margin-bottom: 5px;">bognarvojislav791@gmail.com</span> <br>
-            <span style="font-size: 16px; margin-bottom: 5px;">+1 381 971 2345</span> <br>
+            <span style="font-size: 16px; margin-bottom: 5px;">{{$full_name}}</span> <br>
+            <span style="font-size: 16px; margin-bottom: 5px;">{{$email}}</span> <br>
+            <span style="font-size: 16px; margin-bottom: 5px;">{{$phone}}</span> <br>
         </address>
 
         <div style="width: 50%; float: left;">
@@ -114,7 +114,7 @@
             </p>
             <p style="text-align: right;">
                 <span style="font-weight: bold; font-size: 15px;">@lang('invoice.date'):</span>
-                <span style="font-weight: lighter; font-size: 14px;">2021.3.17</span>
+                <span style="font-weight: lighter; font-size: 14px;">{{$date}}</span>
             </p>
         </div>
     </section>
