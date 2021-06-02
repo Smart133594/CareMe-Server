@@ -16,12 +16,9 @@ class CreateOrderingsTable extends Migration
         Schema::create('orderings', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
-            $table->string('transaction_id')->nullable();
+            $table->integer('transaction_id')->nullable();
             $table->boolean('delivery')->default(false);
             $table->text('carts')->nullable();
-            $table->enum('payment', array('due', 'paid', 'refund'))->default('due');
-            $table->double('amount')->default(0);
-            $table->enum('type', array('card'))->default('card');
             $table->enum('state', array('pending', 'accepted', 'completed', 'rejected'))->default('pending');
             $table->string('reason')->nullable();
             $table->string('invoice')->nullable();

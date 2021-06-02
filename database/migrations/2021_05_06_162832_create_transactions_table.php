@@ -15,8 +15,10 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->string('id')->nullable();
+            $table->string('payment_id')->nullable();
             $table->double('amount')->nullable();
-            $table->enum('state', array('pending', 'capture', 'paid', 'refund'))->default('pending');
+            $table->string('payment_statues')->nullable();
+            $table->string('etc')->nullable();
             $table->timestamps();
         });
     }

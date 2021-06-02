@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'last_name' => "Vojislav",
             'email' => "bognarvojislav791@gmail.com",
             'email_verified_at' => now(),
-            'phone' => '+96892123456',
+            'phone' => '+96898765432',
             'password' => bcrypt('123456'),
             'role' => 'provider',
             'active' => true,

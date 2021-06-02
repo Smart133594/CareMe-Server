@@ -23,6 +23,7 @@ use App\Models\Booking;
 use App\Models\Ordering;
 use App\Models\User;
 use App\Models\Coupon;
+use App\Models\Transaction;
 use PDF;
 use File;
 use DB;
@@ -603,8 +604,12 @@ class ClientController extends Controller{
 
         $user = Auth::user();
 
-        $all['amount'] = $amount;
+        $transaction_data['amount'] = $amount;
+        $transaction_data['payment_status'] = 'Due';
+        $transaction = Transaction::create($transaction_data);
+
         $all['type'] = 'insurance';
+        $all['transaction_id'] = $transaction->id;
         $all['state'] = 'pending';
         $all['user_id'] = $user->id;
         $all['image'] = $image;
@@ -926,11 +931,12 @@ class ClientController extends Controller{
         $feedback = json_decode($feedback, true);
         $meta = $feedback['data']['metadata'];
         $payment_status = $feedback['data']['payment_status'];
+
         $type = $meta['type'];
         if($type == 'service'){
-            $this->makeBooking($meta, -1/*$transaction_id*/, $payment_status);
+            $this->makeBooking($meta, $payment_status);
         }else{
-            $this->makeOrdering($meta, -1/*$transaction_id*/, $payment_status);
+            $this->makeOrdering($meta, $payment_status);
         }
         return response()->json([
             'success'=> true,
@@ -938,7 +944,7 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function makeBooking($meta, $transaction_id, $payment_status){
+    public function makeBooking($meta, $payment_status){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1002,9 +1008,12 @@ class ClientController extends Controller{
         }
         $pdf->save($pdf_name);
 
+        $transaction_data['amount'] = $amount;
+        $transaction_data['payment_status'] = $payment_status;
+        $transaction = Transaction::create($transaction_data);
 
         $all['user_id'] = $user_id;
-        $all['transaction_id'] = $transaction_id;
+        $all['transaction_id'] = $transaction->id;
         $all['service_id'] = $service_id;
         $all['date'] = $date;
         $all['times'] = $times;
@@ -1031,7 +1040,7 @@ class ClientController extends Controller{
         $this->sendBookingMailWithPDF($booking);
     }
 
-    public function makeOrdering($meta, $transaction_id, $payment_status){
+    public function makeOrdering($meta, $payment_status){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1093,8 +1102,12 @@ class ClientController extends Controller{
         }
         $pdf->save($pdf_name);
 
+        $transaction_data['amount'] = $total_amount;
+        $transaction_data['payment_status'] = $payment_status;
+        $transaction = Transaction::create($transaction_data);
+
         $all['user_id'] = $user_id;
-        $all['transaction_id'] = $transaction_id;
+        $all['transaction_id'] = $transaction->id;
         $all['carts'] =  $carts;
         $all['payment'] = $payment_status;
         $all['amount'] = $total_amount;
