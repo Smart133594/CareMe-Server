@@ -940,6 +940,7 @@ class ClientController extends Controller{
         ->get();
 
         foreach ($orderings as $ordering) {
+            $ordering->carts = json_decode($ordering->carts, true);
         }
 
         return response()->json([
