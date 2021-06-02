@@ -14,7 +14,6 @@ class Ordering extends Model
         'transaction_id',
         'delivery',
         'carts',
-        'type',
         'state',
         'reason',
         'invoice',

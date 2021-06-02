@@ -1012,10 +1012,8 @@ class ClientController extends Controller{
         $all['date'] = $date;
         $all['times'] = $times;
         $all['quantity'] = $quantity;
-        $all['amount'] = $amount;
         $all['worker_id'] = $worker_id;
         $all['coupon_id'] = $coupon_id;
-        $all['payment'] = $payment_status;
         $all['type'] = 'card';
         $all['state'] = 'pending';
         if($auto_accept){
@@ -1103,9 +1101,6 @@ class ClientController extends Controller{
         $all['user_id'] = $user_id;
         $all['transaction_id'] = $transaction->id;
         $all['carts'] =  $carts;
-        $all['payment'] = $payment_status;
-        $all['amount'] = $total_amount;
-        $all['type'] = 'card';
         $all['invoice'] = $pdf_name;
         $all['state'] = 'accepted';
 
