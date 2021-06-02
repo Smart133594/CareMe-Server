@@ -936,7 +936,7 @@ class ClientController extends Controller{
         $coupon_id = $meta['coupon_id'];
         $carts = $meta['carts'];
         $carts = str_replace("'", "\"", $carts);
-        $carts = json_decode($carts);
+        $carts = json_decode($carts, true);
         $lang = 'en';
         $items = [];
         $sub_amount = 0;
