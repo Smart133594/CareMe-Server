@@ -3,6 +3,7 @@ import Full from 'Container/Full'
 const Dashboard = () => import('Views/Dashboard/DashboardClient');
 const Profile = () => import('Views/Settings/Profile');
 const Booking = () => import('Views/Bookings/ClientBookings');
+const Orders = () => import('Views/Orders/ClientOrders');
 
 export default {
     path: '/client',
@@ -16,6 +17,23 @@ export default {
                 requiresRole: true,
                 role: 'client',
                 title: 'message.bookings',
+                breadcrumb: [
+                    {
+                        breadcrumbInactive: 'Timelines /'
+                    },
+                    {
+                        breadcrumbActive: "Icon Dots"
+                    }
+                ]
+            }
+        },
+        {
+            path: '/client/orders',
+            component: Orders,
+            meta: {
+                requiresRole: true,
+                role: 'client',
+                title: 'message.orders',
                 breadcrumb: [
                     {
                         breadcrumbInactive: 'Timelines /'

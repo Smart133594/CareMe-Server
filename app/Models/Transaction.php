@@ -20,4 +20,12 @@ class Transaction extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function booking(){
+        return $this->hasOne('App\Models\Booking');
+    }
+
+    public function ordering(){
+        return $this->hasOne('App\Models\Ordering');
+    }
 }

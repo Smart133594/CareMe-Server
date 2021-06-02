@@ -759,22 +759,40 @@ class ClientController extends Controller{
         ]);
     }
 
+    public function refundPayment($payment_id){
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $user = Auth::user();
+        $fields['payment_id'] = $payment_id;
+        $fields['reason'] = "Cancel by client";
+        $metadata['user_id'] = $user->id;
+        $fields['metadata'] = $metadata;
+        $feedback = $this->sendThawaniRequest($baseUrl.'/refunds', "POST", $stringFields);
+        return $feedback;
+    }
+
     public function cancelBooking(Request $request){
         $id = $request->id;
         $booking = Booking::find($id);
-        if($booking->state != "pending" || $booking->state != "rejected"){
+        $feedback = NULL;
+        if($booking->state == "pending" || $booking->state == "rejected"){
+            $transaction = $booking->transaction;
             if($booking->type == "card"){
-
-            }else if($booking->type == "coupon"){
-
+                if($booking->state == "pending" && $transaction->payment_status == 'paid'){
+                    if($booking->payment_id){
+                        $feedback = $this->refundPayment($transaction->$payment_id);
+                    }
+                }
             }
+            $transaction->delete();
             $booking->delete();
             return response()->json([
                 'success'=>true,
+                'data'=> $feedback
             ]);
         }else{
             return response()->json([
                 'success'=>false,
+                'data'=>$feedback
             ]);
         }
     }
@@ -908,6 +926,25 @@ class ClientController extends Controller{
         return response()->json([
             'success'=> true,
             'data'=>$session_id
+        ]);
+    }
+
+    public function getMyOrders(Request $request){
+        $user = Auth::user();
+        $orders = DB::table('orders')
+        ->leftJoin('users', 'users.id', "orders.user_id")
+        ->leftJoin('transactions', 'transactions.id', "orders.transaction_id")
+        ->where('users.id', $user->id)
+        ->select('orders.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
+        ->orderBy('orders.id', 'desc')
+        ->get();
+
+        foreach ($orders as $order) {
+        }
+
+        return response()->json([
+            'success'=>true,
+            'data'=>$orders,
         ]);
     }
 

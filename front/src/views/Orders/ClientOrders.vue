@@ -112,10 +112,10 @@ export default {
         };
     },
     methods: {
-        getMyBookings() {
+        getMyOrders() {
             this.loading = true;
             api
-                .get("getMyBookings", {
+                .get("getMyOrders", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${this.getUser.token}`,
@@ -123,14 +123,9 @@ export default {
                 })
                 .then((response) => {
                     if (response.data.success) {
-                        let bookings = response.data.data;
-                        bookings.forEach((element) => {
-                            let times = element.times;
-                            if (times != null) {
-                                element.times = JSON.parse(times);
-                            }
-                        });
-                        this.bookings = bookings;
+                        let orders = response.data.data;
+                        console.log(orders);
+                        // this.orders = orders;
                     }
                 })
                 .catch((error) => {})
@@ -170,7 +165,7 @@ export default {
     },
     mounted() {},
     beforeMount() {
-        this.getMyBookings();
+        this.getMyOrders();
     },
 };
 </script>

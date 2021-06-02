@@ -38,4 +38,8 @@ class Booking extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function transaction(){
+        return $this->belongsTo('App\Models\Transaction');
+    }
 }

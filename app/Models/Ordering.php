@@ -27,4 +27,7 @@ class Ordering extends Model
         'carts'=>'array',
     ];
 
+    public function transaction(){
+        return $this->belongsTo('App\Models\Transaction');
+    }
 }
