@@ -931,7 +931,82 @@ class ClientController extends Controller{
     }
 
     public function makeBooking($meta, $transaction_id, $payment_status){
+        $user_id = $meta['user_id'];
+        $type = $meta['type'];
+        $coupon_id = $meta['coupon_id'];
+        $date = $meta['date'];
+        $quantity = $meta['quantity'];
+        $service_id = $meta['service_id'];
+        $times = $meta['times'];
+        $times = str_replace("'", "\"", $times);
+        $times = json_decode($times, true);
+        $lang = 'en';
 
+        $service = Service::find($service_id);
+        $auto_accept = $service->auto_confirm;
+        $price = $service->price;
+
+        $sub_amount = $price * $quantity * count($times);
+        $tax_amount = 0;
+        if($service->tax > 0){
+            $tax_amount = ($sub_amount * $service->tax)/100;
+        }
+        $coupon_amount = 0;
+        if($coupon_id != "-1"){
+            $coupon = Coupon::find($coupon_id);
+            if($coupon){
+                $coupon_amount = ($sub_amount * $coupon->percent)%100;
+                $coupon->available = false;
+                $coupon->save();
+            }
+        }
+
+        $amount = $sub_amount + $tax_amount - $coupon_amount;
+        $all['amount'] = $amount;
+        $all['type'] = 'card';
+        $all['state'] = 'pending';
+        if($auto_accept){
+            $all['state'] = 'accepted';
+        }
+        $all['user_id'] = $user_id;
+        $all['transaction_id'] = $transaction_id;
+        $all['payment'] = $payment_status;
+
+        $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
+        $item['price'] = number_format($service->price*count($times), 2, '.', '');
+        $item['quantity'] = $quantity;
+        $item['price_sub'] =  number_format($sub_amount, 2, '.', '');
+
+        $items = [];
+        array_push($items, $item);
+
+        $data['total'] = number_format($amount, 2, '.', '');
+        $data['sub_total'] = number_format($sub_amount, 2, '.', '');
+        $data['tax'] = number_format($tax_amount, 2, '.', '');
+        $data['coupon'] = number_format($coupon_amount, 2, '.', '');
+        $data['amount_paid'] = '0.00';
+        $data['items'] = $items;
+
+        App::setlocale($lang);
+        $pdf = PDF::loadView('invoicies.invoice', $data);
+        $pdf_name = 'uploads/invoicies/'.time()."_invoice.pdf";
+        $path = public_path() . "/uploads/invoicies/";
+        if(!File::isDirectory($path)){
+            File::makeDirectory($path, 0777, true, true);
+        }
+        $pdf->save($pdf_name);
+        $all['invoice'] = $pdf_name;
+
+       
+        $booking = Booking::create($all);
+
+        $booking = DB::table('bookings')
+        ->leftJoin('services', 'services.id', "bookings.service_id")
+        ->leftJoin('users', 'users.id', "bookings.user_id")
+        ->where('bookings.id', $booking->id)
+        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
+        ->first();
+        $this->sendBookingMailWithPDF($booking);
     }
 
     public function makeOrdering($meta, $transaction_id, $payment_status){
