@@ -202,7 +202,7 @@ export default {
 
     add2Cart() {
       if (this.itemExistOnCart) {
-        this.$router.push("/carts");
+        this.$router.push("/carts/1");
         return;
       }
       this.product.quantity = this.quantity;

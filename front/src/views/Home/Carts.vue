@@ -79,6 +79,14 @@ export default {
     }
     this.getCarts();
   },
+
+  watch:{
+    cart(){
+      if(this.cart.length == 0){
+        this.$router.push("/");
+      }
+    }
+  }
 };
 </script>
 
