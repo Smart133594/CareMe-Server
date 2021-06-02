@@ -21,6 +21,7 @@ use App\Models\Department;
 use App\Models\Worker;
 use App\Models\Booking;
 use App\Models\Ordering;
+use App\Models\User;
 use App\Models\Coupon;
 use PDF;
 use File;
