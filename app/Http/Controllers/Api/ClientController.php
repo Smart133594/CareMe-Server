@@ -929,7 +929,7 @@ class ClientController extends Controller{
         return response()->json([
             'success'=> true,
             'data'=>$feedback['data']['data']['metadata']['carts'],
-            'data1'=>json_decode($feedback['data']['data']['metadata']['carts'], true);
+            'data1'=>json_decode($feedback['data']['data']['metadata']['carts'], true)
         ]);
     }
 
