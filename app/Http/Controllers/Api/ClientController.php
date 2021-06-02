@@ -518,8 +518,6 @@ class ClientController extends Controller{
         $result = NULL;
         if($coupon){
             $coupon_amount = ($sub_amount * $coupon->percent)%100;
-            $coupon->available = false;
-            $coupon->save();
             $result['id'] = $coupon->id;
             $result['coupon_amount'] = $coupon_amount;
             $result['coupon_percent'] = $coupon->percent;
@@ -554,6 +552,10 @@ class ClientController extends Controller{
             }
             $coupon_amount = $coupon_result['coupon_amount'];
             $all['coupon_id'] = $coupon_result['id'];
+
+            $coupon = Coupon::find($coupon_result['id']);
+            $coupon->available = false;
+            $coupon->save();
         }
 
         $amount = $sub_amount + $tax_amount - $coupon_amount;
@@ -666,7 +668,7 @@ class ClientController extends Controller{
         $price = $service->price;
         $auto_accept = $service->auto_confirm;
 
-        $sub_amount = $price * $quantity * count($times);
+        $sub_amount = $price * count($times);
         $tax_amount = 0;
         if($service->tax > 0){
             $tax_amount = ($sub_amount * $service->tax)/100;
@@ -694,7 +696,7 @@ class ClientController extends Controller{
         $products = [];
         $product['name'] = $service->en_name."(+ tax - coupon)";
         $product['unit_amount'] = $amount *1000;
-        $product['quantity'] = 1;
+        $product['quantity'] = $quantity;
         array_push($products, $product);
         $fields['products'] = $products;
         $fields['success_url'] = $success_url;
@@ -834,16 +836,15 @@ class ClientController extends Controller{
             $quantity = $cart['quantity'];
             $product = Product::find($id);
             if($product){
-                $price_sub = $product->price * $quantity;
-                $tax = ($price_sub * $product->tax)/100;
+                $price_sub = $product->price;
+                $tax = ($price_sub * $quantity * $product->tax)/100;
                 $sub_amount += $price_sub;
                 $tax_amount += $tax;
 
                 $item['id'] = $id;
                 $item['name'] = $product->en_name."(+ tax -coupon)";
-                $item['unit_amount'] = ($price_sub + $tax - ($price_sub * $coupon_percent)/100)*1000;
+                $item['unit_amount'] = ($price_sub + $tax - ($price_sub * $quantity * $coupon_percent)/100)*1000;
                 $item['quantity'] = $quantity;
-
 
                 $item_meta['id'] = $id;
                 $item_meta['quantity'] = $quantity;
@@ -878,7 +879,7 @@ class ClientController extends Controller{
         $baseUrl = config('app.THAWANI_BASE_URL');
         $feedback = $this->sendThawaniRequest($baseUrl.'/checkout/session', "POST", $stringFields);
         $session_id = "";
-      
+        
         if(!is_null($feedback)){
             $json = json_decode($feedback, true);
             if($json['success']){
@@ -911,28 +912,36 @@ class ClientController extends Controller{
         // fwrite($fp, json_encode($all));
         // fclose($fp);
         $session_id = $request->session_id;
-        $feedback = $this->getSessionDetails($session_id);
-        $feedback = json_decode($feedback, true);
-        return response()->json([
-            'success'=> true,
-            'data'=>$feedback
-        ]);
-    }
 
-    public function getSessionDetails($session_id){
         $baseUrl = config('app.THAWANI_BASE_URL');
         $url = $baseUrl.'/checkout/session/'.$session_id;
         $feedback = $this->sendThawaniRequest($url, "GET");
-        return $feedback;
+
+        $feedback = json_decode($feedback, true);
+        
+        $type = $feedback['data']['data']['metadata']['type'];
+        if($type == 'servie'){
+
+        }else{
+            // $this->makeOrdering($feedback['data']['data']['metadata']);
+        }
+
+        return response()->json([
+            'success'=> true,
+            'data'=>$feedback['data']['data']['metadata']['carts']
+            'data1'=>json_decode($feedback['data']['data']['metadata']['carts'], true);
+        ]);
     }
 
-    public function orderingWithCard(Request $request){
-        $type = $request->type;
-        // $lang = $request->lang;
+    public function makeOrdering($meta){
+        $user_id = $meta['user_id'];
+        $type = $meta['type'];
+        $coupon_id = $meta['coupon_id'];
+        $carts = $meta['carts'];
+        
         $lang = 'en';
-        $code = $request->coupon;
+        
         $carts = $request->carts;
-
         $all = $request->all();
 
         $items = [];
