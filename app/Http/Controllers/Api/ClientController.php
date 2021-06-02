@@ -875,6 +875,7 @@ class ClientController extends Controller{
         $stringFields = str_replace("\'", "'", $stringFields);
         $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
         $session_id = "";
+      
         if(!is_null($feedback)){
             $json = json_decode($feedback, true);
             if($json['success']){
