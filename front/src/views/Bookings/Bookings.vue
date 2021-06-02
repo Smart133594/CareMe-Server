@@ -34,7 +34,7 @@
                                     <p style="text-transform: uppercase">{{ item.type }}</p>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid',info: item.payment == 'paid'}">{{ item.payment }}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid',info: item.payment_status == 'paid'}">{{ item.payment_status }}</v-badge>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
@@ -50,8 +50,8 @@
                                             <v-btn text block @click="view(item)">{{$t("message.view")}}</v-btn>
                                             <v-btn text block @click="edit(item)" class="mt-1">{{$t("message.edit")}}</v-btn>
                                             <v-btn text block @click="confirmBooking(item)" class="mt-1" v-if="item.state == 'pending'">{{ $t("message.confirm") }}</v-btn>
-                                            <v-btn text block @click="payBooking(item)" v-if="item.payment == 'due' && item.state == 'accepted'" class="mt-1">{{ $t("message.pay") }}</v-btn>
-                                            <v-btn text block @click="rejectBooking(item)" v-if="item.payment == 'due' && item.state != 'rejected' && item.state != 'accepted'" class="mt-1">{{ $t("message.reject") }}</v-btn>
+                                            <v-btn text block @click="payBooking(item)" v-if="item.payment_status != 'paid' && item.state == 'accepted'" class="mt-1">{{ $t("message.pay") }}</v-btn>
+                                            <v-btn text block @click="rejectBooking(item)" v-if="item.state == 'pending'" class="mt-1">{{ $t("message.reject") }}</v-btn>
                                         </v-list>
                                     </v-menu>
                                 </td>
@@ -138,14 +138,13 @@ export default {
                 .then((response) => {
                     if (response.data.success) {
                         let bookings = response.data.data;
-                        console.log(bookings);
-                        // bookings.forEach((element) => {
-                        //     let times = element.times;
-                        //     if (times != null) {
-                        //         element.times = JSON.parse(times);
-                        //     }
-                        // });
-                        // this.bookings = bookings;
+                        bookings.forEach((element) => {
+                            let times = element.times;
+                            if (times != null) {
+                                element.times = JSON.parse(times);
+                            }
+                        });
+                        this.bookings = bookings;
                     }
                 })
                 .catch((error) => {})

@@ -9,38 +9,25 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                 </v-card-title>
-                <v-data-table v-bind:headers="headers" v-bind:items="bookings" v-bind:search="search">
+                <v-data-table v-bind:headers="headers" v-bind:items="orders" v-bind:search="search">
                     <template v-slot:body="{ items }">
                         <tbody>
-                            <tr v-for="(item, index) in items" :key="`booking${item.id}`">
+                            <tr v-for="(item, index) in items" :key="`ordering${item.id}`">
                                 <td>{{ index + 1 }}</td>
                                 <td>
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
-                                <td>{{item.full_name}}</td>
-                                <td>{{item[selectedLocale.locale == "en" ? "en_name" : "ar_name"]}}
-                                </td>
-                                <td>
-                                    {{ item.date }}
-                                </td>
-                                <td>
-                                    <p v-for="(time, index) in item.times" :key="`${index}item`">
-                                        {{ time.from_time }} ~ {{ time.to_time }}
-                                    </p>
+                                <td>{{item.created_at}}
                                 </td>
                                 <td>
                                     {{ $t("message.currency") }}
                                     {{ parseFloat(item.amount).toFixed(2) }}
                                 </td>
                                 <td>
-                                    <p style="text-transform: uppercase">{{ item.type }}</p>
-                                </td>
-                                <td>
                                     <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid', info: item.payment == 'paid'}">{{ item.payment_status }}</v-badge>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
-                                    <v-btn :value="false" class="p-2 error ml-2" small @click="cancelBooking(item)" v-if="item.state == 'pending'" :disabled="loading">{{ $t("message.cancel") }}</v-btn>
+                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted', error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
                                 </td>
                             </tr>
                         </tbody>
@@ -66,7 +53,7 @@ export default {
     data: function () {
         return {
             loading: false,
-            bookings: [],
+            orders: [],
             search: "",
             baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
             headers: [{
@@ -78,29 +65,13 @@ export default {
                     value: "invoice",
                 },
                 {
-                    text: this.$t("message.worker"),
-                    value: "worker",
-                },
-                {
-                    text: this.$t("message.service"),
-                    value: "en_name",
-                },
-                {
                     text: this.$t("message.date"),
-                    value: "date",
-                },
-                {
-                    text: this.$t("message.times"),
+                    value: "created_at",
                 },
                 {
                     text: this.$t("message.amount"),
                     value: "amount",
                 },
-                {
-                    text: this.$t("message.type"),
-                    value: "type",
-                },
-
                 {
                     text: this.$t("message.payment"),
                     value: "payment_status",
@@ -124,8 +95,7 @@ export default {
                 .then((response) => {
                     if (response.data.success) {
                         let orders = response.data.data;
-                        console.log(orders);
-                        // this.orders = orders;
+                        this.orders = orders;
                     }
                 })
                 .catch((error) => {})

@@ -956,20 +956,38 @@ class AdminController extends Controller{
         ]);
     }
 
+    public function refundPayment($payment_id){
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $user = Auth::user();
+        $fields['payment_id'] = $payment_id;
+        $fields['reason'] = "Rejected by provider";
+        $metadata['user_id'] = $user->id;
+        $fields['metadata'] = $metadata;
+        $feedback = $this->sendThawaniRequest($baseUrl.'/refunds', "POST", $stringFields);
+        return $feedback;
+    }
+
     public function rejectBooking(Request $request){
         $booking = Booking::find($request->id);
         if($booking){
             if($booking->state!="accepted"){
                 $booking->state = "rejected";
                 $booking->save();
+                $transaction = $booking->transaction;
+                if($transaction->payment_status == 'paid'){
+                    $feedback = $this->refundPayment($transaction->payment_id);
+                    $transaction->payment_status = 'refund';
+                    $transaction->save();
+                }
+               
                 $booking = DB::table('bookings')
                 ->leftJoin('services', 'services.id', "bookings.service_id")
                 ->leftJoin('users', 'users.id', "bookings.user_id")
+                ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
                 ->where('bookings.id', $booking->id)
-                ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
-                ->orderBy('bookings.id', 'desc')
+                ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone",
+                         "users.email", "transactions.amount", "transactions.payment_status")
                 ->first();
-
                 $this->sendBookingMail($booking);
                 return response()->json([
                     'success'=>true,
@@ -983,10 +1001,11 @@ class AdminController extends Controller{
 
     public function payBooking(Request $request){
         $booking = Booking::find($request->id);
-        if($booking){
-            if($booking->state=="accepted"){
-                $booking->payment = "paid";
-                $booking->save();
+        $transaction = $booking->transaction;
+        if($transaction){
+            if($transaction->payment_status != "paid"){
+                $transaction->payment_status = "paid";
+                $transaction->save();
                 return response()->json([
                     'success'=>true,
                 ]);
@@ -1004,15 +1023,14 @@ class AdminController extends Controller{
                 $booking->state = "accepted";
                 $booking->save();
                 $booking = DB::table('bookings')
-                    ->leftJoin('services', 'services.id', "bookings.service_id")
-                    ->leftJoin('users', 'users.id', "bookings.user_id")
-                    ->where('bookings.id', $booking->id)
-                    ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
-                    ->orderBy('bookings.id', 'desc')
-                    ->first();
-
+                ->leftJoin('services', 'services.id', "bookings.service_id")
+                ->leftJoin('users', 'users.id', "bookings.user_id")
+                ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
+                ->where('bookings.id', $booking->id)
+                ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone",
+                         "users.email", "transactions.amount", "transactions.payment_status")
+                ->first();
                 $this->sendBookingMail($booking);
-
                 return response()->json([
                     'success'=>true,
                 ]);

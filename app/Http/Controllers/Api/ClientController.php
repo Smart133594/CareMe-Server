@@ -605,7 +605,7 @@ class ClientController extends Controller{
         $user = Auth::user();
 
         $transaction_data['amount'] = $amount;
-        $transaction_data['payment_status'] = 'Due';
+        $transaction_data['payment_status'] = 'due';
         $transaction = Transaction::create($transaction_data);
 
         $all['type'] = 'insurance';
@@ -939,16 +939,16 @@ class ClientController extends Controller{
         ->orderBy('orderings.id', 'desc')
         ->get();
 
-        foreach ($orderings as $ordering) {
-            $carts = json_decode($ordering->carts, true);
-            $products = [];
-            foreach ($carts as $cart) {
-                $product = Product::find($cart['id']);
-                $product->quantity = $cart['quantity'];
-                array_push($products, $product);
-            }
-            $ordering->carts = $products;
-        }
+        // foreach ($orderings as $ordering) {
+        //     $carts = json_decode($ordering->carts, true);
+        //     $products = [];
+        //     foreach ($carts as $cart) {
+        //         $product = Product::find($cart['id']);
+        //         $product->quantity = $cart['quantity'];
+        //         array_push($products, $product);
+        //     }
+        //     $ordering->carts = $products;
+        // }
 
         return response()->json([
             'success'=>true,
