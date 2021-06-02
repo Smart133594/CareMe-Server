@@ -957,6 +957,44 @@ class AdminController extends Controller{
         ]);
     }
 
+    public function getOrders(Request $request){
+        $user = Auth::user();
+
+        if($user->role == "admin"){
+            $orderings = DB::table('orderings')
+            ->leftJoin('users', 'users.id', "orderings.user_id")
+            ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
+            ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status", "users.full_name"
+            , "users.email", "users.phone")
+            ->orderBy('orderings.id', 'desc')
+            ->get();
+        }else{
+            $orderings = DB::table('orderings')
+            ->leftJoin('users', 'users.id', "orderings.user_id")
+            ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
+            ->where('users.id', $user->id)
+            ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
+            ->orderBy('orderings.id', 'desc')
+            ->get();
+        }
+
+        foreach ($orderings as $ordering) {
+            $carts = json_decode($ordering->carts, true);
+            $products = [];
+            foreach ($carts as $cart) {
+                $product = Product::find($cart['id']);
+                $product->quantity = $cart['quantity'];
+                array_push($products, $product);
+            }
+            $ordering->carts = $products;
+        }
+
+        return response()->json([
+            'success'=>true,
+            'data'=>$orderings,
+        ]);
+    }
+
     public function refundPayment($payment_id){
         $baseUrl = config('app.THAWANI_BASE_URL');
         $user = Auth::user();

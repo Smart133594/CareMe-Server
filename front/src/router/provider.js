@@ -52,23 +52,23 @@ export default {
             }
         },
 
-        {
-            path: '/provider/orders',
-            component: Orders,
-            meta: {
-                requiresRole: true,
-                role: 'provider',
-                title: 'message.orders',
-                breadcrumb: [
-                    {
-                        breadcrumbInactive: 'Timelines /'
-                    },
-                    {
-                        breadcrumbActive: "Icon Dots"
-                    }
-                ]
-            }
-        },
+        // {
+        //     path: '/provider/orders',
+        //     component: Orders,
+        //     meta: {
+        //         requiresRole: true,
+        //         role: 'provider',
+        //         title: 'message.orders',
+        //         breadcrumb: [
+        //             {
+        //                 breadcrumbInactive: 'Timelines /'
+        //             },
+        //             {
+        //                 breadcrumbActive: "Icon Dots"
+        //             }
+        //         ]
+        //     }
+        // },
 
         {
             path: '/provider/workers',
