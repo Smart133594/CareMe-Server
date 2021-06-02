@@ -14,7 +14,7 @@ class CreateTransactionsTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->string('id')->nullable();
+            $table->id();
             $table->string('payment_id')->nullable();
             $table->double('amount')->nullable();
             $table->string('payment_statues')->nullable();

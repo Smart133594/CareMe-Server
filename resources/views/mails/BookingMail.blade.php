@@ -60,7 +60,7 @@
                                     Date: {{$booking->date}}
                                 </div>
                                 <div class="text-gray-600 text-sm">
-                                    Payment: {{$booking->payment}}
+                                    Payment: {{$booking->payment_status}}
                                 </div>
                                 @if($booking->state == 'rejected')
                                 <div class="text-gray-600 text-sm">

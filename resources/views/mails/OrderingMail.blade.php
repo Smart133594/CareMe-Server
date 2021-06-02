@@ -53,7 +53,7 @@
                                     Status: {{$ordering->state}}
                                 </div>
                                 <div class="text-gray-600 text-sm">
-                                    Payment: {{$ordering->payment}}
+                                    Payment: {{$ordering->payment_status}}
                                 </div>
                                 @if($ordering->state == 'rejected')
                                 <div class="text-gray-600 text-sm">
