@@ -36,7 +36,7 @@
                                     <p style="text-transform: uppercase">{{ item.type }}</p>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid', info: item.payment == 'paid'}">{{ item.payment }}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid', info: item.payment == 'paid'}">{{ item.payment_status }}</v-badge>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
@@ -103,7 +103,7 @@ export default {
 
                 {
                     text: this.$t("message.payment"),
-                    value: "payment",
+                    value: "payment_status",
                 },
                 {
                     text: this.$t("message.state"),
