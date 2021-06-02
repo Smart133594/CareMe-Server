@@ -892,7 +892,7 @@ class ClientController extends Controller{
             ]);
         }
         return response()->json([
-            'success'=> false,
+            'success'=> true,
             'data'=>$session_id
         ]);
     }
@@ -912,6 +912,8 @@ class ClientController extends Controller{
             'success'=> true,
         ]);
     }
+
+
 
     public function orderingWithCard(Request $request){
         $type = $request->type;
