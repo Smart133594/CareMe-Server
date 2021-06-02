@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{any}', 'SpaController@index')->where('any', '.*');
-Route::post('/paymentResult', 'API\ClientController@paymentResult');
+Route::post('/paymentResult', 'Api\ClientController@paymentResult');
 
 
