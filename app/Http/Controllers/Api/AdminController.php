@@ -930,7 +930,7 @@ class AdminController extends Controller{
             ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
             ->leftJoin('users', 'users.id', "bookings.user_id")
             ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
-                    "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge", "transactions.payment_id", "transactions.amount",
+                    "users.email", "workers.full_name as worker_name", "workers.image as worker_image", "transactions.payment_id", "transactions.amount",
                     "transactions.payment_status")
             ->orderBy('bookings.id', 'desc')
             ->get();
@@ -950,6 +950,7 @@ class AdminController extends Controller{
             ->orderBy('bookings.id', 'desc')
             ->get();
         }
+
         return response()->json([
             'success'=>true,
             'data'=>$bookings
@@ -972,6 +973,7 @@ class AdminController extends Controller{
         if($booking){
             if($booking->state!="accepted"){
                 $booking->state = "rejected";
+                $booking->reason = "Provider rejected";
                 $booking->save();
                 $transaction = $booking->transaction;
                 if($transaction->payment_status == 'paid'){

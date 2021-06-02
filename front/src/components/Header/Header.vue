@@ -48,7 +48,7 @@
           </router-link>
         </div>
       </div>
-      <div class="navbar-right">
+      <div class="navbar-right d-flex flex-direction-row">
         <v-btn icon large @click="toggleFullScreen" class="full-screen ma-0">
           <v-icon color="grey">fullscreen</v-icon>
         </v-btn>

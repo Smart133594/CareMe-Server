@@ -24,14 +24,30 @@
                                     {{ item.date }}
                                 </td>
                                 <td>
-                                    {{ item.full_name }}
+                                    <p class="m-0" v-for="(time, index) in item.times" :key="`${index}item`">
+                                        {{ time.from_time }} ~ {{ time.to_time }}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p class="m-0">
+                                        {{ item.full_name }}
+                                    </p>
+                                    <p class="m-0">
+                                        {{item.phone}}
+                                    </p>
                                 </td>
                                 <td>
                                     {{ $t("message.currency") }}
                                     {{ parseFloat(item.amount).toFixed(2) }}
                                 </td>
                                 <td>
-                                    <p style="text-transform: uppercase">{{ item.type }}</p>
+                                    <div v-if="item.type == 'insurance'" class="d-flex flex-direction-row">
+                                        <v-img @click="showImage(`${baseUrl}uploads/bookings/${item.image}`)" class="m-0" width="50" height="50" :src="`${baseUrl}uploads/bookings/${item.image}`"></v-img>
+                                        <v-img @click="showImage(`${baseUrl}uploads/bookings/${item.image1}`)" class="m-0 ml-1" width="50" height="50" :src="`${baseUrl}uploads/bookings/${item.image1}`"></v-img>
+                                    </div>
+                                    <div v-else>
+                                        <p style="text-transform: uppercase" class="m-0">{{ item.type }}</p>
+                                    </div>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid',info: item.payment_status == 'paid'}">{{ item.payment_status }}</v-badge>
@@ -47,8 +63,8 @@
                                             </v-btn>
                                         </template>
                                         <v-list style="cursor: pointer">
-                                            <v-btn text block @click="view(item)">{{$t("message.view")}}</v-btn>
-                                            <v-btn text block @click="edit(item)" class="mt-1">{{$t("message.edit")}}</v-btn>
+                                            <!--<<v-btn text block @click="view(item)">{{$t("message.view")}}</v-btn>!-->
+                                            <!--<v-btn text block @click="edit(item)" class="mt-1">{{$t("message.edit")}}</v-btn>!-->
                                             <v-btn text block @click="confirmBooking(item)" class="mt-1" v-if="item.state == 'pending'">{{ $t("message.confirm") }}</v-btn>
                                             <v-btn text block @click="payBooking(item)" v-if="item.payment_status != 'paid' && item.state == 'accepted'" class="mt-1">{{ $t("message.pay") }}</v-btn>
                                             <v-btn text block @click="rejectBooking(item)" v-if="item.state == 'pending'" class="mt-1">{{ $t("message.reject") }}</v-btn>
@@ -99,6 +115,10 @@ export default {
                     value: "date",
                 },
                 {
+                    text: this.$t("message.times"),
+                    value: "times",
+                },
+                {
                     text: this.$t("message.client"),
                     value: "full_name",
                 },
@@ -122,7 +142,9 @@ export default {
                     text: this.$t("message.settings"),
                 },
             ],
-            selectedItem: null,
+            selectedItem: {},
+            imageUrl: "",
+            dialog: false,
         };
     },
     methods: {
@@ -154,8 +176,12 @@ export default {
         },
         view(item) {
             this.selectedItem = item;
+            this.dialog = true;
         },
-        edit(item) {},
+        edit(item) {
+            this.selectedItem = item;
+            this.dialog = true;
+        },
         confirmBooking(item) {
             this.loading = true;
             api
@@ -234,6 +260,10 @@ export default {
                     this.loading = false;
                 });
         },
+
+        showImage(url) {
+            window.open(url, "_blank");
+        }
     },
     mounted() {},
     beforeMount() {

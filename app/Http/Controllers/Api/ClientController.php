@@ -784,6 +784,9 @@ class ClientController extends Controller{
                         $feedback = $this->refundPayment($transaction->$payment_id);
                     }
                 }
+            }else{
+                File::delete(public_path() . "/uploads/bookings/".$booking->image);
+                File::delete(public_path() . "/uploads/bookings/".$booking->image1);
             }
             $transaction->delete();
             $booking->delete();
@@ -808,7 +811,7 @@ class ClientController extends Controller{
         ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
         ->where('users.id', $user->id)
         ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "workers.full_name", 
-            "workers.image", "transactions.payment_id", "transactions.amount", "transactions.payment_status")
+            "workers.image as worker_image", "transactions.payment_id", "transactions.amount", "transactions.payment_status")
         ->orderBy('bookings.id', 'desc')
         ->get();
 
