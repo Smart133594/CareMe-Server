@@ -919,17 +919,14 @@ class ClientController extends Controller{
         $feedback = json_decode($feedback, true);
         $meta = $feedback['data']['metadata'];
         $type = $meta['type'];
-        $carts = $meta['carts'];
         if($type == 'servie'){
 
         }else{
-            // $this->makeOrdering($feedback['data']['metadata']);
+            // $this->makeOrdering($meta);
         }
-        $carts = str_replace("'", "\"", $carts);
-        $result = json_decode($carts);
         return response()->json([
             'success'=> true,
-            'data'=>$result,
+            'data'=>$feedback
         ]);
     }
 
@@ -938,9 +935,9 @@ class ClientController extends Controller{
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
         $carts = $meta['carts'];
+        $carts = str_replace("'", "\"", $carts);
+        $carts = json_decode($carts);
         $lang = 'en';
-        $carts = $request->carts;
-        $all = $request->all();
 
         $items = [];
         $sub_amount = 0;
@@ -967,10 +964,7 @@ class ClientController extends Controller{
         if($code != ""){
             $types = ['cart', $type];
             $today = date("Y-m-d");
-            $coupon = Coupon::where('code', $code)
-                        ->whereIn('type', $types)
-                        ->whereDate('expire', '>=', $today)
-                        ->first();
+            $coupon = Coupon::find($code)
             if($coupon){
                 $coupon_amount = ($sub_amount * $coupon->percent)%100;
                 $coupon->available = false;
