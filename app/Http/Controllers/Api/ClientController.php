@@ -830,7 +830,10 @@ class ClientController extends Controller{
             $product = Product::find($cart['id']);
             $product['quantity'] = $cart['quantity'];
             $department = Department::find($product->id);
-            $product['vendor_id'] = $department->vendor_id;
+            $vendor = Vendor::find($department->vendor_id);
+            $product['vendor_id'] = $vendor->id;
+            $product['vendor_en_name'] = $vendor->en_name;
+            $product['vendor_ar_name'] = $vendor->ar_name;
 
             if($product['active']){
                 array_push($products, $product);
