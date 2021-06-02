@@ -964,7 +964,7 @@ class ClientController extends Controller{
         if($code != ""){
             $types = ['cart', $type];
             $today = date("Y-m-d");
-            $coupon = Coupon::find($code)
+            $coupon = Coupon::find($code);
             if($coupon){
                 $coupon_amount = ($sub_amount * $coupon->percent)%100;
                 $coupon->available = false;
