@@ -779,13 +779,14 @@ class ClientController extends Controller{
 
     public function getMyBookings(Request $request){
         $user = Auth::user();
-
         $bookings = DB::table('bookings')
         ->leftJoin('services', 'services.id', "bookings.service_id")
         ->leftJoin('users', 'users.id', "bookings.user_id")
         ->leftJoin('workers', 'workers.id', "bookings.worker_id")
+        ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
         ->where('users.id', $user->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "workers.full_name", "workers.image")
+        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "workers.full_name", 
+            "workers.image", "transactions.payment_id", "transactions.amount", "transactions.payment_status")
         ->orderBy('bookings.id', 'desc')
         ->get();
 

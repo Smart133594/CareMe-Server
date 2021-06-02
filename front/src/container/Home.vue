@@ -276,7 +276,6 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
                     Vue.notify({
                         group: "loggedIn",
                         type: "error",
@@ -327,7 +326,6 @@ export default {
                         }
                     })
                     .catch((error) => {
-                        console.log(error);
                         Vue.notify({
                             group: "loggedIn",
                             type: "error",
@@ -440,7 +438,6 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
                     Vue.notify({
                         group: "loggedIn",
                         type: "error",

@@ -71,7 +71,6 @@ export default {
 
   methods: {
     selectedItem(item) {
-      console.log(item);
     },
   },
 };

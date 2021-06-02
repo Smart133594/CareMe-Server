@@ -31,7 +31,6 @@ export default {
     this.breadcrumbItems[0] = this.$breadcrumbs[0].meta;
   },
   mounted() {
-    // console.log("this.$route.params="+this.$route.params.id);
     this.projectId = this.$route.params.id;
   },
   methods: {

@@ -138,13 +138,14 @@ export default {
                 .then((response) => {
                     if (response.data.success) {
                         let bookings = response.data.data;
-                        bookings.forEach((element) => {
-                            let times = element.times;
-                            if (times != null) {
-                                element.times = JSON.parse(times);
-                            }
-                        });
-                        this.bookings = bookings;
+                        console.log(bookings);
+                        // bookings.forEach((element) => {
+                        //     let times = element.times;
+                        //     if (times != null) {
+                        //         element.times = JSON.parse(times);
+                        //     }
+                        // });
+                        // this.bookings = bookings;
                     }
                 })
                 .catch((error) => {})

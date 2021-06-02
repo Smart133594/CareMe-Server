@@ -51,7 +51,6 @@ const mutations = {
     },
 
     setMenus(state, role){
-        console.log("role", role.role)
         if(role.role == 'admin'){
             state.menus = admins;
         }else if(role.role == 'provider'){
