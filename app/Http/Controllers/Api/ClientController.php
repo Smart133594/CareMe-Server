@@ -688,7 +688,7 @@ class ClientController extends Controller{
         $amount = $sub_amount + $tax_amount - $coupon_amount;
 
         $user = Auth::user();
-        $fields['client_customer_id'] = $user->id;
+        $fields['client_reference_id'] = $user->id;
         $fields['customer_id'] = $user->customer_id;
 
         $products = [];
@@ -855,7 +855,7 @@ class ClientController extends Controller{
 
         $amount = $sub_amount + $tax_amount - $coupon_amount;
         $user = Auth::user();
-        $fields['client_customer_id'] = $user->id;
+        $fields['client_reference_id'] = $user->id;
         $fields['customer_id'] = $user->customer_id;
 
         $fields['products'] = $products;
@@ -912,6 +912,7 @@ class ClientController extends Controller{
         // fclose($fp);
         $session_id = $request->session_id;
         $feedback = $this->getSessionDetails($session_id);
+        $feedback = json_decode($feedback, true);
         return response()->json([
             'success'=> true,
             'data'=>$feedback
