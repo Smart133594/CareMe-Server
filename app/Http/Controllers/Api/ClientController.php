@@ -971,21 +971,6 @@ class ClientController extends Controller{
         }
 
         $amount = $sub_amount + $tax_amount - $coupon_amount;
-        $all['amount'] = $amount;
-        $all['type'] = 'card';
-        $all['state'] = 'pending';
-        if($auto_accept){
-            $all['state'] = 'accepted';
-        }
-        $all['user_id'] = $user_id;
-        $all['transaction_id'] = $transaction_id;
-        $all['payment'] = $payment_status;
-        $all['date'] = $date;
-        $all['worker_id'] = $worker_id;
-        $all['times'] = $times;
-        $all['quantity'] = $quantity;
-        $all['coupon_id'] = $coupon_id;
-        $all['service_id'] = $service_id;
 
         $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
         $item['price'] = number_format($service->price*count($times), 2, '.', '');
@@ -1016,9 +1001,24 @@ class ClientController extends Controller{
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
-        $all['invoice'] = $pdf_name;
 
-       
+
+        $all['user_id'] = $user_id;
+        $all['transaction_id'] = $transaction_id;
+        $all['service_id'] = $service_id;
+        $all['date'] = $date;
+        $all['times'] = $times;
+        $all['quantity'] = $quantity;
+        $all['amount'] = $amount;
+        $all['worker_id'] = $worker_id;
+        $all['coupon_id'] = $coupon_id;
+        $all['payment'] = $payment_status;
+        $all['type'] = 'card';
+        $all['state'] = 'pending';
+        if($auto_accept){
+            $all['state'] = 'accepted';
+        }
+        $all['invoice'] = $pdf_name;
         $booking = Booking::create($all);
 
         $booking = DB::table('bookings')
@@ -1027,6 +1027,7 @@ class ClientController extends Controller{
         ->where('bookings.id', $booking->id)
         ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone", "users.email")
         ->first();
+
         $this->sendBookingMailWithPDF($booking);
     }
 
