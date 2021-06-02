@@ -917,17 +917,18 @@ class ClientController extends Controller{
         $url = $baseUrl.'/checkout/session/'.$session_id;
         $feedback = $this->sendThawaniRequest($url, "GET");
         $feedback = json_decode($feedback, true);
-        $type = $feedback['data']['metadata']['type'];
+        $meta = $feedback['data']['metadata'];
+        $type = $meta['type'];
         if($type == 'servie'){
 
         }else{
             // $this->makeOrdering($feedback['data']['metadata']);
         }
-
         return response()->json([
             'success'=> true,
-            'data'=>$feedback['data']['metadata']['carts'],
-            'data1'=>json_decode($feedback['data']['metadata']['carts'])
+            'data'=>$meta,
+            'data2'=>$meta['carts'],
+            'data3'=>json_decode($meta['carts']),
         ]);
     }
 
