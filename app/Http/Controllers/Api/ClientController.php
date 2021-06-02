@@ -925,11 +925,11 @@ class ClientController extends Controller{
         }else{
             // $this->makeOrdering($feedback['data']['metadata']);
         }
+        $carts = str_replace("'", "\"", $carts);
+        $result = json_decode($carts);
         return response()->json([
             'success'=> true,
-            'data'=>$meta,
-            'data2'=>$meta['carts'],
-            'data3'=>json_decode($carts),
+            'data'=>$result,
         ]);
     }
 
@@ -938,9 +938,7 @@ class ClientController extends Controller{
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
         $carts = $meta['carts'];
-        
         $lang = 'en';
-        
         $carts = $request->carts;
         $all = $request->all();
 
