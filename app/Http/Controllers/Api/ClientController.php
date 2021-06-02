@@ -931,20 +931,20 @@ class ClientController extends Controller{
 
     public function getMyOrders(Request $request){
         $user = Auth::user();
-        $orders = DB::table('orders')
-        ->leftJoin('users', 'users.id', "orders.user_id")
-        ->leftJoin('transactions', 'transactions.id', "orders.transaction_id")
+        $orderings = DB::table('orderings')
+        ->leftJoin('users', 'users.id', "orderings.user_id")
+        ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
         ->where('users.id', $user->id)
-        ->select('orders.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
-        ->orderBy('orders.id', 'desc')
+        ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
+        ->orderBy('orderings.id', 'desc')
         ->get();
 
-        foreach ($orders as $order) {
+        foreach ($orderings as $ordering) {
         }
 
         return response()->json([
             'success'=>true,
-            'data'=>$orders,
+            'data'=>$orderings,
         ]);
     }
 
