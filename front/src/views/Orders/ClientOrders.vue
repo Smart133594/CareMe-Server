@@ -18,7 +18,11 @@
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
                                 <td>{{item.created_at}}</td>
-                                <td>{{item.carts}}</td>
+                                <td>
+                                    <p class="m-0" v-for="(cart, index) in item.carts" :key="`${index}item`">
+                                        {{cart[selectedLocale.locale == "en" ? "en_name" : "ar_name"]}}({{cart.quantity}})
+                                    </p>
+                                </td>
                                 <td>
                                     {{ $t("message.currency") }}
                                     {{ parseFloat(item.amount).toFixed(2) }}
