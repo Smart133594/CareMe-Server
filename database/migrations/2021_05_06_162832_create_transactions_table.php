@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->string('payment_id')->nullable();
             $table->double('amount')->nullable();
-            $table->string('payment_statues')->nullable();
+            $table->string('payment_status')->nullable();
             $table->string('etc')->nullable();
             $table->timestamps();
         });
