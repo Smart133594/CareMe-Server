@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App;
 use PDF;
 use Route;
+use File;
 
 class SpaController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $url = \Request::getRequestUri();
         if($url == "/paymentResult"){
-            $this->paymentResult();
+            $this->paymentResult($request);
         }else{
             return view('index');
         }
@@ -25,7 +26,15 @@ class SpaController extends Controller
         return view('invoicies.invoice');
     }
 
-    public function paymentResult(){
-        dd("paymentResult");
+    public function paymentResult($request){
+        $path = public_path() . "/uploads/webhooks/";
+        $filePath = $path."webhook.txt";
+        if(!File::isDirectory($path)){
+            File::makeDirectory($path, 0777, true, true);
+        }
+        $all = $request->all();
+        $fp = fopen($filePath,"wb");
+        fwrite($fp, json_encode($all));
+        fclose($fp);
     }
 }

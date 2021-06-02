@@ -897,6 +897,22 @@ class ClientController extends Controller{
         ]);
     }
 
+    public function paymentResult(Request $request){
+        $path = public_path() . "/uploads/webhooks/";
+        $filePath = $path."webhook1.txt";
+        if(!File::isDirectory($path)){
+            File::makeDirectory($path, 0777, true, true);
+        }
+        $all = $request->all();
+        $fp = fopen($filePath,"wb");
+        fwrite($fp, json_encode($all));
+        fclose($fp);
+
+        return response()->json([
+            'success'=> true,
+        ]);
+    }
+
     public function orderingWithCard(Request $request){
         $type = $request->type;
         // $lang = $request->lang;
