@@ -916,20 +916,18 @@ class ClientController extends Controller{
         $baseUrl = config('app.THAWANI_BASE_URL');
         $url = $baseUrl.'/checkout/session/'.$session_id;
         $feedback = $this->sendThawaniRequest($url, "GET");
-
         $feedback = json_decode($feedback, true);
-        
-        $type = $feedback['data']['data']['metadata']['type'];
+        $type = $feedback['data']['metadata']['type'];
         if($type == 'servie'){
 
         }else{
-            // $this->makeOrdering($feedback['data']['data']['metadata']);
+            // $this->makeOrdering($feedback['data']['metadata']);
         }
 
         return response()->json([
             'success'=> true,
-            'data'=>$feedback['data']['data']['metadata']['carts'],
-            'data1'=>json_decode($feedback['data']['data']['metadata']['carts'], true)
+            'data'=>$feedback['data']['metadata']['carts'],
+            'data1'=>json_decode($feedback['data']['metadata']['carts'], true)
         ]);
     }
 
