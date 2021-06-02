@@ -20,7 +20,7 @@ trait CommonHelper
         curl_close($ch);
     }
 
-    public function sendThawaniRequest($url, $type, $data){
+    public function sendThawaniRequest($url, $type, $data=[]){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER , true);
@@ -34,9 +34,11 @@ trait CommonHelper
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
 
+        $secret_key = config('app.THAWANI_SECRET_KEY');
+
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Content-Type: application/json",
-            "thawani-api-key: rRQ26GcsZzoEhbrP2HZvLYDbn9C9et"
+            "thawani-api-key:".$secret_key
         ]);
 
         $response = curl_exec($ch);

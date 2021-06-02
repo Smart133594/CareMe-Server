@@ -716,7 +716,9 @@ class ClientController extends Controller{
 
         $stringFields = json_encode($fields);
         $stringFields = str_replace("\'", "'", $stringFields);
-        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
+
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $feedback = $this->sendThawaniRequest($baseUrl.'/checkout/session', "POST", $stringFields);
         $session_id = "";
       
         if(!is_null($feedback)){
@@ -870,10 +872,11 @@ class ClientController extends Controller{
         $metadata['carts'] = $stringCarts;
         $fields['metadata'] = $metadata;
 
-        $secret_key = config('app.THAWANI_SECRET_KEY');
         $stringFields = json_encode($fields);
         $stringFields = str_replace("\'", "'", $stringFields);
-        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/checkout/session', "POST", $stringFields);
+
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $feedback = $this->sendThawaniRequest($baseUrl.'/checkout/session', "POST", $stringFields);
         $session_id = "";
       
         if(!is_null($feedback)){
@@ -898,22 +901,29 @@ class ClientController extends Controller{
     }
 
     public function paymentResult(Request $request){
-        $path = public_path() . "/uploads/webhooks/";
-        $filePath = $path."webhook1.txt";
-        if(!File::isDirectory($path)){
-            File::makeDirectory($path, 0777, true, true);
-        }
-        $all = $request->all();
-        $fp = fopen($filePath,"wb");
-        fwrite($fp, json_encode($all));
-        fclose($fp);
-
+        // $path = public_path() . "/uploads/webhooks/";
+        // $filePath = $path."webhook1.txt";
+        // if(!File::isDirectory($path)){
+        //     File::makeDirectory($path, 0777, true, true);
+        // }
+        // $all = $request->all();
+        // $fp = fopen($filePath,"wb");
+        // fwrite($fp, json_encode($all));
+        // fclose($fp);
+        $session_id = $request->session_id;
+        $feedback = $this->getSessionDetails($session_id);
         return response()->json([
             'success'=> true,
+            'data'=>$feedback
         ]);
     }
 
-
+    public function getSessionDetails($session_id){
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $url = $baseUrl.'/checkout/session/'.$session_id;
+        $feedback = $this->sendThawaniRequest($url, "GET");
+        return $feedback;
+    }
 
     public function orderingWithCard(Request $request){
         $type = $request->type;

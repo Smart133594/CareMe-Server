@@ -153,7 +153,8 @@ class UserController extends Controller{
         $all['password'] = bcrypt($password);
 
         $fields['client_customer_id'] = $phone;
-        $feedback = $this->sendThawaniRequest('https://uatcheckout.thawani.om/api/v1/customers', "POST", json_encode($fields));
+        $baseUrl = config('app.THAWANI_BASE_URL');
+        $feedback = $this->sendThawaniRequest($baseUrl.'/customers', "POST", json_encode($fields));
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
             $all['customer_id'] = $feedback['data']['id'];
