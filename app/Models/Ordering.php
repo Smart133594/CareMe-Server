@@ -13,6 +13,7 @@ class Ordering extends Model
         'user_id',
         'transaction_id',
         'delivery',
+        'vendor_id',
         'carts',
         'state',
         'reason',

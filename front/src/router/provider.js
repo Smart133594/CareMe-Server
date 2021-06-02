@@ -124,23 +124,23 @@ export default {
             }
         },
 
-        // {
-        //     path: '/provider/products',
-        //     component: Products,
-        //     meta: {
-        //         requiresRole: true,
-        //         role: 'provider',
-        //         title: 'message.products',
-        //         breadcrumb: [
-        //             {
-        //                 breadcrumbInactive: 'Timelines /'
-        //             },
-        //             {
-        //                 breadcrumbActive: "Icon Dots"
-        //             }
-        //         ]
-        //     }
-        // },
+        {
+            path: '/provider/products',
+            component: Products,
+            meta: {
+                requiresRole: true,
+                role: 'provider',
+                title: 'message.products',
+                breadcrumb: [
+                    {
+                        breadcrumbInactive: 'Timelines /'
+                    },
+                    {
+                        breadcrumbActive: "Icon Dots"
+                    }
+                ]
+            }
+        },
 
         {
             path: '/provider/settings/offdays',

@@ -829,6 +829,9 @@ class ClientController extends Controller{
         foreach ($carts as $cart) {
             $product = Product::find($cart['id']);
             $product['quantity'] = $cart['quantity'];
+            $department = Department::find($product->id);
+            $product['vendor_id'] = $department->vendor_id;
+
             if($product['active']){
                 array_push($products, $product);
             }
@@ -846,6 +849,7 @@ class ClientController extends Controller{
         $carts = $request->carts;
         $code = $request->coupon;
         $type = $request->type;
+        $vendor_id = $request->vendor_id;
        // $lang = $request->lang;
         $lang = 'en';
         App::setlocale($lang);
@@ -899,6 +903,7 @@ class ClientController extends Controller{
         $metadata['user_id'] = $user->id; 
         $metadata['type'] = "product"; 
         $metadata['coupon_id'] = $coupon_id; 
+        $metadata['vendor_id'] = $vendor_id; 
        
         $stringCarts = json_encode($meta_products);
         $stringCarts = str_replace("\"", "\'", $stringCarts);
@@ -1091,6 +1096,7 @@ class ClientController extends Controller{
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
+        $vendor_id = $meta['vendor_id'];
         $carts = $meta['carts'];
         $carts = str_replace("'", "\"", $carts);
         $carts = json_decode($carts, true);
@@ -1155,6 +1161,7 @@ class ClientController extends Controller{
 
         $all['user_id'] = $user_id;
         $all['transaction_id'] = $transaction->id;
+        $all['vendor_id'] = $vendor_id;
         $all['carts'] =  $carts;
         $all['invoice'] = $pdf_name;
         $all['state'] = 'accepted';

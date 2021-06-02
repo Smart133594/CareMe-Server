@@ -57,14 +57,14 @@ export const providers = {
             label: 'Old'
         },
 
-        // {
-        //     action: 'zmdi-shape',
-        //     title: 'message.products',
-        //     active: false,
-        //     path: '/products',
-        //     items: null,
-        //     label: 'Old'
-        // },
+        {
+            action: 'zmdi-shape',
+            title: 'message.products',
+            active: false,
+            path: '/products',
+            items: null,
+            label: 'Old'
+        },
     ],
 
     'message.settings': [

@@ -18,6 +18,7 @@ class CreateOrderingsTable extends Migration
             $table->integer('user_id')->nullable();
             $table->integer('transaction_id')->nullable();
             $table->boolean('delivery')->default(false);
+            $table->integer('vendor_id');
             $table->text('carts')->nullable();
             $table->enum('state', array('pending', 'accepted', 'completed', 'rejected'))->default('pending');
             $table->string('reason')->nullable();
