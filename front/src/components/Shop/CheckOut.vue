@@ -152,12 +152,12 @@ export default {
         },
 
         getTax() {
-            let total = 0;
+            let tax = 0;
             this.cart.forEach((element) => {
-                total += (element.price * element.quantity * element.tax) / 100;
+                tax += (element.price * element.quantity * element.tax) / 100;
             });
-            total = total.toFixed(2);
-            return total;
+            tax = tax.toFixed(2);
+            return tax;
         },
 
         getCoupons() {

@@ -824,22 +824,18 @@ class ClientController extends Controller{
         $lang = 'en';
         App::setlocale($lang);
 
-        $sub_amount = 0;
-        $tax_amount = 0;
         $products = [];
         $meta_products = [];
 
-        $coupon_amount = 0;
         $coupon_id = -1;
         $coupon_percent = 0;
         if($code != ""){
-            $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
+            $coupon_result = $this->getCouponPrice(0, $code, $type);
             if($coupon_result == NULL){
                 return response()->json([
                     'success'=>false,
                 ]);
             }
-            $coupon_amount = $coupon_result['coupon_amount'];
             $coupon_id = $coupon_result['id'];
             $coupon_percent = $coupon_result['coupon_percent'];
         }
@@ -849,14 +845,13 @@ class ClientController extends Controller{
             $quantity = $cart['quantity'];
             $product = Product::find($id);
             if($product){
-                $price_sub = $product->price;
-                $tax = ($price_sub * $quantity * $product->tax)/100;
-                $sub_amount += $price_sub;
-                $tax_amount += $tax;
+                $price = $product->price;
+                $tax = ($price * $product->tax)/100;
+                $coupon_amount = ($price * $coupon_percent)/100;
 
                 $item['id'] = $id;
                 $item['name'] = $product->en_name."(+ tax -coupon)";
-                $item['unit_amount'] = ($price_sub + $tax - ($price_sub * $quantity * $coupon_percent)/100)*1000;
+                $item['unit_amount'] = ($price + $tax - $coupon_amount)*1000;
                 $item['quantity'] = $quantity;
 
                 $item_meta['id'] = $id;
@@ -867,7 +862,6 @@ class ClientController extends Controller{
         }
 
 
-        $amount = $sub_amount + $tax_amount - $coupon_amount;
         $user = Auth::user();
         $fields['client_reference_id'] = $user->id;
         $fields['customer_id'] = $user->customer_id;
