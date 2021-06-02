@@ -919,8 +919,8 @@ class ClientController extends Controller{
         $meta = $feedback['data']['metadata'];
         $payment_status = $feedback['data']['payment_status'];
         $type = $meta['type'];
-        if($type == 'servie'){
-
+        if($type == 'service'){
+            $this->makeBooking($meta, -1/*$transaction_id*/, $payment_status);
         }else{
             $this->makeOrdering($meta, -1/*$transaction_id*/, $payment_status);
         }
@@ -928,6 +928,10 @@ class ClientController extends Controller{
             'success'=> true,
             'data'=>$feedback
         ]);
+    }
+
+    public function makeBooking($meta, $transaction_id, $payment_status){
+
     }
 
     public function makeOrdering($meta, $transaction_id, $payment_status){
