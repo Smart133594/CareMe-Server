@@ -106,7 +106,9 @@
             <span style="font-size: 16px; margin-bottom: 5px;">{{$email}}</span> <br>
             <span style="font-size: 16px; margin-bottom: 5px;">{{$phone}}</span> <br>
         </address>
-
+        <?php 
+            $date = date("YYYY-mm-dd");
+        ?>
         <div style="width: 50%; float: left;">
             <p style="text-align: right;">
                 <span style="font-weight: bold; font-size: 15px;">@lang('invoice.invoice_id'):</span>
