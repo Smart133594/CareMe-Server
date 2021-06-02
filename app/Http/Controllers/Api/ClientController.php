@@ -912,17 +912,17 @@ class ClientController extends Controller{
         // fwrite($fp, json_encode($all));
         // fclose($fp);
         $session_id = $request->session_id;
-
         $baseUrl = config('app.THAWANI_BASE_URL');
         $url = $baseUrl.'/checkout/session/'.$session_id;
         $feedback = $this->sendThawaniRequest($url, "GET");
         $feedback = json_decode($feedback, true);
         $meta = $feedback['data']['metadata'];
+        $payment_status = $feedback['data']['payment_status'];
         $type = $meta['type'];
         if($type == 'servie'){
 
         }else{
-            // $this->makeOrdering($meta);
+            $this->makeOrdering($meta, -1/*$transaction_id*/, $payment_status);
         }
         return response()->json([
             'success'=> true,
@@ -930,7 +930,7 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function makeOrdering($meta){
+    public function makeOrdering($meta, $transaction_id){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -938,7 +938,6 @@ class ClientController extends Controller{
         $carts = str_replace("'", "\"", $carts);
         $carts = json_decode($carts);
         $lang = 'en';
-
         $items = [];
         $sub_amount = 0;
         $tax_amount = 0;
@@ -961,19 +960,12 @@ class ClientController extends Controller{
         }
 
         $coupon_amount = 0;
-        if($code != ""){
-            $types = ['cart', $type];
-            $today = date("Y-m-d");
-            $coupon = Coupon::find($code);
+        if($coupon_id != "-1"){
+            $coupon = Coupon::find($coupon_id);
             if($coupon){
                 $coupon_amount = ($sub_amount * $coupon->percent)%100;
                 $coupon->available = false;
                 $coupon->save();
-                $all['coupon_id'] = $coupon->id;
-            }else{
-                return response()->json([
-                    'success'=>false,
-                ]);
             }
         }
 
@@ -993,13 +985,15 @@ class ClientController extends Controller{
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
-        $all['invoice'] = $pdf_name;
 
+        $all['user_id'] = $user_id;
+        $all['transaction_id'] = $transaction_id;
+        $all['carts'] =  $carts;
+        $all['payment'] =  $payment_status;
         $all['amount'] = $total_amount;
         $all['type'] = 'card';
-        $all['carts'] =  $carts;
+        $all['invoice'] = $pdf_name;
         $all['state'] = 'accepted';
-        $all['user_id'] = Auth::user()->id;
 
         $ordering = Ordering::create($all);
         $ordering = DB::table('orderings')
@@ -1007,7 +1001,6 @@ class ClientController extends Controller{
             ->where('orderings.id', $ordering->id)
             ->select('orderings.*', "users.full_name", "users.phone", "users.email")
             ->first();
-
         $this->sendOrderingMailWithPDF($ordering);
         return response()->json([
             'success'=>true,
