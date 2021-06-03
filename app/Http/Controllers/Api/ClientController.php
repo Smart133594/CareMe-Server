@@ -1001,7 +1001,7 @@ class ClientController extends Controller{
         ]);
     }
 
-    public function makeBooking($meta, $payment_status){
+    public function makeBooking($meta, $payment_status, $payment_id){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1067,6 +1067,7 @@ class ClientController extends Controller{
 
         $transaction_data['amount'] = $amount;
         $transaction_data['payment_status'] = $payment_status;
+        $transaction_data['payment_id'] = $payment_id;
         $transaction = Transaction::create($transaction_data);
 
         $all['user_id'] = $user_id;
@@ -1097,7 +1098,7 @@ class ClientController extends Controller{
         $this->sendBookingMailWithPDF($booking);
     }
 
-    public function makeOrdering($meta, $payment_status){
+    public function makeOrdering($meta, $payment_status, $payment_id){
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1162,6 +1163,7 @@ class ClientController extends Controller{
 
         $transaction_data['amount'] = $total_amount;
         $transaction_data['payment_status'] = $payment_status;
+        $transaction_data['payment_id'] = $payment_id;
         $transaction = Transaction::create($transaction_data);
 
         $all['user_id'] = $user_id;
