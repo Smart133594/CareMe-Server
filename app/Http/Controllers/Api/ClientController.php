@@ -107,7 +107,7 @@ class ClientController extends Controller{
             ->groupBy('vendors.id')
             ->orderBy('rating', 'desc')
             ->orderBy('id')
-            ->take(5)
+            ->take(20)
             ->get();
 
             $servicies = DB::table('services')
@@ -122,7 +122,7 @@ class ClientController extends Controller{
             ->orderBy('rating', 'desc')
             ->orderBy('id')
             ->select('services.*')
-            ->take(10)
+            ->take(20)
             ->get();
         $products = DB::table('products')
             ->leftJoin('departments', 'departments.id', '=', 'products.department_id')
@@ -136,11 +136,11 @@ class ClientController extends Controller{
             ->orderBy('rating', 'desc')
             ->orderBy('id')
             ->select('products.*')
-            ->take(10)
+            ->take(20)
             ->get();
 
-        $hot_servicies = Service::where([['discount_price', '>', 0], ['active', true]])->orderBy('discount_price', 'desc')->take(24)->get();
-        $hot_products = Product::where([['discount_price', '>', 0], ['active', true]])->orderBy('discount_price', 'desc')->take(24)->get();
+        $hot_servicies = Service::where([['discount_price', '>', 0], ['active', true]])->orderBy('discount_price', 'desc')->take(20)->get();
+        $hot_products = Product::where([['discount_price', '>', 0], ['active', true]])->orderBy('discount_price', 'desc')->take(20)->get();
 
         $result = [
             'banners' => $banners,
@@ -970,33 +970,33 @@ class ClientController extends Controller{
     }
 
     public function paymentResult(Request $request){
-        // $path = public_path() . "/uploads/webhooks/";
-        // $filePath = $path."webhook1.txt";
-        // if(!File::isDirectory($path)){
-        //     File::makeDirectory($path, 0777, true, true);
-        // }
-        // $all = $request->all();
-        // $fp = fopen($filePath,"wb");
-        // fwrite($fp, json_encode($all));
-        // fclose($fp);
-        $session_id = $request->session_id;
-        $baseUrl = config('app.THAWANI_BASE_URL');
-        $url = $baseUrl.'/checkout/session/'.$session_id;
-        $feedback = $this->sendThawaniRequest($url, "GET");
-        $feedback = json_decode($feedback, true);
-        $meta = $feedback['data']['metadata'];
-        $payment_status = $feedback['data']['payment_status'];
-
-        $type = $meta['type'];
-        if($type == 'service'){
-            $this->makeBooking($meta, $payment_status);
-        }else{
-            $this->makeOrdering($meta, $payment_status);
+        $path = public_path() . "/uploads/webhooks/";
+        $filePath = $path."webhook1.txt";
+        if(!File::isDirectory($path)){
+            File::makeDirectory($path, 0777, true, true);
         }
-        return response()->json([
-            'success'=> true,
-            'data'=>$feedback
-        ]);
+        $all = $request->all();
+        $fp = fopen($filePath,"wb");
+        fwrite($fp, json_encode($all));
+        fclose($fp);
+        // $session_id = $request->session_id;
+        // $baseUrl = config('app.THAWANI_BASE_URL');
+        // $url = $baseUrl.'/checkout/session/'.$session_id;
+        // $feedback = $this->sendThawaniRequest($url, "GET");
+        // $feedback = json_decode($feedback, true);
+        // $meta = $feedback['data']['metadata'];
+        // $payment_status = $feedback['data']['payment_status'];
+
+        // $type = $meta['type'];
+        // if($type == 'service'){
+        //     $this->makeBooking($meta, $payment_status);
+        // }else{
+        //     $this->makeOrdering($meta, $payment_status);
+        // }
+        // return response()->json([
+        //     'success'=> true,
+        //     'data'=>$feedback
+        // ]);
     }
 
     public function makeBooking($meta, $payment_status){
