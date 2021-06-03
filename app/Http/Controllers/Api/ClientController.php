@@ -970,11 +970,11 @@ class ClientController extends Controller{
     }
 
     public function paymentResult(Request $request){
-        $webhook = $request->data;
-        $meta = $webhook['metadata'];
-        $payment_status = $webhook['payment_status'];
-        $event_type = $webhook['event_type'];
+        $event_type = $request->event_type;
         if($event_type == 'checkout.completed'){
+            $webhook = $request->data;
+            $meta = $webhook['metadata'];
+            $payment_status = $webhook['payment_status'];
             $type = $meta['type'];
             if($type == 'service'){
                 $this->makeBooking($meta, $payment_status);
