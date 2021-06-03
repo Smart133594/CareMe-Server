@@ -32,14 +32,16 @@ use Config;
 
 use App\Traits\CommonHelper;
 
-class ClientController extends Controller{
+class ClientController extends Controller
+{
     use CommonHelper;
 
-    public function __construct(){
-
+    public function __construct()
+    {
     }
 
-    public function getSearchItems(Request $request){
+    public function getSearchItems(Request $request)
+    {
         $categories = Category::where('active', true)->orderBy('id')->get();
         $vendors = DB::table('vendors')
             ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
@@ -52,7 +54,7 @@ class ClientController extends Controller{
             ->orderBy('id')
             ->get();
 
-            $servicies = DB::table('services')
+        $servicies = DB::table('services')
             ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
@@ -81,19 +83,20 @@ class ClientController extends Controller{
         $result = [
             'categories' => $categories,
             'vendors' => $vendors,
-            'servicies'=>$servicies,
-            'products'=>$products,
+            'servicies' => $servicies,
+            'products' => $products,
         ];
         return response()->json([
-            'success'=>true,
-            'data'=>$result
+            'success' => true,
+            'data' => $result
         ]);
     }
     // Banners
-    public function getFrontData(Request $request){
+    public function getFrontData(Request $request)
+    {
 
 
-        $today = date("Y-m-d") ;
+        $today = date("Y-m-d");
         $rows = Banner::where(['active' => true])->whereDate('start_date', '<=', $today)->whereDate('expire_date', '>=', $today)->orderBy('id')->select('image')->get();
         $banners = $rows->pluck('image');
         $categories = Category::where('active', true)->orderBy('id')->get();
@@ -110,7 +113,7 @@ class ClientController extends Controller{
             ->take(20)
             ->get();
 
-            $servicies = DB::table('services')
+        $servicies = DB::table('services')
             ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
             ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
@@ -146,18 +149,19 @@ class ClientController extends Controller{
             'banners' => $banners,
             'categories' => $categories,
             'vendors' => $vendors,
-            'servicies'=>$servicies,
-            'products'=>$products,
-            'hot_servicies'=>$hot_servicies,
-            'hot_products'=>$hot_products
+            'servicies' => $servicies,
+            'products' => $products,
+            'hot_servicies' => $hot_servicies,
+            'hot_products' => $hot_products
         ];
         return response()->json([
-            'success'=>true,
-            'data'=>$result
+            'success' => true,
+            'data' => $result
         ]);
     }
 
-    public function getVendors(Request $request){
+    public function getVendors(Request $request)
+    {
 
         $selected_cities = $request->selected_cities;
         $selected_categories = $request->selected_categories;
@@ -166,14 +170,14 @@ class ClientController extends Controller{
             ->leftJoin('vendor_galleries', 'vendor_galleries.vendor_id', '=', 'vendors.id')
             ->where('vendors.active', true);
 
-        if(count($selected_cities)){
+        if (count($selected_cities)) {
             $query = $query->leftJoin('cities', 'cities.id', '=', 'vendors.city_id')
-                    ->whereIn('cities.id', $selected_cities);
+                ->whereIn('cities.id', $selected_cities);
         }
 
-        if(count($selected_categories)){
+        if (count($selected_categories)) {
             $query = $query->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
-                    ->whereIn('categories.id', $selected_categories);
+                ->whereIn('categories.id', $selected_categories);
         }
 
         $vendors = $query->select('vendors.id', 'vendors.en_name', 'vendors.ar_name', 'vendors.rating', 'vendor_galleries.image')
@@ -183,12 +187,13 @@ class ClientController extends Controller{
             ->get();
 
         return response()->json([
-            'success'=>true,
-            'data'=>$vendors
+            'success' => true,
+            'data' => $vendors
         ]);
     }
 
-    public function getFilterData(Request $request){
+    public function getFilterData(Request $request)
+    {
         $categories = Category::where('active', true)->orderBy('id')->get();
         $cities = City::orderBy('id')->get();
         foreach ($categories as $category) {
@@ -200,12 +205,13 @@ class ClientController extends Controller{
 
         $result = ['cities' => $cities, 'categories' => $categories];
         return response()->json([
-            'success'=>true,
-            'data'=>$result
+            'success' => true,
+            'data' => $result
         ]);
     }
 
-    public function getVendor($vendor_id){
+    public function getVendor($vendor_id)
+    {
         $vendor = Vendor::find($vendor_id);
         $vendor->images;
         $vendor->city;
@@ -238,12 +244,13 @@ class ClientController extends Controller{
         $result = ['vendor' => $vendor, 'servicies' => $servicies, 'products' => $products];
 
         return response()->json([
-            'success'=>true,
-            'data'=>$result
+            'success' => true,
+            'data' => $result
         ]);
     }
 
-    public function getServicies(Request $request){
+    public function getServicies(Request $request)
+    {
         $selected_cities = $request->selected_cities;
         $selected_categories = $request->selected_categories;
         $selected_pricies = $request->selected_pricies;
@@ -260,28 +267,28 @@ class ClientController extends Controller{
             ->where('vendors.active', true)
             ->where('categories.active', true);
 
-        if(count($selected_departments)){
+        if (count($selected_departments)) {
             $query = $query->whereIn('departments.id', $selected_departments);
         }
 
-        if(count($selected_vendors)){
+        if (count($selected_vendors)) {
             $query = $query->whereIn('vendors.id', $selected_vendors);
         }
 
-        if(count($selected_cities)){
+        if (count($selected_cities)) {
             $query = $query->leftJoin('cities', 'cities.id', '=', 'vendors.city_id')
                 ->whereIn('cities.id', $selected_cities);
         }
 
-        if(count($selected_categories)){
+        if (count($selected_categories)) {
             $query = $query->whereIn('categories.id', $selected_categories);
         }
 
-        if(count($selected_pricies)){
+        if (count($selected_pricies)) {
             $query = $query->whereBetween('services.price', $selected_pricies);
         }
 
-        if(count($selected_discount)){
+        if (count($selected_discount)) {
             $query = $query->whereBetween('services.discount_price', $selected_discount);
         }
 
@@ -291,12 +298,13 @@ class ClientController extends Controller{
             ->get();
 
         return response()->json([
-            'success'=>true,
-            'data'=>$servicies
+            'success' => true,
+            'data' => $servicies
         ]);
     }
 
-    public function getProducts(Request $request){
+    public function getProducts(Request $request)
+    {
         $selected_cities = $request->selected_cities;
         $selected_categories = $request->selected_categories;
         $selected_pricies = $request->selected_pricies;
@@ -313,28 +321,28 @@ class ClientController extends Controller{
             ->where('vendors.active', true)
             ->where('categories.active', true);
 
-        if(count($selected_departments)){
-            $query = $query-> whereIn('departments.id', $selected_departments);
+        if (count($selected_departments)) {
+            $query = $query->whereIn('departments.id', $selected_departments);
         }
 
-        if(count($selected_vendors)){
-            $query = $query-> whereIn('vendors.id', $selected_vendors);
+        if (count($selected_vendors)) {
+            $query = $query->whereIn('vendors.id', $selected_vendors);
         }
 
-        if(count($selected_cities)){
+        if (count($selected_cities)) {
             $query = $query->leftJoin('cities', 'cities.id', '=', 'vendors.city_id')
                 ->whereIn('cities.id', $selected_cities);
         }
 
-        if(count($selected_categories)){
+        if (count($selected_categories)) {
             $query = $query->whereIn('categories.id', $selected_categories);
         }
 
-        if(count($selected_pricies)){
+        if (count($selected_pricies)) {
             $query = $query->whereIn('products.price', $selected_pricies);
         }
 
-        if(count($selected_discount)){
+        if (count($selected_discount)) {
             $query = $query->whereIn('products.discount_price', $selected_discount);
         }
 
@@ -344,33 +352,36 @@ class ClientController extends Controller{
             ->get();
 
         return response()->json([
-            'success'=>true,
-            'data'=>$servicies
+            'success' => true,
+            'data' => $servicies
         ]);
     }
 
-    public function addWish(Request $request){
+    public function addWish(Request $request)
+    {
         $user = Auth::user();
         $all = $request->all();
         $all['user_id'] = $user->id;
         $wish = WishList::updateOrCreate($all, $all);
         return response()->json([
-            'success'=>true,
-            'data'=> $wish
+            'success' => true,
+            'data' => $wish
         ]);
     }
 
-    public function removeWish(Request $request){
+    public function removeWish(Request $request)
+    {
         $user = Auth::user();
         $all = $request->all();
         $all['user_id'] = $user->id;
         WishList::where($all)->delete();
         return response()->json([
-            'success'=>true,
+            'success' => true,
         ]);
     }
 
-    public function getWishes(Request $request){
+    public function getWishes(Request $request)
+    {
         $user = Auth::user();
 
         $servicies = DB::table('wish_lists')
@@ -388,28 +399,29 @@ class ClientController extends Controller{
         $result = ['servicies' => $servicies, 'products' => $products];
 
         return response()->json([
-            'success'=>true,
-            'data'=>$result
+            'success' => true,
+            'data' => $result
         ]);
     }
 
-    public function getService($service_id){
+    public function getService($service_id)
+    {
         $service = DB::table('services')
-        ->leftJoin('departments', 'departments.id', 'services.department_id')
-        ->leftJoin('vendors', 'vendors.id', 'departments.vendor_id')
-        ->where('services.id', $service_id)
-        ->where('services.active', true)
-        ->select('services.*', 'vendors.en_address', 'vendors.ar_address', 'vendors.lat', 'vendors.lng', 'vendors.phone')
-        ->first();
+            ->leftJoin('departments', 'departments.id', 'services.department_id')
+            ->leftJoin('vendors', 'vendors.id', 'departments.vendor_id')
+            ->where('services.id', $service_id)
+            ->where('services.active', true)
+            ->select('services.*', 'vendors.en_address', 'vendors.ar_address', 'vendors.lat', 'vendors.lng', 'vendors.phone')
+            ->first();
 
-        if($service){
+        if ($service) {
             $department = Department::find($service->department_id);
             $vendor = Vendor::find($department->vendor_id);
             $offday = $vendor->offday;
             $holidays = $vendor->holidays;
             $off_days = [];
 
-            if($offday){
+            if ($offday) {
                 $off_days = $offday->off_days;
             }
 
@@ -421,30 +433,30 @@ class ClientController extends Controller{
 
             $starting_hours = (int)(date("H", $starting_time));
             $starting_minutes = (int)(date("i", $starting_time));
-            $starting_minutes = $starting_hours*60 + $starting_minutes;
+            $starting_minutes = $starting_hours * 60 + $starting_minutes;
 
             $ending_hours = (int)(date("H", $ending_time));
             $ending_minutes = (int)(date("i", $ending_time));
-            $ending_minutes = $ending_hours*60 + $ending_minutes;
+            $ending_minutes = $ending_hours * 60 + $ending_minutes;
 
             $buffering_minutes = (int)$service->buffering_time;
             $duration_minutes = (int)$service->duration;
             $times = [];
             $index = 1;
-            for($time = $starting_minutes; $time <= $ending_minutes;){
+            for ($time = $starting_minutes; $time <= $ending_minutes;) {
                 $hours = floor($time / 60);
                 $minutes = $time % 60;
-                $at_time['from_time'] = str_pad($hours, 2, "0", STR_PAD_LEFT).":".str_pad($minutes, 2, "0", STR_PAD_LEFT).":00";
+                $at_time['from_time'] = str_pad($hours, 2, "0", STR_PAD_LEFT) . ":" . str_pad($minutes, 2, "0", STR_PAD_LEFT) . ":00";
 
                 $time += $duration_minutes;
                 $time += $buffering_minutes;
                 $hours = floor($time / 60);
                 $minutes = $time % 60;
-                $at_time['to_time'] = str_pad($hours, 2, "0", STR_PAD_LEFT).":".str_pad($minutes, 2, "0", STR_PAD_LEFT).":00";
+                $at_time['to_time'] = str_pad($hours, 2, "0", STR_PAD_LEFT) . ":" . str_pad($minutes, 2, "0", STR_PAD_LEFT) . ":00";
                 $at_time['id'] = $index;
-                if($time <= $ending_minutes){
+                if ($time <= $ending_minutes) {
                     array_push($times, $at_time);
-                    $index ++ ;
+                    $index++;
                 }
             }
 
@@ -456,7 +468,7 @@ class ClientController extends Controller{
             $workers = [];
             foreach ($workers_temp as $worker) {
                 $at_service = $worker->servicies;
-                if(in_array($service->id, $at_service)){
+                if (in_array($service->id, $at_service)) {
                     array_push($workers, $worker);
                 }
             }
@@ -464,63 +476,66 @@ class ClientController extends Controller{
         }
 
         return response()->json([
-            'success'=>true,
-            'data'=>$service
+            'success' => true,
+            'data' => $service
         ]);
     }
 
-    public function getProduct($product_id){
+    public function getProduct($product_id)
+    {
         $product = DB::table('products')
-        ->leftJoin('departments', 'departments.id', 'products.department_id')
-        ->leftJoin('vendors', 'vendors.id', 'departments.vendor_id')
-        ->where('products.id', $product_id)
-        ->where('products.active', true)
-        ->select('products.*', 'vendors.en_address', 'vendors.ar_address', 'vendors.lat', 'vendors.lng', 'vendors.phone')
-        ->first();
+            ->leftJoin('departments', 'departments.id', 'products.department_id')
+            ->leftJoin('vendors', 'vendors.id', 'departments.vendor_id')
+            ->where('products.id', $product_id)
+            ->where('products.active', true)
+            ->select('products.*', 'vendors.en_address', 'vendors.ar_address', 'vendors.lat', 'vendors.lng', 'vendors.phone')
+            ->first();
 
         return response()->json([
-            'success'=>true,
-            'data'=>$product
+            'success' => true,
+            'data' => $product
         ]);
     }
 
     // Apply Coupon
-    public function checkCoupon(Request $request){
+    public function checkCoupon(Request $request)
+    {
         $code = $request->coupon;
         $type = $request->type;
         $types = ['cart', $type];
         $today = date("Y-m-d");
 
         $coupon = Coupon::where('code', $code)
-                    ->whereIn('type', $types)
-                    ->where('available', true)
-                    ->whereDate('expire', '>=', $today)
-                    ->first();
+            ->whereIn('type', $types)
+            ->where('available', true)
+            ->whereDate('expire', '>=', $today)
+            ->first();
 
-        if($coupon){
+        if ($coupon) {
             return response()->json([
-                'success'=>true,
-                'data'=>$coupon->percent,
+                'success' => true,
+                'data' => $coupon->percent,
             ]);
         }
 
         return response()->json([
-            'success'=>false,
+            'success' => false,
         ]);
     }
 
-    public function getCouponPrice($sub_amount, $code, $type){
+    public function getCouponPrice($sub_amount, $code, $type)
+    {
         $types = ['cart', $type];
         $today = date("Y-m-d");
         $coupon = Coupon::where('code', $code)
-                    ->whereIn('type', $types)
-                    ->where('available', true)
-                    ->whereDate('expire', '>=', $today)
-                    ->first();
+            ->whereIn('type', $types)
+            ->where('available', true)
+            ->whereDate('expire', '>=', $today)
+            ->first();
 
         $result = NULL;
-        if($coupon){
-            $coupon_amount = ($sub_amount * $coupon->percent)%100;
+        if ($coupon) {
+            $coupon_amount = ($sub_amount * $coupon->percent) % 100;
             $result['id'] = $coupon->id;
             $result['coupon_amount'] = $coupon_amount;
             $result['coupon_percent'] = $coupon->percent;
@@ -529,7 +544,8 @@ class ClientController extends Controller{
     }
 
     //Booking
-    public function bookingWithInsurance(Request $request){
+    public function bookingWithInsurance(Request $request)
+    {
         $service_id = $request->service_id;
         $all = $request->all();
         $service = Service::find($service_id);
@@ -539,20 +555,20 @@ class ClientController extends Controller{
         $times = $request->times;
         $code = $request->coupon;
         $type = $request->type;
-        
+
         $sub_amount = $price * $quantity * count($times);
         $tax_amount = 0;
-        if($service->tax > 0){
-            $tax_amount = ($sub_amount * $service->tax)/100;
+        if ($service->tax > 0) {
+            $tax_amount = ($sub_amount * $service->tax) / 100;
         }
         $coupon_amount = 0;
         $all['coupon_id'] = -1;
-        
-        if($code != ""){
+
+        if ($code != "") {
             $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
-            if($coupon_result == NULL){
+            if ($coupon_result == NULL) {
                 return response()->json([
-                    'success'=>false,
+                    'success' => false,
                 ]);
             }
             $coupon_amount = $coupon_result['coupon_amount'];
@@ -571,10 +587,10 @@ class ClientController extends Controller{
 
         if ($image && str_contains($image, 'data:image')) {
             $data64 = explode(',', $image)[1];
-            $file_name = 'bookings_0'.time(). '.png';
+            $file_name = 'bookings_0' . time() . '.png';
             $path = public_path() . "/uploads/bookings/";
-            $uploadPath = $path. $file_name;
-            if(!File::isDirectory($path)){
+            $uploadPath = $path . $file_name;
+            if (!File::isDirectory($path)) {
                 File::makeDirectory($path, 0777, true, true);
             }
             $data64 = base64_decode($data64);
@@ -583,16 +599,16 @@ class ClientController extends Controller{
             } else {
                 $image = null;
             }
-        }else{
+        } else {
             $image = null;
         }
 
         if ($image1 && str_contains($image1, 'data:image')) {
             $data64 = explode(',', $image1)[1];
-            $file_name = 'bookings_1'.time(). '.png';
+            $file_name = 'bookings_1' . time() . '.png';
             $path = public_path() . "/uploads/bookings/";
-            $uploadPath = $path. $file_name;
-            if(!File::isDirectory($path)){
+            $uploadPath = $path . $file_name;
+            if (!File::isDirectory($path)) {
                 File::makeDirectory($path, 0777, true, true);
             }
             $data64 = base64_decode($data64);
@@ -601,7 +617,7 @@ class ClientController extends Controller{
             } else {
                 $image1 = null;
             }
-        }else{
+        } else {
             $image1 = null;
         }
 
@@ -619,7 +635,7 @@ class ClientController extends Controller{
         $all['image1'] = $image1;
 
         $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
-        $item['price'] = number_format($service->price*count($times), 2, '.', '');
+        $item['price'] = number_format($service->price * count($times), 2, '.', '');
         $item['quantity'] = $quantity;
         $item['price_sub'] =  number_format($sub_amount, 2, '.', '');
 
@@ -640,35 +656,45 @@ class ClientController extends Controller{
 
         App::setlocale($lang);
         $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/'.time()."_invoice.pdf";
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $path = public_path() . "/uploads/invoicies/";
-        if(!File::isDirectory($path)){
+        if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
         $all['invoice'] = $pdf_name;
 
-        if($auto_accept){
+        if ($auto_accept) {
             $all['state'] = 'accepted';
         }
         $booking = Booking::create($all);
 
         $booking = DB::table('bookings')
-        ->leftJoin('services', 'services.id', "bookings.service_id")
-        ->leftJoin('users', 'users.id', "bookings.user_id")
-        ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
-        ->where('bookings.id', $booking->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone",
-                 "users.email", "transactions.amount", "transactions.payment_status")
-        ->first();
+            ->leftJoin('services', 'services.id', "bookings.service_id")
+            ->leftJoin('users', 'users.id', "bookings.user_id")
+            ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
+            ->where('bookings.id', $booking->id)
+            ->select(
+                'bookings.*',
+                "services.en_name",
+                "services.ar_name",
+                "services.price",
+                "users.full_name",
+                "users.phone",
+                "users.email",
+                "transactions.amount",
+                "transactions.payment_status"
+            )
+            ->first();
 
         $this->sendBookingMailWithPDF($booking);
         return response()->json([
-            'success'=>true,
+            'success' => true,
         ]);
     }
 
-    public function getServiceSession(Request $request){
+    public function getServiceSession(Request $request)
+    {
         $cancel_url = $request->cancel_url;
         $success_url = $request->success_url;
         $service_id = $request->service_id;
@@ -678,7 +704,7 @@ class ClientController extends Controller{
         $quantity = $request->quantity;
         $code = $request->coupon;
         $type = $request->type;
-       // $lang = $request->lang;
+        // $lang = $request->lang;
         $lang = 'en';
         App::setlocale($lang);
 
@@ -688,17 +714,17 @@ class ClientController extends Controller{
 
         $sub_amount = $price * count($times);
         $tax_amount = 0;
-        if($service->tax > 0){
-            $tax_amount = ($sub_amount * $service->tax)/100;
+        if ($service->tax > 0) {
+            $tax_amount = ($sub_amount * $service->tax) / 100;
         }
 
         $coupon_amount = 0;
         $coupon_id = -1;
-        if($code != ""){
+        if ($code != "") {
             $coupon_result = $this->getCouponPrice($sub_amount, $code, $type);
-            if($coupon_result == NULL){
+            if ($coupon_result == NULL) {
                 return response()->json([
-                    'success'=>false,
+                    'success' => false,
                 ]);
             }
             $coupon_amount = $coupon_result['coupon_amount'];
@@ -712,21 +738,21 @@ class ClientController extends Controller{
         $fields['customer_id'] = $user->customer_id;
 
         $products = [];
-        $product['name'] = $service->en_name."(+ tax - coupon)";
-        $product['unit_amount'] = $amount *1000;
+        $product['name'] = $service->en_name . "(+ tax - coupon)";
+        $product['unit_amount'] = $amount * 1000;
         $product['quantity'] = $quantity;
         array_push($products, $product);
         $fields['products'] = $products;
         $fields['success_url'] = $success_url;
         $fields['cancel_url'] = $cancel_url;
 
-        $metadata['user_id'] = $user->id; 
-        $metadata['type'] = "service"; 
-        $metadata['coupon_id'] = $coupon_id; 
-        $metadata['date'] = $date; 
-        $metadata['quantity'] = $quantity; 
-        $metadata['service_id'] = $service_id; 
-        $metadata['worker_id'] = $worker_id; 
+        $metadata['user_id'] = $user->id;
+        $metadata['type'] = "service";
+        $metadata['coupon_id'] = $coupon_id;
+        $metadata['date'] = $date;
+        $metadata['quantity'] = $quantity;
+        $metadata['service_id'] = $service_id;
+        $metadata['worker_id'] = $worker_id;
         $stringTimes = json_encode($times);
         $stringTimes = str_replace("\"", "\'", $stringTimes);
 
@@ -738,123 +764,139 @@ class ClientController extends Controller{
         $stringFields = str_replace("\'", "'", $stringFields);
 
         $baseUrl = config('app.THAWANI_BASE_URL');
-        $feedback = $this->sendThawaniRequest($baseUrl.'/checkout/session', "POST", $stringFields);
+        $feedback = $this->sendThawaniRequest($baseUrl . '/checkout/session', "POST", $stringFields);
         $session_id = "";
-      
-        if(!is_null($feedback)){
+
+        if (!is_null($feedback)) {
             $json = json_decode($feedback, true);
-            if($json['success']){
+            if ($json['success']) {
                 $session_id = $json['data']['session_id'];
-            }else{
+            } else {
                 return response()->json([
-                    'success'=>false,
-                    'data'=>$feedback
+                    'success' => false,
+                    'data' => $feedback
                 ]);
             }
-        }else{
+        } else {
             return response()->json([
-                'success'=>false,
+                'success' => false,
             ]);
         }
         return response()->json([
-            'success'=> true,
-            'data'=>$session_id
+            'success' => true,
+            'data' => $session_id
         ]);
     }
 
-    public function refundPayment($payment_id){
+    public function refundPayment($payment_id)
+    {
         $baseUrl = config('app.THAWANI_BASE_URL');
         $user = Auth::user();
         $fields['payment_id'] = $payment_id;
         $fields['reason'] = "Cancel by client";
         $metadata['user_id'] = $user->id;
         $fields['metadata'] = $metadata;
-        $feedback = $this->sendThawaniRequest($baseUrl.'/refunds', "POST", $stringFields);
+        $feedback = $this->sendThawaniRequest($baseUrl . '/refunds', "POST", $stringFields);
         return $feedback;
     }
 
-    public function cancelBooking(Request $request){
+    public function cancelBooking(Request $request)
+    {
         $id = $request->id;
         $booking = Booking::find($id);
         $feedback = NULL;
-        if($booking->state == "pending" || $booking->state == "rejected"){
+        if ($booking->state == "pending" || $booking->state == "rejected") {
             $transaction = $booking->transaction;
-            if($booking->type == "card"){
-                if($booking->state == "pending" && $transaction->payment_status == 'paid'){
-                    if($booking->payment_id){
+            if ($booking->type == "card") {
+                if ($booking->state == "pending" && $transaction->payment_status == 'paid') {
+                    if ($booking->payment_id) {
                         $feedback = $this->refundPayment($transaction->$payment_id);
                     }
                 }
-            }else{
-                File::delete(public_path() . "/uploads/bookings/".$booking->image);
-                File::delete(public_path() . "/uploads/bookings/".$booking->image1);
+            } else {
+                File::delete(public_path() . "/uploads/bookings/" . $booking->image);
+                File::delete(public_path() . "/uploads/bookings/" . $booking->image1);
             }
             $transaction->delete();
             $booking->delete();
             return response()->json([
-                'success'=>true,
-                'data'=> $feedback
+                'success' => true,
+                'data' => $feedback
             ]);
-        }else{
+        } else {
             return response()->json([
-                'success'=>false,
-                'data'=>$feedback
+                'success' => false,
+                'data' => $feedback
             ]);
         }
     }
 
-    public function getMyBookings(Request $request){
+    public function getMyBookings(Request $request)
+    {
         $user = Auth::user();
         $bookings = DB::table('bookings')
-        ->leftJoin('services', 'services.id', "bookings.service_id")
-        ->leftJoin('users', 'users.id', "bookings.user_id")
-        ->leftJoin('workers', 'workers.id', "bookings.worker_id")
-        ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
-        ->where('users.id', $user->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "workers.full_name", 
-            "workers.image as worker_image", "transactions.payment_id", "transactions.amount", "transactions.payment_status")
-        ->orderBy('bookings.id', 'desc')
-        ->get();
+            ->leftJoin('services', 'services.id', "bookings.service_id")
+            ->leftJoin('users', 'users.id', "bookings.user_id")
+            ->leftJoin('workers', 'workers.id', "bookings.worker_id")
+            ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
+            ->where('users.id', $user->id)
+            ->select(
+                'bookings.*',
+                "services.en_name",
+                "services.ar_name",
+                "services.price",
+                "workers.full_name",
+                "workers.image as worker_image",
+                "transactions.payment_id",
+                "transactions.amount",
+                "transactions.payment_status"
+            )
+            ->orderBy('bookings.id', 'desc')
+            ->get();
 
         return response()->json([
-            'success'=>true,
-            'data'=>$bookings,
+            'success' => true,
+            'data' => $bookings,
         ]);
     }
 
     ///Ordering
-    public function getCarts(Request $request){
+    public function getCarts(Request $request)
+    {
         $carts = $request->all();
 
         $products = [];
         foreach ($carts as $cart) {
             $product = Product::find($cart['id']);
-            $product['quantity'] = $cart['quantity'];
-            $department = Department::find($product->id);
-            $vendor = Vendor::find($department->vendor_id);
-            $product['vendor_id'] = $vendor->id;
-            $product['vendor_en_name'] = $vendor->en_name;
-            $product['vendor_ar_name'] = $vendor->ar_name;
+            if ($product) {
+                $product['quantity'] = $cart['quantity'];
+                $department = Department::find($product->id);
+                $vendor = Vendor::find($department->vendor_id);
+                $product['vendor_id'] = $vendor->id;
+                $product['vendor_en_name'] = $vendor->en_name;
+                $product['vendor_ar_name'] = $vendor->ar_name;
 
-            if($product['active']){
-                array_push($products, $product);
+                if ($product['active']) {
+                    array_push($products, $product);
+                }
             }
         }
 
         return response()->json([
-            'success'=>true,
-            'data'=> $products
+            'success' => true,
+            'data' => $products
         ]);
     }
 
-    public function getProductSession(Request $request){
+    public function getProductSession(Request $request)
+    {
         $cancel_url = $request->cancel_url;
         $success_url = $request->success_url;
         $carts = $request->carts;
         $code = $request->coupon;
         $type = $request->type;
         $vendor_id = $request->vendor_id;
-       // $lang = $request->lang;
+        // $lang = $request->lang;
         $lang = 'en';
         App::setlocale($lang);
 
@@ -863,11 +905,11 @@ class ClientController extends Controller{
 
         $coupon_id = -1;
         $coupon_percent = 0;
-        if($code != ""){
+        if ($code != "") {
             $coupon_result = $this->getCouponPrice(0, $code, $type);
-            if($coupon_result == NULL){
+            if ($coupon_result == NULL) {
                 return response()->json([
-                    'success'=>false,
+                    'success' => false,
                 ]);
             }
             $coupon_id = $coupon_result['id'];
@@ -878,14 +920,14 @@ class ClientController extends Controller{
             $id = $cart['id'];
             $quantity = $cart['quantity'];
             $product = Product::find($id);
-            if($product){
+            if ($product) {
                 $price = $product->price;
-                $tax = ($price * $product->tax)/100;
-                $coupon_amount = ($price * $coupon_percent)/100;
+                $tax = ($price * $product->tax) / 100;
+                $coupon_amount = ($price * $coupon_percent) / 100;
 
                 $item['id'] = $id;
-                $item['name'] = $product->en_name."(+ tax -coupon)";
-                $item['unit_amount'] = ($price + $tax - $coupon_amount)*1000;
+                $item['name'] = $product->en_name . "(+ tax -coupon)";
+                $item['unit_amount'] = ($price + $tax - $coupon_amount) * 1000;
                 $item['quantity'] = $quantity;
 
                 $item_meta['id'] = $id;
@@ -904,11 +946,11 @@ class ClientController extends Controller{
         $fields['success_url'] = $success_url;
         $fields['cancel_url'] = $cancel_url;
 
-        $metadata['user_id'] = $user->id; 
-        $metadata['type'] = "product"; 
-        $metadata['coupon_id'] = $coupon_id; 
-        $metadata['vendor_id'] = $vendor_id; 
-       
+        $metadata['user_id'] = $user->id;
+        $metadata['type'] = "product";
+        $metadata['coupon_id'] = $coupon_id;
+        $metadata['vendor_id'] = $vendor_id;
+
         $stringCarts = json_encode($meta_products);
         $stringCarts = str_replace("\"", "\'", $stringCarts);
 
@@ -919,39 +961,40 @@ class ClientController extends Controller{
         $stringFields = str_replace("\'", "'", $stringFields);
 
         $baseUrl = config('app.THAWANI_BASE_URL');
-        $feedback = $this->sendThawaniRequest($baseUrl.'/checkout/session', "POST", $stringFields);
+        $feedback = $this->sendThawaniRequest($baseUrl . '/checkout/session', "POST", $stringFields);
         $session_id = "";
-        
-        if(!is_null($feedback)){
+
+        if (!is_null($feedback)) {
             $json = json_decode($feedback, true);
-            if($json['success']){
+            if ($json['success']) {
                 $session_id = $json['data']['session_id'];
-            }else{
+            } else {
                 return response()->json([
-                    'success'=>false,
-                    'data'=>$feedback
+                    'success' => false,
+                    'data' => $feedback
                 ]);
             }
-        }else{
+        } else {
             return response()->json([
-                'success'=>false,
+                'success' => false,
             ]);
         }
         return response()->json([
-            'success'=> true,
-            'data'=>$session_id
+            'success' => true,
+            'data' => $session_id
         ]);
     }
 
-    public function getMyOrders(Request $request){
+    public function getMyOrders(Request $request)
+    {
         $user = Auth::user();
         $orderings = DB::table('orderings')
-        ->leftJoin('users', 'users.id', "orderings.user_id")
-        ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
-        ->where('users.id', $user->id)
-        ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
-        ->orderBy('orderings.id', 'desc')
-        ->get();
+            ->leftJoin('users', 'users.id', "orderings.user_id")
+            ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
+            ->where('users.id', $user->id)
+            ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status")
+            ->orderBy('orderings.id', 'desc')
+            ->get();
 
         foreach ($orderings as $ordering) {
             $carts = json_decode($ordering->carts, true);
@@ -965,14 +1008,15 @@ class ClientController extends Controller{
         }
 
         return response()->json([
-            'success'=>true,
-            'data'=>$orderings,
+            'success' => true,
+            'data' => $orderings,
         ]);
     }
 
-    public function paymentResult(Request $request){
+    public function paymentResult(Request $request)
+    {
         $event_type = $request->event_type;
-        if($event_type == 'checkout.completed'){
+        if ($event_type == 'checkout.completed') {
             $webhook = $request->data;
             $meta = $webhook['metadata'];
             $payment_status = $webhook['payment_status'];
@@ -980,27 +1024,28 @@ class ClientController extends Controller{
             $invoice = $webhook['invoice'];
 
             $baseUrl = config('app.THAWANI_BASE_URL');
-            $feedback = $this->sendThawaniRequest($baseUrl.'/payments?checkout_invoice='.$invoice, "GET");
+            $feedback = $this->sendThawaniRequest($baseUrl . '/payments?checkout_invoice=' . $invoice, "GET");
 
-            if(!is_null($feedback)){
+            if (!is_null($feedback)) {
                 $json = json_decode($feedback, true);
-                if($json['success']){
+                if ($json['success']) {
                     $payment_id = $json['data'][0]['payment_id'];
-                    if($type == 'service'){
+                    if ($type == 'service') {
                         $this->makeBooking($meta, $payment_status, $payment_id);
-                    }else{
+                    } else {
                         $this->makeOrdering($meta, $payment_status, $payment_id);
                     }
                 }
             }
         }
-       
+
         return response()->json([
-            'success'=> true,
+            'success' => true,
         ]);
     }
 
-    public function makeBooking($meta, $payment_status, $payment_id){
+    public function makeBooking($meta, $payment_status, $payment_id)
+    {
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1019,14 +1064,14 @@ class ClientController extends Controller{
 
         $sub_amount = $price * $quantity * count($times);
         $tax_amount = 0;
-        if($service->tax > 0){
-            $tax_amount = ($sub_amount * $service->tax)/100;
+        if ($service->tax > 0) {
+            $tax_amount = ($sub_amount * $service->tax) / 100;
         }
         $coupon_amount = 0;
-        if($coupon_id != "-1"){
+        if ($coupon_id != "-1") {
             $coupon = Coupon::find($coupon_id);
-            if($coupon){
-                $coupon_amount = ($sub_amount * $coupon->percent)%100;
+            if ($coupon) {
+                $coupon_amount = ($sub_amount * $coupon->percent) % 100;
                 $coupon->available = false;
                 $coupon->save();
             }
@@ -1035,7 +1080,7 @@ class ClientController extends Controller{
         $amount = $sub_amount + $tax_amount - $coupon_amount;
 
         $item['title'] = $lang == 'ar' ? $service->ar_name : $service->en_name;
-        $item['price'] = number_format($service->price*count($times), 2, '.', '');
+        $item['price'] = number_format($service->price * count($times), 2, '.', '');
         $item['quantity'] = $quantity;
         $item['price_sub'] =  number_format($sub_amount, 2, '.', '');
 
@@ -1057,9 +1102,9 @@ class ClientController extends Controller{
 
         App::setlocale($lang);
         $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/'.time()."_invoice.pdf";
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $path = public_path() . "/uploads/invoicies/";
-        if(!File::isDirectory($path)){
+        if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
@@ -1079,25 +1124,35 @@ class ClientController extends Controller{
         $all['coupon_id'] = $coupon_id;
         $all['type'] = 'card';
         $all['state'] = 'pending';
-        if($auto_accept){
+        if ($auto_accept) {
             $all['state'] = 'accepted';
         }
         $all['invoice'] = $pdf_name;
         $booking = Booking::create($all);
 
         $booking = DB::table('bookings')
-        ->leftJoin('services', 'services.id', "bookings.service_id")
-        ->leftJoin('users', 'users.id', "bookings.user_id")
-        ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
-        ->where('bookings.id', $booking->id)
-        ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.phone",
-                 "users.email", "transactions.amount", "transactions.payment_status")
-        ->first();
+            ->leftJoin('services', 'services.id', "bookings.service_id")
+            ->leftJoin('users', 'users.id', "bookings.user_id")
+            ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
+            ->where('bookings.id', $booking->id)
+            ->select(
+                'bookings.*',
+                "services.en_name",
+                "services.ar_name",
+                "services.price",
+                "users.full_name",
+                "users.phone",
+                "users.email",
+                "transactions.amount",
+                "transactions.payment_status"
+            )
+            ->first();
 
         $this->sendBookingMailWithPDF($booking);
     }
 
-    public function makeOrdering($meta, $payment_status, $payment_id){
+    public function makeOrdering($meta, $payment_status, $payment_id)
+    {
         $user_id = $meta['user_id'];
         $type = $meta['type'];
         $coupon_id = $meta['coupon_id'];
@@ -1114,9 +1169,9 @@ class ClientController extends Controller{
             $id = $cart['id'];
             $quantity = $cart['quantity'];
             $product = Product::find($id);
-            if($product){
+            if ($product) {
                 $price_sub = $product->price * $quantity;
-                $tax = ($price_sub * $product->tax)/100;
+                $tax = ($price_sub * $product->tax) / 100;
                 $item['title'] = $lang == 'ar' ? $product->ar_name : $product->en_name;
                 $item['price'] = number_format($product->price, 2, '.', '');
                 $item['quantity'] = $quantity;
@@ -1128,10 +1183,10 @@ class ClientController extends Controller{
         }
 
         $coupon_amount = 0;
-        if($coupon_id != "-1"){
+        if ($coupon_id != "-1") {
             $coupon = Coupon::find($coupon_id);
-            if($coupon){
-                $coupon_amount = ($sub_amount * $coupon->percent)%100;
+            if ($coupon) {
+                $coupon_amount = ($sub_amount * $coupon->percent) % 100;
                 $coupon->available = false;
                 $coupon->save();
             }
@@ -1153,9 +1208,9 @@ class ClientController extends Controller{
         $data['items'] = $items;
 
         $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/'.time()."_invoice.pdf";
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $path = public_path() . "/uploads/invoicies/";
-        if(!File::isDirectory($path)){
+        if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
@@ -1182,15 +1237,18 @@ class ClientController extends Controller{
         $this->sendOrderingMailWithPDF($ordering);
     }
 
-    public function sendBookingMail($booking){
+    public function sendBookingMail($booking)
+    {
         Mail::to($booking->email)->send(new BookingMail($booking));
     }
 
-    public function sendBookingMailWithPDF($booking){
+    public function sendBookingMailWithPDF($booking)
+    {
         Mail::to($booking->email)->send(new BookingMail($booking, $booking->invoice));
     }
 
-    public function sendOrderingMailWithPDF($ordering){
+    public function sendOrderingMailWithPDF($ordering)
+    {
         Mail::to($ordering->email)->send(new OrderingMail($ordering, $ordering->invoice));
     }
 }

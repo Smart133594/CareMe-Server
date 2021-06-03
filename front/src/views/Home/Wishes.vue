@@ -29,9 +29,9 @@ export default {
   computed: {
     ...mapGetters(["getUser", "selectedLocale"]),
     isExistWishes(){
-        let user = this.getUser;
-        let wishes = user.wishes;
-        return wishes.length;
+      let user = this.getUser;
+      let wishes = user.wishes;
+      return wishes.length;
     }
   },
   methods: {
@@ -61,9 +61,9 @@ export default {
     this.getWishes();
   },
   watch:{
-      isExistWishes(){
-          this.getWishes();
-      }
+    isExistWishes(){
+      this.getWishes();
+    }
   }
 };
 </script>

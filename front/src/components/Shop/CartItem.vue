@@ -11,7 +11,7 @@
             <h6 class="text-purple item-title mt-2">{{$t('message.currency')}} {{product['price']}}</h6>
             <div class="control-box d-flex justify-content-between mt-2">
                 <div class="d-flex flex-row align-items-center" >
-                    <v-btn text class="control-button border" small @click="decreaseQuantity">
+                    <v-btn text class="control-button border" :disabled="product.quantity == 1" small @click="decreaseQuantity">
                         <v-icon dark>remove</v-icon>
                     </v-btn>
                     <div class="input-quantity">
@@ -69,6 +69,9 @@ export default {
   },
   methods: {
       decreaseQuantity(){
+        if(this.product.quantity == 1){
+          return
+        }
         this.$store.dispatch('changeQuantityHandler', {product:this.product, quantity:-1})
       },
 
