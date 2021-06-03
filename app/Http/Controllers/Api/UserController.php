@@ -46,7 +46,7 @@ class UserController extends Controller{
             $randomNumber = $this->makeRandomNumber();
             $basic  = new \Nexmo\Client\Credentials\Basic("4228b62e", "aNN21mqPwYTSFH4b");
             $client = new \Nexmo\Client($basic);
-            $message = "<#> Welcome to CareMe System. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/";
+            $message = "Welcome to CareMe System. Your verification code is: ".$randomNumber;
             $message = $client->message()->send([
                 'to' => $phone,
                 'from' => 'CareMe System',
