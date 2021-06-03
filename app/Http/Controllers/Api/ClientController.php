@@ -982,6 +982,16 @@ class ClientController extends Controller{
             $baseUrl = config('app.THAWANI_BASE_URL');
             $feedback = $this->sendThawaniRequest($baseUrl.'/payments?checkout_invoice='.$invoice, "GET");
 
+
+            $path = public_path() . "/uploads/webhooks/";
+            $filePath = $path."webhook.txt";
+            if(!File::isDirectory($path)){
+                File::makeDirectory($path, 0777, true, true);
+            }
+            $fp = fopen($filePath,"wb");
+            fwrite($fp, json_encode($feedback));
+            fclose($fp);
+
             if(!is_null($feedback)){
                 $json = json_decode($feedback, true);
                 if($json['success']){
