@@ -8,25 +8,33 @@
             </div>
             <h5 class="text-purple">
                 {{
-            cart.length == 1
-              ? `${$t("message.thereIs")} 1 ${$t("message.item")}`
-              : `${$t("message.thereAre")} ${cart.length} ${$t(
-                  "message.items"
-                )}`
-          }}
+                        cart.length == 1
+                            ? `${$t("message.thereIs")} 1 ${$t("message.item")}`
+                            : `${$t("message.thereAre")} ${cart.length} ${$t(
+                                  "message.items"
+                              )}`
+                    }}
             </h5>
             <v-row>
                 <v-col cols="5">
-                    <h6 class="text-purple item-title">{{ $t("message.name") }}</h6>
+                    <h6 class="text-purple item-title">
+                        {{ $t("message.name") }}
+                    </h6>
                 </v-col>
                 <v-col cols="2">
-                    <h6 class="text-purple item-title">{{ $t("message.quantity") }}</h6>
+                    <h6 class="text-purple item-title">
+                        {{ $t("message.quantity") }}
+                    </h6>
                 </v-col>
                 <v-col cols="2">
-                    <h6 class="text-purple item-title">{{ $t("message.price") }}</h6>
+                    <h6 class="text-purple item-title">
+                        {{ $t("message.price") }}
+                    </h6>
                 </v-col>
                 <v-col cols="3">
-                    <h6 class="text-purple item-title">{{ $t("message.total") }}</h6>
+                    <h6 class="text-purple item-title">
+                        {{ $t("message.total") }}
+                    </h6>
                 </v-col>
             </v-row>
             <div v-for="(product, index) in cart" :key="`${index}_cart`" class="mt-2">
@@ -34,20 +42,32 @@
                     <v-col cols="5">
                         <h6 class="text-purple item-title">
                             {{
-                  product[selectedLocale.locale == "en" ? "en_name" : "ar_name"]
-                }}
+                                    product[
+                                        selectedLocale.locale == "en"
+                                            ? "en_name"
+                                            : "ar_name"
+                                    ]
+                                }}
                         </h6>
                     </v-col>
                     <v-col cols="2">
-                        <h6 class="text-purple item-title">{{ product.quantity }}</h6>
+                        <h6 class="text-purple item-title">
+                            {{ product.quantity }}
+                        </h6>
                     </v-col>
                     <v-col cols="2">
-                        <h6 class="text-purple item-title">{{ product.price }}</h6>
+                        <h6 class="text-purple item-title">
+                            {{ product.price }}
+                        </h6>
                     </v-col>
                     <v-col cols="3">
                         <h6 class="text-purple item-title">
                             {{ $t("message.currency") }}
-                            {{ (product.price * product.quantity).toFixed(2) }}
+                            {{
+                                    (product.price * product.quantity).toFixed(
+                                        2
+                                    )
+                                }}
                         </h6>
                     </v-col>
                 </v-row>
@@ -116,35 +136,44 @@ import {
 import appConfig from "Constants/AppConfig";
 import Vue from "vue";
 import api from "Api";
-import CardForm from "./CreditCard/CardForm";
 
 export default {
-    components: {
-        CardForm,
+    props: {
+        cart: {
+            require: true,
+            default: Array
+        },
+        vendorId:{
+            require: true
+        }
     },
+
+    components: {},
     data() {
         return {
             loading: false,
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.testMode ?
+                appConfig.localhost :
+                appConfig.domain,
             coupon: "",
             coupon_percent: 0,
-            requireRule: [(v) => !!v || this.$t("message.fieldRequired")],
+            requireRule: [v => !!v || this.$t("message.fieldRequired")],
             formData: {
                 cardName: "",
                 cardNumber: "",
                 cardMonth: "",
                 cardYear: "",
-                cardCvv: "",
+                cardCvv: ""
             },
-            dialog: false,
+            dialog: false
         };
     },
     computed: {
-        ...mapGetters(["cart", "getUser", "selectedLocale"]),
+        ...mapGetters(["getUser", "selectedLocale"]),
 
         getSubTotal() {
             let total = 0;
-            this.cart.forEach((element) => {
+            this.cart.forEach(element => {
                 total += element.price * element.quantity;
             });
             total = total.toFixed(2);
@@ -153,7 +182,7 @@ export default {
 
         getTax() {
             let tax = 0;
-            this.cart.forEach((element) => {
+            this.cart.forEach(element => {
                 tax += (element.price * element.quantity * element.tax) / 100;
             });
             tax = tax.toFixed(2);
@@ -178,7 +207,7 @@ export default {
                 parseFloat(this.getCoupons)
             ).toFixed(2);
             return total;
-        },
+        }
     },
     methods: {
         checkOut() {
@@ -186,7 +215,7 @@ export default {
                 Vue.notify({
                     group: "center",
                     type: "error",
-                    text: this.$t("message.youNeedToLoginFirst"),
+                    text: this.$t("message.youNeedToLoginFirst")
                 });
             } else {
                 this.getProductSession();
@@ -197,7 +226,7 @@ export default {
                 Vue.notify({
                     group: "center",
                     type: "error",
-                    text: this.$t("message.youNeedToLoginFirst"),
+                    text: this.$t("message.youNeedToLoginFirst")
                 });
                 return;
             }
@@ -205,8 +234,7 @@ export default {
                 return;
             }
             this.loading = true;
-            api
-                .post(
+            api.post(
                     `checkCoupon`,
                     JSON.stringify({
                         coupon: this.coupon,
@@ -214,23 +242,23 @@ export default {
                     }), {
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${this.getUser.token}`,
-                        },
+                            Authorization: `Bearer ${this.getUser.token}`
+                        }
                     }
                 )
-                .then((response) => {
+                .then(response => {
                     if (response.data.success) {
                         this.coupon_percent = response.data.data;
                         Vue.notify({
                             group: "center",
                             type: "success",
-                            text: this.$t("message.couponApplied"),
+                            text: this.$t("message.couponApplied")
                         });
                     } else {
                         Vue.notify({
                             group: "center",
                             type: "error",
-                            text: this.$t("message.invalidCoupon"),
+                            text: this.$t("message.invalidCoupon")
                         });
                     }
                 })
@@ -247,42 +275,38 @@ export default {
                 coupon: this.coupon_percent > 0 ? this.coupon : "",
                 type: "product",
                 lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
-            }
+                vendor_id: this.vendorId
+            };
 
             this.loading = true;
-            api
-                .post(`getProductSession`, JSON.stringify(model), {
+            api.post(`getProductSession`, JSON.stringify(model), {
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${this.getUser.token}`,
-                    },
+                        Authorization: `Bearer ${this.getUser.token}`
+                    }
                 })
-                .then((response) => {
+                .then(response => {
                     if (response.data.success) {
                         let session_id = response.data.data;
                         let url = "";
                         if (appConfig.payment_test) {
-                            url = "https://uatcheckout.thawani.om/pay/"
+                            url = "https://uatcheckout.thawani.om/pay/";
                         } else {
-                            url = "https://checkout.thawani.om/pay/"
+                            url = "https://checkout.thawani.om/pay/";
                         }
-                        window.location.href = `${url}${session_id}?key=${appConfig.payment_public_key}`
+                        window.location.href = `${url}${session_id}?key=${appConfig.payment_public_key}`;
                     } else {
                         Vue.notify({
                             group: "center",
                             type: "error",
-                            text: this.$t("message.sessionError"),
+                            text: this.$t("message.sessionError")
                         });
                     }
                 })
                 .finally(() => {
                     this.loading = false;
                 });
-        },
-    },
+        }
+    }
 };
 </script>
-
-<style lang="scss">
-@import "./CreditCard/style.scss";
-</style>

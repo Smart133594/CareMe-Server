@@ -19,14 +19,14 @@ export const providers = {
             label: 'Old'
         },
 
-        // {
-        //     action: 'ti-write',
-        //     title: 'message.orders',
-        //     active: false,
-        //     path: '/orders',
-        //     items: null,
-        //     label: 'Old'
-        // },
+        {
+            action: 'ti-write',
+            title: 'message.orders',
+            active: false,
+            path: '/orders',
+            items: null,
+            label: 'Old'
+        },
     ],
 
     'message.features' : [
