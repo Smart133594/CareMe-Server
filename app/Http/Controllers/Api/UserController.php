@@ -14,7 +14,7 @@ use App\Models\WishList;
 use DB;
 use Twilio\Rest\Client;
 use App\Traits\CommonHelper;
-
+use Exception;
 class UserController extends Controller{
     use CommonHelper;
     public function makeRandomString(){
