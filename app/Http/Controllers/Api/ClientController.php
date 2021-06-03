@@ -353,8 +353,7 @@ class ClientController extends Controller{
         $user = Auth::user();
         $all = $request->all();
         $all['user_id'] = $user->id;
-        $wish = WishList::create($all);
-
+        $wish = WishList::updateOrCreate($all, $all);
         return response()->json([
             'success'=>true,
             'data'=> $wish
