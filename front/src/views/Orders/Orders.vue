@@ -18,7 +18,15 @@
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
                                 <td>{{item.created_at}}</td>
-                                <td>
+                                 <td>
+                                    <p class="m-0">
+                                        {{ item.full_name }}
+                                    </p>
+                                    <p class="m-0">
+                                        {{item.phone}}
+                                    </p>
+                                </td>
+                                 <td>
                                     <p class="m-0" v-for="(cart, index) in item.carts" :key="`${index}item`">
                                         {{cart[selectedLocale.locale == "en" ? "en_name" : "ar_name"]}}({{cart.quantity}})
                                     </p>
@@ -73,6 +81,10 @@ export default {
                     value: "created_at",
                 },
                 {
+                    text: this.$t("message.client"),
+                    value: "full_name",
+                },
+                {
                     text: this.$t("message.cart"),
                     value: "carts",
                 },
@@ -91,10 +103,10 @@ export default {
         };
     },
     methods: {
-        getMyOrders() {
+        getOrders() {
             this.loading = true;
             api
-                .get("getMyOrders", {
+                .get("getOrders", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${this.getUser.token}`,
@@ -115,7 +127,7 @@ export default {
     },
     mounted() {},
     beforeMount() {
-        this.getMyOrders();
+        this.getOrders();
     },
 };
 </script>
