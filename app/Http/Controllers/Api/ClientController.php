@@ -875,7 +875,6 @@ class ClientController extends Controller
                 $product['vendor_id'] = $vendor->id;
                 $product['vendor_en_name'] = $vendor->en_name;
                 $product['vendor_ar_name'] = $vendor->ar_name;
-
                 if ($product['active']) {
                     array_push($products, $product);
                 }
