@@ -23,7 +23,6 @@ use App\Models\Offday;
 use App\Models\Holiday;
 use App\Models\Banner;
 use App\Models\Booking;
-use App\Models\VendorRole;
 use App\Models\WishList;
 use App\Models\Coupon;
 use App\Mail\BookingMail;
