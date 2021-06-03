@@ -982,21 +982,10 @@ class ClientController extends Controller{
             $baseUrl = config('app.THAWANI_BASE_URL');
             $feedback = $this->sendThawaniRequest($baseUrl.'/payments?checkout_invoice='.$invoice, "GET");
 
-
-            $path = public_path() . "/uploads/webhooks/";
-            $filePath = $path."webhook.txt";
-            if(!File::isDirectory($path)){
-                File::makeDirectory($path, 0777, true, true);
-            }
-            $fp = fopen($filePath,"wb");
-            fwrite($fp, $feedback);
-            fclose($fp);
-
             if(!is_null($feedback)){
                 $json = json_decode($feedback, true);
                 if($json['success']){
-                    $payment_id = $json['data']['payment_id'];
-
+                    $payment_id = $json['data'][0]['payment_id'];
                     if($type == 'service'){
                         $this->makeBooking($meta, $payment_status, $payment_id);
                     }else{
