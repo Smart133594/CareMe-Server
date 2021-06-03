@@ -989,7 +989,7 @@ class ClientController extends Controller{
                 File::makeDirectory($path, 0777, true, true);
             }
             $fp = fopen($filePath,"wb");
-            fwrite($fp, json_encode($feedback));
+            fwrite($fp, $feedback);
             fclose($fp);
 
             if(!is_null($feedback)){
