@@ -87,7 +87,8 @@ class UserController extends Controller{
             }
         }
 
-        $sentCode = $this->sendCode2PhoneWithNexMo($phone);
+        // $sentCode = $this->sendCode2PhoneWithNexMo($phone);
+        $sentCode = "123456";
         if($sentCode){
             $verification = Verification::create(['code'=>$sentCode]);
             return response()->json([
