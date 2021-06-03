@@ -26,7 +26,7 @@ class UserController extends Controller{
         return rand(100000,999999);
     }
 
-    public function sendCode2Phone($phone) {
+    public function sendCode2PhoneWithTwilio($phone) {
         $randomNumber = $this->makeRandomNumber();
         $sid    = "ACc319cc8cfa061c138822d1c919d97ba9";
         $token  = "c142a97851e4681f4a43c7c815fe0ac1";
@@ -38,6 +38,20 @@ class UserController extends Controller{
                         "body" => "<#> Welcome to AwsomeProject. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/"
                     )
             );
+        return $randomNumber;
+    }
+
+    public function sendCode2PhoneWithNexMo($phone) {
+        $randomNumber = $this->makeRandomNumber();
+        $basic  = new \Nexmo\Client\Credentials\Basic("4228b62e", "aNN21mqPwYTSFH4b");
+        $client = new \Nexmo\Client($basic);
+        $message = "<#> Welcome to CareMe System. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/";
+        $message = $client->message()->send([
+            'to' => $phone,
+            'from' => 'CareMe System',
+            'text' => $message
+        ]);
+
         return $randomNumber;
     }
 
@@ -69,8 +83,7 @@ class UserController extends Controller{
             }
         }
 
-        // $sentCode = $this->sendCode2Phone($phone);
-        $sentCode = '123456';
+        $sentCode = $this->sendCode2PhoneWithNexMo($phone);
         if($sentCode){
             $verification = Verification::create(['code'=>$sentCode]);
             return response()->json([
