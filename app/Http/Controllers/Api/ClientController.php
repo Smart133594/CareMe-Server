@@ -607,7 +607,7 @@ class ClientController extends Controller{
         $user = Auth::user();
 
         $transaction_data['amount'] = $amount;
-        $transaction_data['payment_status'] = 'due';
+        $transaction_data['payment_status'] = 'unpaid';
         $transaction = Transaction::create($transaction_data);
 
         $all['type'] = 'insurance';
@@ -970,33 +970,22 @@ class ClientController extends Controller{
     }
 
     public function paymentResult(Request $request){
-        $path = public_path() . "/uploads/webhooks/";
-        $filePath = $path."webhook1.txt";
-        if(!File::isDirectory($path)){
-            File::makeDirectory($path, 0777, true, true);
+        $webhook = $request->data;
+        $meta = $webhook['metadata'];
+        $payment_status = $webhook['payment_status'];
+        $event_type = $webhook['event_type'];
+        if($event_type == 'checkout.completed'){
+            $type = $meta['type'];
+            if($type == 'service'){
+                $this->makeBooking($meta, $payment_status);
+            }else{
+                $this->makeOrdering($meta, $payment_status);
+            }
         }
-        $all = $request->all();
-        $fp = fopen($filePath,"wb");
-        fwrite($fp, json_encode($all));
-        fclose($fp);
-        // $session_id = $request->session_id;
-        // $baseUrl = config('app.THAWANI_BASE_URL');
-        // $url = $baseUrl.'/checkout/session/'.$session_id;
-        // $feedback = $this->sendThawaniRequest($url, "GET");
-        // $feedback = json_decode($feedback, true);
-        // $meta = $feedback['data']['metadata'];
-        // $payment_status = $feedback['data']['payment_status'];
-
-        // $type = $meta['type'];
-        // if($type == 'service'){
-        //     $this->makeBooking($meta, $payment_status);
-        // }else{
-        //     $this->makeOrdering($meta, $payment_status);
-        // }
-        // return response()->json([
-        //     'success'=> true,
-        //     'data'=>$feedback
-        // ]);
+       
+        return response()->json([
+            'success'=> true,
+        ]);
     }
 
     public function makeBooking($meta, $payment_status){
