@@ -91,13 +91,15 @@ export default {
     mounted() {},
     beforeMount() {
         let type = this.$route.params.type;
-        if (type == "3") {
+        if (type != "-1") {
             Vue.notify({
                 group: "center",
                 type: "success",
                 text: this.$t("message.orderingSuccess"),
             });
-            this.$store.dispatch("updateCart", []);
+            this.vendor_id = -1;
+            let carts = this.cart.filter(element => element.vendor_id != type);
+            this.$store.dispatch("updateCart", carts);
         }
         this.getCarts();
     },

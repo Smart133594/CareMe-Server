@@ -269,8 +269,8 @@ export default {
 
         getProductSession() {
             let model = {
-                cancel_url: `${this.baseUrl}carts/2`,
-                success_url: `${this.baseUrl}carts/3`,
+                cancel_url: `${this.baseUrl}carts/-1`,
+                success_url: `${this.baseUrl}carts/${this.vendorId}`,
                 carts: this.cart,
                 coupon: this.coupon_percent > 0 ? this.coupon : "",
                 type: "product",
