@@ -27,7 +27,7 @@
                         <div class="p-6">
                             <div class="flex items-center">
                                 <div class="ml-4 text-gray-600">
-                                    <h4>Hi Vojislav</h4>
+                                    <h4>Hi {{$booking->full_name}}</h4>
                                 </div>
                             </div>
                             <div class="ml-12">
