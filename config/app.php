@@ -134,8 +134,8 @@ return [
     |
     */
 
-    'THAWANI_SECRET_KEY' => "nTFkb94A6HUKTojVerBVlDs8ucMhrX",
-    'THAWANI_PUBLIC_KEY' => "uDwxsSOqDBB3qjTD6kZfvkGlzKvPBv",
+    'THAWANI_SECRET_KEY' => "uDwxsSOqDBB3qjTD6kZfvkGlzKvPBv",
+    'THAWANI_PUBLIC_KEY' => "nTFkb94A6HUKTojVerBVlDs8ucMhrX",
     'THAWANI_BASE_URL' => 'https://uatcheckout.thawani.om/api/v1',
 
     'providers' => [

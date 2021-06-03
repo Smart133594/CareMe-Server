@@ -175,17 +175,16 @@ class UserController extends Controller{
         $feedback = $this->sendThawaniRequest($baseUrl.'/customers', "POST", json_encode($fields));
         if(!is_null($feedback)){
             $feedback = json_decode($feedback, true);
-            // $all['customer_id'] = $feedback['data']['id'];
+            $all['customer_id'] = $feedback['data']['id'];
         }else{
             return response()->json([
                 'success'=>false,
             ]);
         }
 
-        // User::create($all);
+        User::create($all);
         return response()->json([
             'success'=>true,
-            'data'=>$feedback 
         ]);
     }
 
