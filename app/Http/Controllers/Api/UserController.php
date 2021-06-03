@@ -42,17 +42,21 @@ class UserController extends Controller{
     }
 
     public function sendCode2PhoneWithNexMo($phone) {
-        $randomNumber = $this->makeRandomNumber();
-        $basic  = new \Nexmo\Client\Credentials\Basic("4228b62e", "aNN21mqPwYTSFH4b");
-        $client = new \Nexmo\Client($basic);
-        $message = "<#> Welcome to CareMe System. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/";
-        $message = $client->message()->send([
-            'to' => $phone,
-            'from' => 'CareMe System',
-            'text' => $message
-        ]);
+        try {
+            $randomNumber = $this->makeRandomNumber();
+            $basic  = new \Nexmo\Client\Credentials\Basic("4228b62e", "aNN21mqPwYTSFH4b");
+            $client = new \Nexmo\Client($basic);
+            $message = "<#> Welcome to CareMe System. Your verification code is :".$randomNumber."\nMrpzuH/0SQ/";
+            $message = $client->message()->send([
+                'to' => $phone,
+                'from' => 'CareMe System',
+                'text' => $message
+            ]);
+            return $randomNumber;
+        } catch (Exception $e) {
+            return NULL;
+        }
 
-        return $randomNumber;
     }
 
     public function sendUrl2Email($email) {
