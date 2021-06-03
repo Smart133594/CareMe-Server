@@ -376,11 +376,13 @@ class ClientController extends Controller{
         $servicies = DB::table('wish_lists')
             ->leftJoin('services', 'services.id', 'wish_lists.service_id')
             ->where('services.active', true)
+            ->where('wish_lists.user_id', $user->id)
             ->get();
 
         $products = DB::table('wish_lists')
             ->leftJoin('products', 'products.id', 'wish_lists.product_id')
             ->where('products.active', true)
+            ->where('wish_lists.user_id', $user->id)
             ->get();
 
         $result = ['servicies' => $servicies, 'products' => $products];
@@ -975,10 +977,22 @@ class ClientController extends Controller{
             $meta = $webhook['metadata'];
             $payment_status = $webhook['payment_status'];
             $type = $meta['type'];
-            if($type == 'service'){
-                $this->makeBooking($meta, $payment_status);
-            }else{
-                $this->makeOrdering($meta, $payment_status);
+            $invoice = $webhook['invoice'];
+
+            $baseUrl = config('app.THAWANI_BASE_URL');
+            $feedback = $this->sendThawaniRequest($baseUrl.'/payments?checkout_invoice='.$invoice, "GET");
+
+            if(!is_null($feedback)){
+                $json = json_decode($feedback, true);
+                if($json['success']){
+                    $payment_id = $json['data']['payment_id'];
+
+                    if($type == 'service'){
+                        $this->makeBooking($meta, $payment_status, $payment_id);
+                    }else{
+                        $this->makeOrdering($meta, $payment_status, $payment_id);
+                    }
+                }
             }
         }
        
