@@ -19,7 +19,7 @@
                         <h6> : {{$t("message.currency")}} {{getTotalPrice}}</h6>
                     </div>
                 </v-card-title>
-                <v-data-table v-bind:headers="headers" v-bind:items="getFilteredBooking" v-bind:search="search" v-if="!loading">
+                <v-data-table v-bind:headers="headers" v-bind:items="getFilteredBooking" v-bind:search="search" :loading="loading">
                     <template v-slot:body="{ items }">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`booking${item.id}`">

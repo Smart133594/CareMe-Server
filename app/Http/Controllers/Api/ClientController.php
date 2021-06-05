@@ -740,7 +740,7 @@ class ClientController extends Controller
         }
 
         $amount = $sub_amount + $tax_amount - $coupon_amount;
-
+        $amount = number_format($amount, 2, '.', '');
         $user = Auth::user();
         $fields['client_reference_id'] = $user->id;
         $fields['customer_id'] = $user->customer_id;
@@ -935,7 +935,8 @@ class ClientController extends Controller
 
                 $item['id'] = $id;
                 $item['name'] = $product->en_name . "(+ tax -coupon)";
-                $item['unit_amount'] = ($price + $tax - $coupon_amount) * 1000;
+
+                $item['unit_amount'] = number_format(($price + $tax - $coupon_amount) * 1000, 2, '.', '');
                 $item['quantity'] = $quantity;
 
                 $item_meta['id'] = $id;
