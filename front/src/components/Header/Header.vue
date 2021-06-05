@@ -52,7 +52,7 @@
         <v-btn icon large @click="toggleFullScreen" class="full-screen ma-0">
           <v-icon color="grey">fullscreen</v-icon>
         </v-btn>
-        <notifications></notifications>
+        <!--<notifications></notifications>-->
         <language-provider></language-provider>
       </div>
     </v-app-bar>
