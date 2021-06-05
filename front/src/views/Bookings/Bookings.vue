@@ -10,10 +10,13 @@
                     </v-text-field>
                 </v-card-title>
                 <v-data-table v-bind:headers="headers" v-bind:items="bookings" v-bind:search="search" v-if="!loading">
-                    <template v-slot:body="{ items }" >
+                    <template v-slot:body="{ items }">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`booking${item.id}`">
                                 <td>{{ index + 1 }}</td>
+                                 <td>
+                                    {{item[selectedLocale.locale == "en" ? "vendor_en_name" : "vendor_ar_name"]}}
+                                </td>
                                 <td>
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
@@ -111,8 +114,17 @@ export default {
                     value: "no",
                 },
                 {
+                    text: this.$t("message.vendorName"),
+                    value: "vendor_en_name",
+                    align: "center",
+                },
+                {
                     text: this.$t("message.invoice"),
                     value: "invoice",
+                },
+                {
+                    text: this.$t("message.service"),
+                    value: "en_name",
                 },
                 {
                     text: this.$t("message.service"),

@@ -14,11 +14,14 @@
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`ordering${item.id}`">
                                 <td>{{ index + 1 }}</td>
+                                 <td>
+                                    {{item[selectedLocale.locale == "en" ? "vendor_en_name" : "vendor_ar_name"]}}
+                                </td>
                                 <td>
                                     <a :href="`${baseUrl}${item.invoice}`" target="_blank">{{$t("message.invoice")}}</a>
                                 </td>
                                 <td>{{item.created_at}}</td>
-                                 <td>
+                                <td>
                                     <p class="m-0">
                                         {{ item.full_name }}
                                     </p>
@@ -26,7 +29,7 @@
                                         {{item.phone}}
                                     </p>
                                 </td>
-                                 <td>
+                                <td>
                                     <p class="m-0" v-for="(cart, index) in item.carts" :key="`${index}item`">
                                         {{cart[selectedLocale.locale == "en" ? "en_name" : "ar_name"]}}({{cart.quantity}})
                                     </p>
@@ -71,6 +74,11 @@ export default {
             headers: [{
                     text: this.$t("message.no"),
                     value: "no",
+                },
+                {
+                    text: this.$t("message.vendorName"),
+                    value: "vendor_en_name",
+                    align: "center",
                 },
                 {
                     text: this.$t("message.invoice"),

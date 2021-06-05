@@ -209,12 +209,12 @@ export default {
                 },
                 {
                     text: this.$t("message.vendorName"),
-                    value: "vendor.en_name",
+                    value: "department.vendor.en_name",
                     align: "center",
                 },
                 {
                     text: this.$t("message.departmentName"),
-                    value: "department",
+                    value: "department.en_name",
                     align: "center",
                 },
                 {
@@ -239,7 +239,6 @@ export default {
                 },
             ],
 
-   
             baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
             selectedItem: null,
             deleteDialog: false,

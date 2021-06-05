@@ -879,7 +879,7 @@ class ClientController extends Controller
             $product = Product::find($cart['id']);
             if ($product) {
                 $product['quantity'] = $cart['quantity'];
-                $department = Department::find($product->id);
+                $department = Department::find($product->department_id);
                 $vendor = Vendor::find($department->vendor_id);
                 $product['vendor_id'] = $vendor->id;
                 $product['vendor_en_name'] = $vendor->en_name;

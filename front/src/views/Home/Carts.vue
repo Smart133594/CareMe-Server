@@ -34,7 +34,6 @@ export default {
 
         getVendorCart() {
             let carts = this.cart.filter(element => element.vendor_id == this.vendor_id);
-            console.log(carts);
             return carts;
         },
 

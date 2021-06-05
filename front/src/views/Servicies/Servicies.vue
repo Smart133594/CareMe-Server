@@ -538,12 +538,12 @@ export default {
         },
         {
           text: this.$t("message.vendorName"),
-          value: "department",
+          value: "department.vendor.en_name",
           align: "center",
         },
         {
           text: this.$t("message.departmentName"),
-          value: "department",
+          value: "department.en_name",
           align: "center",
         },
         {
