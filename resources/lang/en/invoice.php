@@ -19,4 +19,5 @@ return [
     "subtotal"=>"Sub Total",
     "tax"=>"Tax",
     "coupon"=>"Coupon",
+    "vendor_name"=>"vendor_name",
 ];

@@ -108,8 +108,12 @@
         </address>
         <div style="width: 50%; float: left;">
             <p style="text-align: right;">
-                <!-- <span style="font-weight: bold; font-size: 15px;">@lang('invoice.invoice_id'):</span> -->
-                <!-- <span style="font-weight: lighter; font-size: 14px;">38</span> -->
+                <span style="font-weight: bold; font-size: 15px;">@lang('invoice.invoice_id'):</span>
+                <span style="font-weight: lighter; font-size: 14px;">{{$id}}</span>
+            </p>
+            <p style="text-align: right;">
+                <span style="font-weight: bold; font-size: 15px;">@lang('invoice.vendor_name'):</span>
+                <span style="font-weight: lighter; font-size: 14px;">{{$vendor_name}}</span>
             </p>
             <p style="text-align: right;">
                 <span style="font-weight: bold; font-size: 15px;">@lang('invoice.date'):</span>

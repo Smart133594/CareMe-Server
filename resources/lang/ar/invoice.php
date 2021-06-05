@@ -19,4 +19,5 @@ return [
     "subtotal"=>"الحساب",
     "tax"=>"ضريبة",
     "coupon"=>"الكوبونات",
+    "vendor_name"=>"vendor_name",
 ];

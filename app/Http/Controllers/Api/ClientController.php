@@ -641,6 +641,14 @@ class ClientController extends Controller
 
         $items = [];
         array_push($items, $item);
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
+
+        $all['invoice'] = $pdf_name;
+
+        if ($auto_accept) {
+            $all['state'] = 'accepted';
+        }
+        $booking = Booking::create($all);
 
         $data['full_name'] = $user->full_name;
         $data['email'] = $user->email;
@@ -653,21 +661,21 @@ class ClientController extends Controller
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
         $data['amount_paid'] = '0.00';
         $data['items'] = $items;
+        $data['id'] = $booking->id;
+        $department = $service->department;
+        $vendor = $department->vendor;
+        $data['vendor_name'] = $vendor->en_name;
 
         App::setlocale($lang);
         $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $path = public_path() . "/uploads/invoicies/";
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
-        $all['invoice'] = $pdf_name;
 
-        if ($auto_accept) {
-            $all['state'] = 'accepted';
-        }
-        $booking = Booking::create($all);
+
+
 
         $booking = DB::table('bookings')
             ->leftJoin('services', 'services.id', "bookings.service_id")
@@ -1088,32 +1096,13 @@ class ClientController extends Controller
         array_push($items, $item);
 
         $user = User::find($user_id);
-        $data['full_name'] = $user->full_name;
-        $data['email'] = $user->email;
-        $data['phone'] = $user->phone;
-        $nowDate = date("Y-m-d H:i:s");
-        $data['date'] = $nowDate;
-        $data['total'] = number_format($amount, 2, '.', '');
-        $data['sub_total'] = number_format($sub_amount, 2, '.', '');
-        $data['tax'] = number_format($tax_amount, 2, '.', '');
-        $data['coupon'] = number_format($coupon_amount, 2, '.', '');
-        $data['amount_paid'] = '0.00';
-        $data['items'] = $items;
-
-        App::setlocale($lang);
-        $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
-        $path = public_path() . "/uploads/invoicies/";
-        if (!File::isDirectory($path)) {
-            File::makeDirectory($path, 0777, true, true);
-        }
-        $pdf->save($pdf_name);
 
         $transaction_data['amount'] = $amount;
         $transaction_data['payment_status'] = $payment_status;
         $transaction_data['payment_id'] = $payment_id;
         $transaction_data['etc'] = now();
         $transaction = Transaction::create($transaction_data);
+
 
         $all['user_id'] = $user_id;
         $all['transaction_id'] = $transaction->id;
@@ -1128,8 +1117,35 @@ class ClientController extends Controller
         if ($auto_accept) {
             $all['state'] = 'accepted';
         }
+
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $all['invoice'] = $pdf_name;
         $booking = Booking::create($all);
+
+        $department = $service->department;
+        $vendor = $department->vendor;
+
+        $data['full_name'] = $user->full_name;
+        $data['email'] = $user->email;
+        $data['phone'] = $user->phone;
+        $data['vendor_name'] = $vendor->en_name;
+        $data['id'] = $booking->id;
+        $nowDate = date("Y-m-d H:i:s");
+        $data['date'] = $nowDate;
+        $data['total'] = number_format($amount, 2, '.', '');
+        $data['sub_total'] = number_format($sub_amount, 2, '.', '');
+        $data['tax'] = number_format($tax_amount, 2, '.', '');
+        $data['coupon'] = number_format($coupon_amount, 2, '.', '');
+        $data['amount_paid'] = '0.00';
+        $data['items'] = $items;
+
+        App::setlocale($lang);
+        $path = public_path() . "/uploads/invoicies/";
+        $pdf = PDF::loadView('invoicies.invoice', $data);
+        if (!File::isDirectory($path)) {
+            File::makeDirectory($path, 0777, true, true);
+        }
+        $pdf->save($pdf_name);
 
         $booking = DB::table('bookings')
             ->leftJoin('services', 'services.id', "bookings.service_id")
@@ -1196,6 +1212,23 @@ class ClientController extends Controller
         $total_amount = $sub_amount + $tax_amount - $coupon_amount;
 
         $user = User::find($user_id);
+
+        $transaction_data['amount'] = $total_amount;
+        $transaction_data['payment_status'] = $payment_status;
+        $transaction_data['payment_id'] = $payment_id;
+        $transaction = Transaction::create($transaction_data);
+
+        $all['user_id'] = $user_id;
+        $all['transaction_id'] = $transaction->id;
+        $all['vendor_id'] = $vendor_id;
+        $all['carts'] =  $carts;
+        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
+        $all['invoice'] = $pdf_name;
+        $all['state'] = 'accepted';
+
+        $ordering = Ordering::create($all);
+
+        $vendor = Vendor::find($vendor_id);
         $data['full_name'] = $user->full_name;
         $data['email'] = $user->email;
         $data['phone'] = $user->phone;
@@ -1207,28 +1240,18 @@ class ClientController extends Controller
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
         $data['amount_paid'] = '0.00';
         $data['items'] = $items;
+        $data['id'] = $ordering->id;
+        $data['vendor_name'] = $vendor->en_name;
 
         $pdf = PDF::loadView('invoicies.invoice', $data);
-        $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $path = public_path() . "/uploads/invoicies/";
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
 
-        $transaction_data['amount'] = $total_amount;
-        $transaction_data['payment_status'] = $payment_status;
-        $transaction_data['payment_id'] = $payment_id;
-        $transaction = Transaction::create($transaction_data);
 
-        $all['user_id'] = $user_id;
-        $all['transaction_id'] = $transaction->id;
-        $all['vendor_id'] = $vendor_id;
-        $all['carts'] =  $carts;
-        $all['invoice'] = $pdf_name;
-        $all['state'] = 'accepted';
 
-        $ordering = Ordering::create($all);
         $ordering = DB::table('orderings')
             ->leftJoin('users', 'users.id', "orderings.user_id")
             ->where('orderings.id', $ordering->id)
