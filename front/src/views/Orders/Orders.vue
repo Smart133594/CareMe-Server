@@ -9,8 +9,16 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                 </v-card-title>
+
+                <v-card-title>
+                    <v-select :label="$t('message.vendors')" :item-text="selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'" v-model="vendor_value" :items="getVendors" item-value="value"></v-select>
+                    <v-spacer></v-spacer>
+                    <v-select :label="$t('message.payment')" :item-text="'text'" v-model="payment_status_value" :items="payment_status" item-value="value"></v-select>
+                    <v-spacer></v-spacer>
+                    <v-select :label="$t('message.state')" :item-text="'text'" v-model="states_value" :items="states" item-value="value"></v-select>
+                </v-card-title>
                 
-                <v-data-table v-bind:headers="headers" v-bind:items="orders" v-bind:search="search">
+                <v-data-table v-bind:headers="headers" v-bind:items="getFilteredOrders" v-bind:search="search">
                     <template v-slot:body="{ items }">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`ordering${item.id}`">
@@ -75,6 +83,37 @@ import Vue from "vue";
 export default {
     computed: {
         ...mapGetters(["getUser", "selectedLocale"]),
+
+            getFilteredOrders() {
+            let orders = this.orders;
+            if(this.vendor_value != ""){
+                orders = orders.filter(order => order.vendor_en_name == this.vendor_value)
+            }
+
+            if(this.payment_status_value != ""){
+                orders = orders.filter(order => order.payment_status == this.payment_status_value)
+            }
+
+            if(this.states_value != ""){
+                orders = orders.filter(order => order.state == this.states_value)
+            }
+            return orders
+        },
+
+        getVendors() {
+            let vendors = [{en_name:"None", ar_name:"None", value:""}];
+            this.orders.forEach(element => {
+                let exist = vendors.filter(vendor => vendor.en_name == element.en_name)
+                if (exist.length == 0) {
+                    vendors.push({
+                        en_name: element.vendor_en_name,
+                        ar_name: element.vendor_ar_name,
+                        value: element.vendor_en_name,
+                    })
+                }
+            });
+            return vendors
+        }
     },
     data: function () {
         return {
@@ -119,6 +158,49 @@ export default {
                     text: this.$t("message.state"),
                 },
             ],
+
+            vendors: [],
+            payment_type: [{
+                text: 'None',
+                value: ''
+            },{
+                text: 'CARD',
+                value: 'card'
+            }, {
+                text: 'INSURANCE',
+                value: 'insurance'
+            }],
+            payment_status: [{
+                text: "None",
+                value: ""
+            },{
+                text: "UNPAID",
+                value: "unpaid"
+            }, {
+                text: "PAID",
+                value: "paid"
+            }, {
+                text: "REFUND",
+                value: "refund"
+            }],
+            states: [{
+                text: "None",
+                value: ""
+            },{
+                text: "PENDING",
+                value: "pending"
+            }, {
+                text: "CONFIRMED",
+                value: "confirmed"
+            }, {
+                text: "REJECTED",
+                value: "rejected"
+            }],
+
+            vendor_value: "",
+            payment_type_value: "",
+            payment_status_value: "",
+            states_value: "",
         };
     },
     methods: {

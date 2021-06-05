@@ -16,7 +16,7 @@ const state = {                                            // dark mode
 	backgroundImage: false,                                // enable sidebar background image
 	horizontalLayoutSidebar: false,                        // horizontal layout sidebar
 	languages,                                             // languages
-	selectedLocale: languages[0],                          // selected locale
+	selectedLocale: localStorage.getItem('language') != null ? JSON.parse(localStorage.getItem('language')) : languages[0],                        // selected locale
 	sidebarBackgroundImages,                               // sidebar backgorund images
 	selectedSidebarBgImage: sidebarBackgroundImages[0],    // selected sidebar background image
 	sidebarFilters,                                        // sidebar filters
@@ -152,6 +152,7 @@ const mutations = {
 		} else {
 			state.rtlLayout = false;
 		}
+		localStorage.setItem('language', JSON.stringify(language));
 	},
 	changeBackgroundImageHandler(state, image) {
 		state.selectedSidebarBgImage = image;

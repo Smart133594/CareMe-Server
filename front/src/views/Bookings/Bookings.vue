@@ -10,7 +10,7 @@
                     <v-spacer></v-spacer>
                 </v-card-title>
                 <v-card-title>
-                    <v-select :label="$t('message.vendors')" :item-text="selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'" v-model="vendor_value" :items="getVendors" item-value="en_name"></v-select>
+                    <v-select :label="$t('message.vendors')" :item-text="selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'" v-model="vendor_value" :items="getVendors" item-value="value"></v-select>
                     <v-spacer></v-spacer>
                     <v-select :label="$t('message.type')" :item-text="'text'" v-model="payment_type_value" :items="payment_type" item-value="value"></v-select>
                     <v-spacer></v-spacer>
@@ -118,6 +118,7 @@ import {
 } from "vuex";
 import api from "Api";
 import Vue from "vue";
+import CouponsVue from '../Coupons/Coupons.vue';
 export default {
     computed: {
         ...mapGetters(["getUser", "selectedLocale"]),
@@ -133,24 +134,24 @@ export default {
             }
 
             if(this.payment_status_value != ""){
-                bookings = bookings.filter(booking => booking.payment_status == this.payment_type_value)
+                bookings = bookings.filter(booking => booking.payment_status == this.payment_status_value)
             }
 
             if(this.states_value != ""){
                 bookings = bookings.filter(booking => booking.state == this.states_value)
             }
-
-            return this.bookings
+            return bookings
         },
 
         getVendors() {
-            let vendors = [];
+            let vendors = [{en_name:"None", ar_name:"None", value:""}];
             this.bookings.forEach(element => {
                 let exist = vendors.filter(vendor => vendor.en_name == element.en_name)
                 if (exist.length == 0) {
                     vendors.push({
                         en_name: element.vendor_en_name,
                         ar_name: element.vendor_ar_name,
+                        value: element.vendor_en_name,
                     })
                 }
             });
@@ -222,6 +223,9 @@ export default {
 
             vendors: [],
             payment_type: [{
+                text: 'None',
+                value: ''
+            },{
                 text: 'CARD',
                 value: 'card'
             }, {
@@ -229,6 +233,9 @@ export default {
                 value: 'insurance'
             }],
             payment_status: [{
+                text: "None",
+                value: ""
+            },{
                 text: "UNPAID",
                 value: "unpaid"
             }, {
@@ -239,6 +246,9 @@ export default {
                 value: "refund"
             }],
             states: [{
+                text: "None",
+                value: ""
+            },{
                 text: "PENDING",
                 value: "pending"
             }, {
