@@ -12,7 +12,7 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                 </v-card-title>
-                <v-data-table v-bind:headers="getUser.role == 'admin'?headers_admin:headers_provider" v-bind:items="getFilteredProducts" v-bind:search="search">
+                <v-data-table v-bind:headers="headers" v-bind:items="getFilteredProducts" v-bind:search="search">
                     <template v-slot:body="{ items }">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`product${item.id}`">
@@ -20,7 +20,7 @@
                                 <td>
                                     {{ `${baseUrl}product/${item.id}` }}
                                 </td>
-                                <td v-if="getUser.role == 'admin'">
+                                <td>
                                     {{
                       item.department.vendor[
                         selectedLocale.locale == "en" ? "en_name" : "ar_name"
@@ -197,7 +197,7 @@ export default {
             price: "0",
             discount_price: "0",
 
-            headers_admin: [{
+            headers: [{
                     text: this.$t("message.no"),
                     value: "no",
                     align: "center",
@@ -239,42 +239,7 @@ export default {
                 },
             ],
 
-            headers_provider: [{
-                    text: this.$t("message.no"),
-                    value: "no",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.url"),
-                    value: "url",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.departmentName"),
-                    value: "department",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.name"),
-                    value: "en_name",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.image"),
-                    value: "image",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.active"),
-                    value: "active",
-                    align: "center",
-                },
-                {
-                    text: this.$t("message.settings"),
-                    value: "settings",
-                    align: "center",
-                },
-            ],
+   
             baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
             selectedItem: null,
             deleteDialog: false,

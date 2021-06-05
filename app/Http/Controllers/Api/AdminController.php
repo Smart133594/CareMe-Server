@@ -1041,7 +1041,7 @@ class AdminController extends Controller{
         if($transaction){
             if($transaction->payment_status != "paid"){
                 $transaction->payment_status = "paid";
-                $transaction->etc = now('YYYY-mm-dd');
+                $transaction->etc = now();
                 $transaction->save();
                 return response()->json([
                     'success'=>true,

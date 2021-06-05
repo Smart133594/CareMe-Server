@@ -1112,7 +1112,7 @@ class ClientController extends Controller
         $transaction_data['amount'] = $amount;
         $transaction_data['payment_status'] = $payment_status;
         $transaction_data['payment_id'] = $payment_id;
-        $transaction_data['etc'] = now('YYYY-mm-dd');
+        $transaction_data['etc'] = now();
         $transaction = Transaction::create($transaction_data);
 
         $all['user_id'] = $user_id;

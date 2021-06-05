@@ -35,7 +35,7 @@
             </v-text-field>
           </v-card-title>
           <v-data-table
-            v-bind:headers="getUser.role == 'admin'?headers_admin:headers_provider"
+            v-bind:headers="headers"
             v-bind:items="getFilteredServicies"
             v-bind:search="search"
           >
@@ -48,7 +48,7 @@
                       `${baseUrl}service/${item.id}/1`
                     }}
                   </td>
-                  <td v-if="getUser.role == 'admin'">
+                  <td>
                     {{
                       item.department.vendor[selectedLocale.locale == "en" ? "en_name" : "ar_name"]
                     }}
@@ -525,7 +525,7 @@ export default {
       discount_price: "0",
       auto_confirm: false,
 
-      headers_admin: [
+      headers: [
         {
           text: this.$t("message.no"),
           value: "no",
@@ -567,43 +567,7 @@ export default {
           align: "center",
         },
       ],
-      headers_provider: [
-        {
-          text: this.$t("message.no"),
-          value: "no",
-          align: "center",
-        },
-        {
-          text: this.$t("message.url"),
-          value: "url",
-          align: "center",
-        },
-        {
-          text: this.$t("message.departmentName"),
-          value: "department",
-          align: "center",
-        },
-        {
-          text: this.$t("message.name"),
-          value: "en_name",
-          align: "center",
-        },
-        {
-          text: this.$t("message.image"),
-          value: "image",
-          align: "center",
-        },
-        {
-          text: this.$t("message.active"),
-          value: "active",
-          align: "center",
-        },
-        {
-          text: this.$t("message.settings"),
-          value: "settings",
-          align: "center",
-        },
-      ],
+     
       baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
       selectedItem: null,
       deleteDialog: false,
