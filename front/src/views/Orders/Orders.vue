@@ -9,6 +9,7 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                 </v-card-title>
+                
                 <v-data-table v-bind:headers="headers" v-bind:items="orders" v-bind:search="search">
                     <template v-slot:body="{ items }">
                         <tbody>
@@ -43,6 +44,16 @@
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'confirmed', error:item.state == 'pending' || item.state == 'rejected'}">{{item.state}}</v-badge>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td v-for="header in headers" :key="`total_${header.value}`">
+                                    <div v-if="'carts' == header.value">
+                                        <h6>{{$t('message.total')}}: </h6>
+                                    </div>
+                                    <div v-if="'amount' == header.value">
+                                        <h6>{{getTotal(items)}}</h6>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -132,6 +143,13 @@ export default {
                 });
         },
 
+        getTotal(items) {
+            let amount = 0;
+            items.forEach(element => {
+                amount += parseFloat(element.amount);
+            });
+            return amount.toFixed(2)
+        }
     },
     mounted() {},
     beforeMount() {

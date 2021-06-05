@@ -4,17 +4,22 @@
     <v-container fluid grid-list-xl py-0>
         <v-row>
             <app-card :fullBlock="true" colClasses="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <v-card-title class="align-items-center">
+                <v-card-title>
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                     <v-spacer></v-spacer>
-                    <!-- <div class="d-flex flex-direction-row align-items-center">
-                        <h5>{{$t("message.total")}}</h5>
-                        <h6> : {{$t("message.currency")}} {{getTotalPrice}}</h6>
-                    </div> -->
+                </v-card-title>
+                <v-card-title>
+                    <v-select :label="$t('message.vendors')" :item-text="selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'" v-model="vendor_value" :items="getVendors" item-value="en_name"></v-select>
+                    <v-spacer></v-spacer>
+                    <v-select :label="$t('message.type')" :item-text="'text'" v-model="payment_type_value" :items="payment_type" item-value="value"></v-select>
+                    <v-spacer></v-spacer>
+                    <v-select :label="$t('message.payment')" :item-text="'text'" v-model="payment_status_value" :items="payment_status" item-value="value"></v-select>
+                    <v-spacer></v-spacer>
+                    <v-select :label="$t('message.state')" :item-text="'text'" v-model="states_value" :items="states" item-value="value"></v-select>
                 </v-card-title>
                 <v-data-table v-bind:headers="headers" v-bind:items="getFilteredBooking" v-bind:search="search" :loading="loading">
-                    <template v-slot:body="{ items }">
+                    <template v-slot:body="{items}">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`booking${item.id}`">
                                 <td>{{ index + 1 }}</td>
@@ -87,6 +92,16 @@
                                     </v-menu>
                                 </td>
                             </tr>
+                            <tr>
+                                <td v-for="header in headers" :key="`total_${header.value}`">
+                                    <div v-if="'worker_name' == header.value">
+                                        <h6>{{$t('message.total')}}: </h6>
+                                    </div>
+                                    <div v-if="'amount' == header.value">
+                                        <h6>{{getTotal(items)}}</h6>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </template>
                 </v-data-table>
@@ -108,11 +123,38 @@ export default {
         ...mapGetters(["getUser", "selectedLocale"]),
 
         getFilteredBooking() {
+            let bookings = this.bookings;
+            if(this.vendor_value != ""){
+                bookings = bookings.filter(booking => booking.vendor_en_name == this.vendor_value)
+            }
+
+            if(this.payment_type_value != ""){
+                bookings = bookings.filter(booking => booking.type == this.payment_type_value)
+            }
+
+            if(this.payment_status_value != ""){
+                bookings = bookings.filter(booking => booking.payment_status == this.payment_type_value)
+            }
+
+            if(this.states_value != ""){
+                bookings = bookings.filter(booking => booking.state == this.states_value)
+            }
+
             return this.bookings
         },
 
-        getTotalPrice() {
-            return "0.00"
+        getVendors() {
+            let vendors = [];
+            this.bookings.forEach(element => {
+                let exist = vendors.filter(vendor => vendor.en_name == element.en_name)
+                if (exist.length == 0) {
+                    vendors.push({
+                        en_name: element.vendor_en_name,
+                        ar_name: element.vendor_ar_name,
+                    })
+                }
+            });
+            return vendors
         }
     },
     data: function () {
@@ -177,6 +219,40 @@ export default {
             selectedItem: {},
             imageUrl: "",
             dialog: false,
+
+            vendors: [],
+            payment_type: [{
+                text: 'CARD',
+                value: 'card'
+            }, {
+                text: 'INSURANCE',
+                value: 'insurance'
+            }],
+            payment_status: [{
+                text: "UNPAID",
+                value: "unpaid"
+            }, {
+                text: "PAID",
+                value: "paid"
+            }, {
+                text: "REFUND",
+                value: "refund"
+            }],
+            states: [{
+                text: "PENDING",
+                value: "pending"
+            }, {
+                text: "CONFIRMED",
+                value: "confirmed"
+            }, {
+                text: "REJECTED",
+                value: "rejected"
+            }],
+
+            vendor_value: "",
+            payment_type_value: "",
+            payment_status_value: "",
+            states_value: "",
         };
     },
     methods: {
@@ -294,6 +370,14 @@ export default {
         },
         showImage(url) {
             window.open(url, "_blank");
+        },
+
+        getTotal(items) {
+            let amount = 0;
+            items.forEach(element => {
+                amount += parseFloat(element.amount);
+            });
+            return amount.toFixed(2)
         }
     },
     mounted() {},
