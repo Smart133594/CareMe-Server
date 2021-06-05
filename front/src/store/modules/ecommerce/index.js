@@ -43,7 +43,7 @@ const mutations = {
         Vue.notify({
             group: 'center',
             type: 'success',
-            text: 'Item added to wishlist successfully'
+            text: 'Item added to cart successfully'
         });
     },
     onDeleteProductFromCart(state, payload) {
@@ -53,7 +53,7 @@ const mutations = {
         Vue.notify({
             group: 'center',
             type: 'success',
-            text: 'Item removed from wishlist successfully'
+            text: 'Item removed from cart successfully'
         });
     },
     onChangeQuantityHandler(state, payload) {

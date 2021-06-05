@@ -35,7 +35,7 @@
             </v-text-field>
           </v-card-title>
           <v-data-table
-            v-bind:headers="headers"
+            v-bind:headers="getUser.role == 'admin'?headers_admin:headers_provider"
             v-bind:items="getFilteredServicies"
             v-bind:search="search"
           >
@@ -48,7 +48,7 @@
                       `${baseUrl}service/${item.id}/1`
                     }}
                   </td>
-                  <td>
+                  <td v-if="getUser.role == 'admin'">
                     {{
                       item.department.vendor[selectedLocale.locale == "en" ? "en_name" : "ar_name"]
                     }}
@@ -525,7 +525,7 @@ export default {
       discount_price: "0",
       auto_confirm: false,
 
-      headers: [
+      headers_admin: [
         {
           text: this.$t("message.no"),
           value: "no",
@@ -539,6 +539,43 @@ export default {
         {
           text: this.$t("message.vendorName"),
           value: "department",
+          align: "center",
+        },
+        {
+          text: this.$t("message.departmentName"),
+          value: "department",
+          align: "center",
+        },
+        {
+          text: this.$t("message.name"),
+          value: "en_name",
+          align: "center",
+        },
+        {
+          text: this.$t("message.image"),
+          value: "image",
+          align: "center",
+        },
+        {
+          text: this.$t("message.active"),
+          value: "active",
+          align: "center",
+        },
+        {
+          text: this.$t("message.settings"),
+          value: "settings",
+          align: "center",
+        },
+      ],
+      headers_provider: [
+        {
+          text: this.$t("message.no"),
+          value: "no",
+          align: "center",
+        },
+        {
+          text: this.$t("message.url"),
+          value: "url",
           align: "center",
         },
         {
@@ -717,7 +754,6 @@ export default {
     chooseFiles() {
       document.getElementById("fileUpload").click();
     },
-
     uploadImageFile(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) {
@@ -741,7 +777,6 @@ export default {
       }
       this.createImage(file);
     },
-
     createImage(file) {
       let reader = new FileReader();
       reader.onload = (e) => {
@@ -749,7 +784,6 @@ export default {
       };
       reader.readAsDataURL(file);
     },
-
     edit(item) {
       this.id = item.id;
       this.department_id = item.department_id;
@@ -773,12 +807,10 @@ export default {
       this.dialog = true;
       this.discount_price = item.discount_price;
     },
-
     askDelete(item) {
       this.selectedItem = item;
       this.deleteDialog = true;
     },
-
     deleteService() {
       this.loading = true;
       let model = {

@@ -56,6 +56,9 @@
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid',info: item.payment_status == 'paid'}">{{ item.payment_status }}</v-badge>
+                                    <div v-if="item.payment_status == 'paid'">
+                                        <p style="text-transform: uppercase" class="m-0">{{ item.etc }}</p>
+                                    </div>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>

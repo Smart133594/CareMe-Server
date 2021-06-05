@@ -929,7 +929,7 @@ class AdminController extends Controller{
             ->leftJoin('users', 'users.id', "bookings.user_id")
             ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
                     "users.email", "workers.full_name as worker_name", "workers.image as worker_image", "transactions.payment_id", "transactions.amount",
-                    "transactions.payment_status")
+                    "transactions.payment_status", "transactions.etc")
             ->orderBy('bookings.id', 'desc')
             ->get();
         }else{
@@ -1041,6 +1041,7 @@ class AdminController extends Controller{
         if($transaction){
             if($transaction->payment_status != "paid"){
                 $transaction->payment_status = "paid";
+                $transaction->etc = now('YYYY-mm-dd');
                 $transaction->save();
                 return response()->json([
                     'success'=>true,

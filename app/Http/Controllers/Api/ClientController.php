@@ -849,7 +849,8 @@ class ClientController extends Controller
                 "workers.image as worker_image",
                 "transactions.payment_id",
                 "transactions.amount",
-                "transactions.payment_status"
+                "transactions.payment_status",
+                "transactions.etc"
             )
             ->orderBy('bookings.id', 'desc')
             ->get();
@@ -1111,6 +1112,7 @@ class ClientController extends Controller
         $transaction_data['amount'] = $amount;
         $transaction_data['payment_status'] = $payment_status;
         $transaction_data['payment_id'] = $payment_id;
+        $transaction_data['etc'] = now('YYYY-mm-dd');
         $transaction = Transaction::create($transaction_data);
 
         $all['user_id'] = $user_id;
