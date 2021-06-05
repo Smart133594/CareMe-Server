@@ -8,16 +8,10 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                     <v-spacer></v-spacer>
-                    <v-btn icon class="" color="success">
-                        <v-icon>favorite</v-icon>
-                    </v-btn>
-                     <v-btn icon class="mr-5" color="success">
-                        <v-icon>favorite</v-icon>
-                    </v-btn>
-                    <div class="d-flex flex-direction-row align-items-center">
+                    <!-- <div class="d-flex flex-direction-row align-items-center">
                         <h5>{{$t("message.total")}}</h5>
                         <h6> : {{$t("message.currency")}} {{getTotalPrice}}</h6>
-                    </div>
+                    </div> -->
                 </v-card-title>
                 <v-data-table v-bind:headers="headers" v-bind:items="getFilteredBooking" v-bind:search="search" :loading="loading">
                     <template v-slot:body="{ items }">
