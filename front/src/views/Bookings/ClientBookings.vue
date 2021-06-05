@@ -42,10 +42,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid', success: item.payment_status == 'paid'}">{{item.state == 'accepted' ? "confirmed":item.state}}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid', success: item.payment_status == 'paid'}">{{item.state}}</v-badge>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'confirmed' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
                                     <v-btn :value="false" class="p-2 error ml-2" small @click="cancelBooking(item)" v-if="item.state == 'pending'" :disabled="loading">{{ $t("message.cancel") }}</v-btn>
                                 </td>
                             </tr>

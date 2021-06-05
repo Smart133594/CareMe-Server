@@ -4,17 +4,27 @@
     <v-container fluid grid-list-xl py-0>
         <v-row>
             <app-card :fullBlock="true" colClasses="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <v-card-title>
-                    <v-spacer></v-spacer>
+                <v-card-title class="align-items-center">
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
+                    <v-spacer></v-spacer>
+                    <v-btn icon class="" color="success">
+                        <v-icon>favorite</v-icon>
+                    </v-btn>
+                     <v-btn icon class="mr-5" color="success">
+                        <v-icon>favorite</v-icon>
+                    </v-btn>
+                    <div class="d-flex flex-direction-row align-items-center">
+                        <h5>{{$t("message.total")}}</h5>
+                        <h6> : {{$t("message.currency")}} {{getTotalPrice}}</h6>
+                    </div>
                 </v-card-title>
-                <v-data-table v-bind:headers="headers" v-bind:items="bookings" v-bind:search="search" v-if="!loading">
+                <v-data-table v-bind:headers="headers" v-bind:items="getFilteredBooking" v-bind:search="search" v-if="!loading">
                     <template v-slot:body="{ items }">
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`booking${item.id}`">
                                 <td>{{ index + 1 }}</td>
-                                 <td>
+                                <td>
                                     {{item[selectedLocale.locale == "en" ? "vendor_en_name" : "vendor_ar_name"]}}
                                 </td>
                                 <td>
@@ -64,7 +74,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{item.state == 'accepted' ? "confirmed":item.state}}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{info:item.state == 'confirmed' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{item.state}}</v-badge>
                                 </td>
                                 <td>
                                     <v-menu bottom left>
@@ -77,7 +87,7 @@
                                             <!--<<v-btn text block @click="view(item)">{{$t("message.view")}}</v-btn>!-->
                                             <!--<v-btn text block @click="edit(item)" class="mt-1">{{$t("message.edit")}}</v-btn>!-->
                                             <v-btn text block @click="confirmBooking(item)" class="mt-1" v-if="item.state == 'pending'">{{ $t("message.confirm") }}</v-btn>
-                                            <v-btn text block @click="payBooking(item)" v-if="item.payment_status != 'paid' && item.state == 'accepted'" class="mt-1">{{ $t("message.pay") }}</v-btn>
+                                            <v-btn text block @click="payBooking(item)" v-if="item.payment_status != 'paid' && item.state == 'confirmed'" class="mt-1">{{ $t("message.pay") }}</v-btn>
                                             <v-btn text block @click="rejectBooking(item)" v-if="item.state == 'pending'" class="mt-1">{{ $t("message.reject") }}</v-btn>
                                         </v-list>
                                     </v-menu>
@@ -102,6 +112,14 @@ import Vue from "vue";
 export default {
     computed: {
         ...mapGetters(["getUser", "selectedLocale"]),
+
+        getFilteredBooking() {
+            return this.bookings
+        },
+
+        getTotalPrice() {
+            return "0.00"
+        }
     },
     data: function () {
         return {
@@ -121,10 +139,6 @@ export default {
                 {
                     text: this.$t("message.invoice"),
                     value: "invoice",
-                },
-                {
-                    text: this.$t("message.service"),
-                    value: "en_name",
                 },
                 {
                     text: this.$t("message.service"),
@@ -284,7 +298,6 @@ export default {
                     // this.loading = false;
                 });
         },
-
         showImage(url) {
             window.open(url, "_blank");
         }

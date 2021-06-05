@@ -30,7 +30,7 @@ class CreateBookingsTable extends Migration
             $table->integer('coupon_id')->nullable();
 
             $table->enum('type', array('card', 'coupon', 'insurance'))->default('card');
-            $table->enum('state', array('pending', 'accepted', 'completed', 'rejected'))->default('pending');
+            $table->enum('state', array('pending', 'confirmed', 'completed', 'rejected'))->default('pending');
             $table->string('reason')->nullable();
             $table->string('image')->nullable();
             $table->string('image1')->nullable();

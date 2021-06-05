@@ -1017,7 +1017,7 @@ class AdminController extends Controller{
     public function rejectBooking(Request $request){
         $booking = Booking::find($request->id);
         if($booking){
-            if($booking->state!="accepted"){
+            if($booking->state!="confirmed"){
                 $booking->state = "rejected";
                 $booking->reason = "Provider rejected";
                 $booking->save();
@@ -1069,7 +1069,7 @@ class AdminController extends Controller{
         $booking = Booking::find($request->id);
         if($booking){
             if($booking->state=="pending"){
-                $booking->state = "accepted";
+                $booking->state = "confirmed";
                 $booking->save();
                 $booking = DB::table('bookings')
                 ->leftJoin('services', 'services.id', "bookings.service_id")
