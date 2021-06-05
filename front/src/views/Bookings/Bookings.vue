@@ -9,8 +9,8 @@
                     <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
                 </v-card-title>
-                <v-data-table v-bind:headers="headers" v-bind:items="bookings" v-bind:search="search">
-                    <template v-slot:body="{ items }">
+                <v-data-table v-bind:headers="headers" v-bind:items="bookings" v-bind:search="search" v-if="!loading">
+                    <template v-slot:body="{ items }" >
                         <tbody>
                             <tr v-for="(item, index) in items" :key="`booking${item.id}`">
                                 <td>{{ index + 1 }}</td>
@@ -55,7 +55,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid',info: item.payment_status == 'paid'}">{{ item.payment_status }}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid',success: item.payment_status == 'paid'}">{{ item.payment_status }}</v-badge>
                                     <div v-if="item.payment_status == 'paid'">
                                         <p style="text-transform: uppercase" class="m-0">{{item.etc}}</p>
                                     </div>
@@ -217,7 +217,7 @@ export default {
                 })
                 .catch((error) => {})
                 .finally(() => {
-                    this.loading = false;
+                    // this.loading = false;
                 });
         },
         payBooking(item) {
@@ -243,7 +243,7 @@ export default {
                 })
                 .catch((error) => {})
                 .finally(() => {
-                    this.loading = false;
+                    // this.loading = false;
                 });
         },
         rejectBooking(item) {
@@ -269,7 +269,7 @@ export default {
                 })
                 .catch((error) => {})
                 .finally(() => {
-                    this.loading = false;
+                    // this.loading = false;
                 });
         },
 

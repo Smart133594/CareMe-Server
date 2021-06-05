@@ -194,7 +194,7 @@ export default {
             image: null,
             active: true,
             tax: "5",
-            price: "0",
+            old_price: "0",
             discount_price: "0",
 
             headers: [{

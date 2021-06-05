@@ -24,6 +24,7 @@ class Service extends Model
         'duration',
         'tax',
         'price',
+        'old_price',
         'discount_price',
         'rating',
         'recommended',

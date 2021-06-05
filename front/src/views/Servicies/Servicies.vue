@@ -331,7 +331,7 @@
               <v-col cols="12" sm="6">
                 <v-text-field
                   :label="$t('message.price')"
-                  v-model="price"
+                  v-model="old_price"
                   :rules="requireRule"
                   required
                 ></v-text-field>
@@ -521,7 +521,7 @@ export default {
       image: null,
       active: true,
       tax: "5",
-      price: "0",
+      old_price: "0",
       discount_price: "0",
       auto_confirm: false,
 
@@ -653,10 +653,11 @@ export default {
           buffering_time: parseFloat(this.buffering_time),
           image: this.image,
           tax: parseFloat(this.tax),
-          price: parseFloat(this.price),
+          old_price: parseFloat(this.old_price),
+          price: parseFloat(this.old_price) - parseFloat(parseFloat(this.old_price) * parseFloat(this.discount_price) / 100),
           discount_price: parseFloat(this.discount_price),
           active: this.active,
-            auto_confirm :this.auto_confirm
+          auto_confirm :this.auto_confirm
 
         };
         this.loading = true;
@@ -710,7 +711,7 @@ export default {
       this.image = null;
       this.active = true;
       this.tax = "5";
-      this.price = "0";
+      this.old_price = "0";
       this.discount_price = "0";
     this.auto_confirm = false;
       this.dialog = false;
@@ -763,7 +764,7 @@ export default {
       this.buffering_time = item.buffering_time;
       this.duration = item.duration;
       this.tax = item.tax;
-      this.price = item.price;
+      this.old_price = item.old_price;
       this.rating = item.rating + "";
       this.recommended = item.recommended == 1;
       this.active = item.active == 1;

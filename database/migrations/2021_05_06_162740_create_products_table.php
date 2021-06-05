@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->text('ar_description')->nullable();
             $table->double('tax')->default(10);
             $table->double('price');
+            $table->double('old_price');
             $table->double('discount_price');
             $table->double('rating');
             $table->boolean('recommended')->default(false);

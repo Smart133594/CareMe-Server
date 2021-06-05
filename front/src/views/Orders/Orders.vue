@@ -36,7 +36,7 @@
                                     {{ parseFloat(item.amount).toFixed(2) }}
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid', info: item.payment == 'paid'}">{{ item.payment_status }}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment != 'paid', success: item.payment == 'paid'}">{{ item.payment_status }}</v-badge>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'accepted', error:item.state == 'pending' || item.state == 'rejected'}">{{item.state == 'accepted' ? "confirmed":item.state}}</v-badge>
@@ -85,7 +85,7 @@ export default {
                     value: "full_name",
                 },
                 {
-                    text: this.$t("message.cart"),
+                    text: this.$t("message.item"),
                     value: "carts",
                 },
                 {

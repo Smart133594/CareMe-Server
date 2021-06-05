@@ -29,6 +29,7 @@ class CreateServicesTable extends Migration
             $table->double('duration');
             $table->double('tax')->default(10);
             $table->double('price');
+            $table->double('old_price');
             $table->double('discount_price');
             $table->double('rating');
             $table->boolean('recommended')->default(false);

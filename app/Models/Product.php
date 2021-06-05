@@ -17,6 +17,7 @@ class Product extends Model
         'ar_description',
         'tax',
         'price',
+        'old_price',
         'rating',
         'discount_price',
         'recommended',
