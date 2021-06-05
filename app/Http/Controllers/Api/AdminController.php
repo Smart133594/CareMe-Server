@@ -998,6 +998,10 @@ class AdminController extends Controller{
         $fields['reason'] = "Rejected by provider";
         $metadata['user_id'] = $user->id;
         $fields['metadata'] = $metadata;
+
+        $stringFields = json_encode($fields);
+        $stringFields = str_replace("\'", "'", $stringFields);
+
         $feedback = $this->sendThawaniRequest($baseUrl.'/refunds', "POST", $stringFields);
         return $feedback;
     }
