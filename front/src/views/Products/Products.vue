@@ -100,7 +100,7 @@
                     </v-row>
                     <v-row>
                         <v-col cols="12" sm="4">
-                            <v-text-field :label="$t('message.price')" v-model="price" :rules="requireRule" required></v-text-field>
+                            <v-text-field :label="$t('message.price')" v-model="old_price" :rules="requireRule" required></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="4">
                             <v-text-field :label="`${$t('message.discount')}(%)`" v-model="discount_price" :rules="requireRule" required></v-text-field>
@@ -302,7 +302,8 @@ export default {
                     rating: this.rating,
                     image: this.image,
                     tax: parseFloat(this.tax),
-                    price: parseFloat(this.price),
+                    old_price: parseFloat(this.old_price),
+                    price: parseFloat(this.old_price) - parseFloat(parseFloat(this.old_price) * parseFloat(this.discount_price) / 100),
                     discount_price: parseFloat(this.discount_price),
                     active: this.active,
                 };
@@ -350,7 +351,7 @@ export default {
             this.image = null;
             this.active = true;
             this.tax = "5";
-            this.price = "0";
+            this.old_price = "0";
             this.discount_price = "0";
             this.dialog = false;
         },
@@ -398,7 +399,7 @@ export default {
             this.en_description = item.en_description;
             this.ar_description = item.ar_description;
             this.tax = item.tax;
-            this.price = item.price;
+            this.old_price = item.old_price;
             this.discount_price = item.discount_price;
             this.rating = item.rating + "";
             this.recommended = item.recommended == 1;

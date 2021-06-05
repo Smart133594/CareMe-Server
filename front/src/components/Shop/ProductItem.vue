@@ -52,7 +52,7 @@
             >
             <span class="fw-semi-bold d-block discount-price"
               >{{$t('message.currency')}}
-              {{ getBeforePrice(product.price, product.discount_price) }}</span
+              {{get2DecimalPoint(product.old_price)}}</span
             >
           </div>
           <span class="tag align-items-center" :class="{'discountpercent-before':selectedLocale.locale == 'en', 'discountpercent-after':selectedLocale.locale == 'ar'}">

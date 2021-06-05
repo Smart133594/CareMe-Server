@@ -927,7 +927,7 @@ class AdminController extends Controller{
             ->leftJoin('workers', 'workers.id', "bookings.worker_id")
             ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
             ->leftJoin('users', 'users.id', "bookings.user_id")
-            ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
+            ->select( 'sum(amount) as total', 'bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
                     "users.email", "workers.full_name as worker_name", "workers.image as worker_image", "transactions.payment_id", "transactions.amount",
                     "transactions.payment_status", "transactions.etc")
             ->orderBy('bookings.id', 'desc')
@@ -941,7 +941,7 @@ class AdminController extends Controller{
             ->leftJoin('workers', 'workers.id', "bookings.worker_id")
             ->leftJoin('transactions', 'transactions.id', "bookings.transaction_id")
             ->whereIn('departments.vendor_id', $roles)
-            ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
+            ->select('sum(amount) as total','bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
                     "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge", "transactions.payment_id", "transactions.amount",
                     "transactions.payment_status", "transactions.etc")
             ->orderBy('bookings.id', 'desc')
@@ -960,7 +960,7 @@ class AdminController extends Controller{
             $orderings = DB::table('orderings')
             ->leftJoin('users', 'users.id', "orderings.user_id")
             ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
-            ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status", "users.full_name", "users.email", "users.phone")
+            ->select('sum(amount) as total', 'orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status", "users.full_name", "users.email", "users.phone")
             ->orderBy('orderings.id', 'desc')
             ->get();
         }else{
@@ -969,7 +969,7 @@ class AdminController extends Controller{
             ->leftJoin('transactions', 'transactions.id', "orderings.transaction_id")
             ->leftJoin('users', 'users.id', "orderings.user_id")
             ->whereIn('orderings.vendor_id', $roles)
-            ->select('orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status", "users.full_name", "users.email", "users.phone")
+            ->select('sum(amount) as total', 'orderings.*', "transactions.payment_id", "transactions.amount", "transactions.payment_status", "users.full_name", "users.email", "users.phone")
             ->orderBy('orderings.id', 'desc')
             ->get();
         }
