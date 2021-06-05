@@ -943,7 +943,7 @@ class AdminController extends Controller{
             ->whereIn('departments.vendor_id', $roles)
             ->select('bookings.*', "services.en_name", "services.ar_name", "services.price", "users.full_name", "users.avatar", "users.phone",
                     "users.email", "workers.full_name as worker_name", "workers.image as worker_iamge", "transactions.payment_id", "transactions.amount",
-                    "transactions.payment_status")
+                    "transactions.payment_status", "transactions.etc")
             ->orderBy('bookings.id', 'desc')
             ->get();
         }
