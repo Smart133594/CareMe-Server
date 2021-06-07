@@ -54,6 +54,16 @@ class ClientController extends Controller
             ->orderBy('id')
             ->get();
 
+        $departments = DB::table('departments')
+            ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
+            ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
+            ->where('categories.active', true)
+            ->where('vendors.active', true)
+            ->where('departments.active', true)
+            ->select('departments.*')
+            ->orderBy('id')
+            ->get();
+
         $servicies = DB::table('services')
             ->leftJoin('departments', 'departments.id', '=', 'services.department_id')
             ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
@@ -80,12 +90,17 @@ class ClientController extends Controller
             ->orderBy('id')
             ->get();
 
-        $result = [
+        $cities = City::orderBy('id')->get();
+        
+            $result = [
             'categories' => $categories,
             'vendors' => $vendors,
             'servicies' => $servicies,
             'products' => $products,
+            'cities' => $cities,
+            'departments' => $departments
         ];
+
         return response()->json([
             'success' => true,
             'data' => $result
