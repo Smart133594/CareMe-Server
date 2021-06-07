@@ -17,6 +17,9 @@
             >
             </v-text-field>
             <v-spacer></v-spacer>
+            <download-excel :data="filterBookings" :fields="excel_headers">
+              <v-btn text>Export</v-btn>
+            </download-excel>
           </v-card-title>
           <v-card-title>
             <v-select
@@ -496,7 +499,11 @@ import { mapGetters } from "vuex";
 import api from "Api";
 import Vue from "vue";
 import CouponsVue from "../Coupons/Coupons.vue";
+import JsonExcel from "vue-json-excel";
 export default {
+  components: {
+    downloadExcel: JsonExcel,
+  },
   computed: {
     ...mapGetters(["getUser", "selectedLocale"]),
 
@@ -611,6 +618,53 @@ export default {
           text: this.$t("message.settings"),
         },
       ],
+
+      excel_headers: {
+        "Vendor Name": "vendor_en_name",
+        "Invoice Url": {
+          field: "invoice",
+          callback: (value) => {
+            return `${this.baseUrl}${value}`;
+          },
+        },
+        "Service Name": "en_name",
+        Date: "date",
+        Times: {
+          field: "times",
+          callback: (value) => {
+            let stringValue = "";
+            value.forEach((element) => {
+              stringValue += element.from_time + " ~ " + element.to_time + "\n";
+            });
+            return stringValue;
+          },
+        },
+        "Client Name": "full_name",
+        "Worker Name": "worker_name",
+        Amount: "amount",
+        Type:  {
+          field: "type",
+          callback: (value) => {
+            let stringValue = value.toUpperCase();
+            return stringValue;
+          },
+        },
+        Payment:  {
+          field: "payment_status",
+          callback: (value) => {
+            let stringValue = value.toUpperCase();
+            return stringValue;
+          },
+        },
+        Status:  {
+          field: "state",
+          callback: (value) => {
+            let stringValue = value.toUpperCase();
+            return stringValue;
+          },
+        },
+      },
+
       selectedItem: {},
       imageUrl: "",
       dialog: false,
@@ -666,6 +720,8 @@ export default {
           value: "rejected",
         },
       ],
+
+      filterBookings:[],
 
       vendor_value: "",
       payment_type_value: "",
@@ -807,6 +863,7 @@ export default {
 
     getTotal(items) {
       let amount = 0;
+      this.filterBookings = items;
       items.forEach((element) => {
         amount += parseFloat(element.amount);
       });

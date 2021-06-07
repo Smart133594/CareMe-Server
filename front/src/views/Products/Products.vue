@@ -9,12 +9,15 @@
                     <v-select :label="$t('message.department')" :item-text="selectedLocale.locale == 'en' ? 'en_name' : 'ar_name'" v-model="department_id" item-value="id" :items="departments" :rules="requireRule" required :disabled="all"></v-select>
                     <v-checkbox class="mx-4" :label="$t('message.showAll')" v-model="all"></v-checkbox>
                     <v-spacer></v-spacer>
-                    <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search">
+                    <v-text-field style="padding-top:0px; margin-top:0px"  append-icon="search" label="Search" single-line hide-details v-model="search">
                     </v-text-field>
+                     <download-excel style="margin-left:20px" :data="filteredProducts" :fields="excel_headers">
+              <v-btn text>Export</v-btn>
+            </download-excel>
                 </v-card-title>
                 <v-data-table v-bind:headers="headers" v-bind:items="getFilteredProducts" v-bind:search="search">
                     <template v-slot:body="{ items }">
-                        <tbody>
+                        <tbody v-if="setItems(items)">
                             <tr v-for="(item, index) in items" :key="`product${item.id}`">
                                 <td>{{ index + 1 }}</td>
                                 <td>
@@ -159,8 +162,12 @@ import {
 import api from "Api";
 import Vue from "vue";
 import appConfig from "Constants/AppConfig";
+import JsonExcel from "vue-json-excel";
 
 export default {
+    components: {
+    downloadExcel: JsonExcel,
+  },
     data: function () {
         return {
             loading: false,
@@ -239,9 +246,33 @@ export default {
                 },
             ],
 
+                  excel_headers: {
+        "Url" : {
+          field: "id",
+          callback: (value) => {
+            return `${this.baseUrl}product/${value}`;
+          },
+        },
+        "Vendor Name": {
+          field: "department",
+          callback: (value) => {
+            return value.vendor.en_name;
+          },
+        },
+        "Department Name": {
+          field: "department",
+          callback: (value) => {
+            return value.en_name;
+          },
+        },
+        "Name": "en_name",
+      },
+
             baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
             selectedItem: null,
             deleteDialog: false,
+      filteredProducts:[],
+
         };
     },
 
@@ -442,6 +473,11 @@ export default {
                     this.selectedItem = null;
                 });
         },
+
+            setItems(items){
+      this.filteredProducts = items;
+      return true
+    }
     },
 
     mounted() {

@@ -31,8 +31,12 @@
               single-line
               hide-details
               v-model="search"
+              style="padding-top:0px; margin-top:0px"
             >
             </v-text-field>
+            <download-excel style="margin-left:20px" :data="filteredServicies" :fields="excel_headers">
+              <v-btn text>Export</v-btn>
+            </download-excel>
           </v-card-title>
           <v-data-table
             v-bind:headers="headers"
@@ -40,7 +44,7 @@
             v-bind:search="search"
           >
             <template v-slot:body="{ items }">
-              <tbody>
+              <tbody v-if="setItems(items)">
                 <tr v-for="(item, index) in items" :key="`service${item.id}`">
                   <td>{{ index + 1 }}</td>
                   <td>
@@ -479,8 +483,12 @@ import { mapGetters } from "vuex";
 import api from "Api";
 import Vue from "vue";
 import appConfig from "Constants/AppConfig";
+import JsonExcel from "vue-json-excel";
 
 export default {
+    components: {
+    downloadExcel: JsonExcel,
+  },
   data: function () {
     return {
       loading: false,
@@ -567,10 +575,33 @@ export default {
           align: "center",
         },
       ],
+
+      excel_headers: {
+        "Url" : {
+          field: "id",
+          callback: (value) => {
+            return `${this.baseUrl}service/${value}/1`;
+          },
+        },
+        "Vendor Name": {
+          field: "department",
+          callback: (value) => {
+            return value.vendor.en_name;
+          },
+        },
+        "Department Name": {
+          field: "department",
+          callback: (value) => {
+            return value.en_name;
+          },
+        },
+        "Name": "en_name",
+      },
      
       baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
       selectedItem: null,
       deleteDialog: false,
+      filteredServicies:[],
     };
   },
 
@@ -806,6 +837,11 @@ export default {
           this.selectedItem = null;
         });
     },
+
+    setItems(items){
+      this.filteredServicies = items;
+      return true
+    }
   },
 
   mounted() {
