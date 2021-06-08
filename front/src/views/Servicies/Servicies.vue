@@ -787,7 +787,7 @@ export default {
       this.ar_name = item.ar_name;
       this.en_description = item.en_description;
       this.ar_description = item.ar_description;
-      this.multiple_bookings = item.multiple_bookings;
+      this.multiple_bookings = item.multiple_bookings == 1;
       this.starting_date = item.starting_date;
       this.ending_date = item.ending_date;
       this.starting_time = item.starting_time;
