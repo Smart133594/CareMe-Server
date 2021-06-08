@@ -125,7 +125,7 @@
               </v-col>
               <v-col cols="12" sm="6">
                 <v-radio-group
-                  v-model="multi_bookings"
+                  v-model="multiple_bookings"
                   row
                   class="pt-0"
                   :label="$t('message.multiBookings')"
@@ -517,7 +517,7 @@ export default {
       ar_name: "",
       en_description: "",
       ar_description: "",
-      multi_bookings: true,
+      multiple_bookings: true,
       recommended: true,
       rating: "0",
       starting_date: null,
@@ -673,7 +673,7 @@ export default {
           ar_name: this.ar_name,
           en_description: this.en_description,
           ar_description: this.ar_description,
-          multi_bookings: this.multi_bookings,
+          multiple_bookings: this.multiple_bookings,
           recommended: this.recommended,
           rating: this.rating,
           starting_date: this.starting_date,
@@ -730,7 +730,7 @@ export default {
       this.ar_name = "";
       this.en_description = "";
       this.ar_description = "";
-      this.multi_bookings = true;
+      this.multiple_bookings = true;
       this.rating = "";
       this.recommended = true;
       this.starting_date = null;
