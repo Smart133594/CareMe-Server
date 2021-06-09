@@ -827,7 +827,7 @@ class ClientController extends Controller
     {
         $id = $request->id;
         $booking = Booking::find($id);
-        if($booking){
+        if(!$booking){
             return response()->json([
                 'success' => true,
             ]);
