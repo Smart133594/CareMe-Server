@@ -222,37 +222,9 @@ class UserController extends Controller{
     }
         //change profile
     public function changedProfile(Request $request){
-        $id = $request->id;
-        $avatar = $request->avatar;
-        if ($avatar && str_contains($avatar, 'data:image')) {
-            if($id != -1){
-                $oldfile = User::find($id)->avatar;
-                File::delete(public_path() . "/uploads/avatars/".$oldfile);
-            }
-
-            $data64 = explode(',', $avatar)[1];
-            $file_name = 'avatar'.time(). '.png';
-            $path = public_path() . "/uploads/avatars/";
-            $uploadPath = $path. $file_name;
-
-            if(!File::isDirectory($path)){
-                File::makeDirectory($path, 0777, true, true);
-            }
-            $data64 = base64_decode($data64);
-            if (file_put_contents($uploadPath, $data64)) {
-                $avatar = $file_name;
-            } else {
-                $avatar = null;
-            }
-        }else{
-            $avatar = null;
-        }
-
         $all = $request->all();
-        $all['avatar'] = $avatar;
         $all['password'] = bcrypt($all['password']);
         $all['full_name'] = $all['first_name']." ".$all['last_name'];
-
         $user = User::updateOrCreate(['id' => $all['id']], $all);
         return response()->json([
             'success'=>true,
