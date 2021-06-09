@@ -354,11 +354,11 @@ class ClientController extends Controller
         }
 
         if (count($selected_pricies)) {
-            $query = $query->whereIn('products.price', $selected_pricies);
+            $query = $query->whereBetween('products.price', $selected_pricies);
         }
 
         if (count($selected_discount)) {
-            $query = $query->whereIn('products.discount_price', $selected_discount);
+            $query = $query->whereBetween('products.discount_price', $selected_discount);
         }
 
         $servicies = $query->select('products.*')
