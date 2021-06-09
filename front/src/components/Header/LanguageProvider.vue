@@ -1,40 +1,12 @@
 <template>
   <div class="language-bar">
-    <v-menu
-      offset-y
-      origin="right top"
-      left
-      content-class="language-dropdown"
-      transition="slide-y-transition"
-      nudge-top="-10"
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn icon large v-on="on" class="ml-2 v-step-3">
-          <img
-            class="img-responsive"
-            :src="`/static/flag-icons/${selectedLocale.icon}.png`"
-          />
-        </v-btn>
-      </template>
-      <div class="dropdown-content">
-        <div class="dropdown-top d-custom-flex justify-space-between primary">
-          <span class="white--text fw-bold">Languages</span>
-        </div>
-        <v-list class="dropdown-list">
-          <v-list-item
-            v-for="language in languages"
-            :key="language.name"
-            @click="changeLanguage(language)"
-          >
-            <img
-              class="img-responsive mr-3"
-              :src="`/static/flag-icons/${language.icon}.png`"
-            />
-            <span>{{ language.name }}</span>
-          </v-list-item>
-        </v-list>
-      </div>
-    </v-menu>
+    <v-btn @click="changeLanguage()" text large class="ml-2 v-step-3">
+      <img
+        class="img-responsive"
+        :src="selectedLocale.locale == 'en' ? '/static/flag-icons/om.png' : '/static/flag-icons/uk.png'"
+      />
+      <p style="color:white; margin-left:5px; margin-right:5px">{{selectedLocale.locale == "en" ? "العربية":"English"}}</p>
+    </v-btn>
   </div>
 </template>
 
@@ -46,7 +18,8 @@ export default {
     ...mapGetters(["selectedLocale", "languages"]),
   },
   methods: {
-    changeLanguage(language) {
+    changeLanguage() {
+      let language = this.selectedLocale.locale == "en" ? this.languages[1]:this.languages[0]
       this.$i18n.locale = language.locale;
       this.$store.dispatch("changeLanguage", language);
     },

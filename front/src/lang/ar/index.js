@@ -730,7 +730,7 @@ export default {
     state: "الحالة",
     complete: "اكتمل",
     reject: "رفض",
-accept: "مؤكد",
+    accept: "مؤكد",
     pay: "دفع",
     alreadyAccepted: "تم ـاكيد الحجز مسبقا ",
     alreadyRejectedOrCanceled: "تم الغاء او حدف الحجز مسبقا",

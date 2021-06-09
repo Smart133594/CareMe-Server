@@ -13,7 +13,7 @@ export const languages = [
       locale: "en"
    },
    {
-      name: "Arabic",
+      name: "العربية",
       icon: "om",
       locale: "ar"
    },

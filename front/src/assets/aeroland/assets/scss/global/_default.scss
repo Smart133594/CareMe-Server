@@ -708,6 +708,26 @@ select {
 }
 
 /*----- hero swiper slider button start -----*/
+/*---- carousel sass emd ----*/
+.carousel{
+    height: 500px !important;
+    @media #{$tablet-device}{
+        height: 250px !important;
+    }
+    @media #{$large-mobile}{
+        height: 180px !important;
+    }
+
+    .v-responsive{
+        height: 500px !important;
+        @media #{$tablet-device}{
+            height: 250px !important;
+        }
+        @media #{$large-mobile}{
+            height: 180px !important;
+        }
+    }
+}
 
 .hero-swiper-btn {
     .swiper-button-prev,

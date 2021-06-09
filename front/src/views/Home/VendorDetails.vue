@@ -2,7 +2,7 @@
 <div>
     <app-section-loader :status="loading"></app-section-loader>
     <div class="container">
-        <v-carousel :interval="3000" hide-delimiters cycle :autoplay="true" :loop="true" height="500px">
+        <v-carousel :interval="3000" hide-delimiters cycle :autoplay="true" :loop="true" class="carousel">
             <v-carousel-item v-for="(image, i) in vendor.images" v-bind:src="`${baseUrl}uploads/vendors/${image.image}`" :key="`${i}-vendor-banner`"></v-carousel-item>
         </v-carousel>
         <v-row class="align-items-center">

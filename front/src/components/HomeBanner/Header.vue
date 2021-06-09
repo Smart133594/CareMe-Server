@@ -46,11 +46,13 @@
             @click="changeLanguage(language)"
             class="scroll language-nav"
           >
-            <img
-              class="img-responsive mr-3"
-              :src="`/static/flag-icons/${language.icon}.png`"
-            />
-            <span>{{ language.name }}</span>
+           <div v-if="language.locale != selectedLocale.locale">
+              <img
+                class="img-responsive mr-3"
+                :src="`/static/flag-icons/${language.icon}.png`"
+              />
+              <span>{{ language.name }}</span>
+           </div>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -87,7 +89,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getUser", "languages"]),
+    ...mapGetters(["getUser", "languages", "selectedLocale"]),
   },
   mounted() {
     // (function () {
