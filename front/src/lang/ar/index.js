@@ -668,7 +668,7 @@ export default {
     type: "النوع",
     faq: "الاسئلة المتكررة",
     contactUs: "التواصل",
-    our: "Our",
+    our: "المتوفرة",
     deActive: "تعطيل",
     password: "كلمة المرور ",
     manageVendors: "ادارة مقدمين الخدمة ",
