@@ -625,6 +625,7 @@ export default {
     deleteItemTitle: "هل تريد الحذف",
     deleteItemContent: "ا1ا قمت بالحذف لن تتمكن من استرداده",
     city: "الولاية",
+    recommended: "المتميزون",
     ratingRule: "التقييم من 0 الى 5",
     lat: "الطول",
     lng: "العرض",
