@@ -827,6 +827,11 @@ class ClientController extends Controller
     {
         $id = $request->id;
         $booking = Booking::find($id);
+        if($booking){
+            return response()->json([
+                'success' => true,
+            ]);
+        }
         $feedback = NULL;
         if ($booking->state == "pending" || $booking->state == "rejected") {
             $transaction = $booking->transaction;
