@@ -51,6 +51,10 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
 
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], function () {
+    Route::post('changedProfile', 'UserController@changedProfile');
+});
+
+Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], function () {
     //Provider Part
     Route::get('getProviders', 'AdminController@getProviders');
     Route::post('addProvider', 'AdminController@addProvider');
@@ -88,8 +92,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::get('getHolidays', 'AdminController@getHolidays');
     Route::post('addHoliday', 'AdminController@addHoliday');
     Route::post('deleteHoliday', 'AdminController@deleteHoliday');
-    //Profile
-    Route::post('changedProfile', 'AdminController@changedProfile');
+   
     // Banner
     Route::get('getBanners', 'AdminController@getBanners');
     Route::post('addBanner', 'AdminController@addBanner');
