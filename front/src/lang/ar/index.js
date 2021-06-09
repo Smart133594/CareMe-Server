@@ -688,6 +688,7 @@ export default {
     viewServiciesProducts: "عرض الخدمات و المنتجات",
     added2WishList: "تم الاضافة للمفضلة",
     add2wishlist: "اضف للمفضلة",
+    added2wishes: "تم الاضافة للمفضلة",
     removefromwishlist: "حذف من المفضلة",
     removedFWishList: "تم الحذف من المفضلة",
     all: "الكل",

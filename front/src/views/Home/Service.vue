@@ -58,7 +58,7 @@
               :disabled="itemExist"
               >{{
                 itemExist
-                  ? $t("message.added2wishlist")
+                  ? $t("message.added2wishes")
                   : $t("message.add2wishlist")
               }}</v-btn
             >
