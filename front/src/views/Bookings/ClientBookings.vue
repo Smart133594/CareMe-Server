@@ -42,7 +42,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid', success: item.payment_status == 'paid'}">{{item.state}}</v-badge>
+                                    <v-badge :value="false" class="p-2" :class="{error: item.payment_status != 'paid', success: item.payment_status == 'paid'}">{{item.payment_status}}</v-badge>
                                 </td>
                                 <td>
                                     <v-badge :value="false" class="p-2" :class="{info:item.state == 'confirmed' || item.state == 'completed',error:item.state == 'pending' || item.state == 'rejected'}">{{ item.state }}</v-badge>
