@@ -2,7 +2,7 @@
  * App Config File
  */
 const testMode = true
-const dev_domain = 'http://157.175.103.0/'	                    			
+const dev_domain = 'http://dev.careme.om/'	                    			
 const domain = 'https://careme.om/'		
 
 export default {
