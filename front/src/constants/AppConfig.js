@@ -1,7 +1,7 @@
 /**
  * App Config File
  */
-const testMode = true
+const testMode = false
 const dev_domain = 'http://dev.careme.om/'	                    			
 const domain = 'https://careme.om/'		
 
