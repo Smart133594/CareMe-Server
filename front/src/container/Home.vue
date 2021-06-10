@@ -23,14 +23,14 @@
                                 <img @click="chooseFiles(i)" :src="avatar ? avatar : '/static/avatars/male.png'" class="img-responsive rounded-circle" alt="user images" style="width: 100px; height: 100px" />
                             </div>
                             <input id="fileUpload" type="file" hidden :accept="['.jpg', '.jpeg', '.gif', '.png']" @change="uploadImageFile" />
-                            <VuePhoneNumberInput v-model="phone" @update="updatePhone" dark required dark-color="#2e3343" default-country-code="OM" :preferred-countries="['OM', 'US', 'DE']" />
+                            <VuePhoneNumberInput v-model="phone" @update="updatePhone" dark required dark-color="#2e3343" default-country-code="OM" :preferred-countries="['OM', 'US', 'DE']" style="direction:ltr !important"/>
                             <v-row class="px-3 input-row" v-if="i == 2">
                                 <v-text-field v-model="first_name" :rules="firstNameRules" prepend-icon="perm_identity" :label="$t('message.firstName')" required></v-text-field>
                                 <v-text-field v-model="last_name" :rules="lastNameRules" prepend-icon="perm_identity" :label="$t('message.lastName')" required></v-text-field>
                                 <v-text-field v-model="email" :rules="emailRules" prepend-icon="mail" :label="$t('message.email')" required></v-text-field>
                             </v-row>
                             <v-row class="px-3" :class="i == 1 && 'input-row'">
-                                <v-text-field :label="$t('password')" v-model="password" prepend-icon="ti-lock" :rules="passwordRules" type="password" required></v-text-field>
+                                <v-text-field :label="$t('message.password')" v-model="password" prepend-icon="ti-lock" :rules="passwordRules" type="password" required></v-text-field>
                                 <a v-if="i == 1" class="mb-2" @click="forgotPassword" :disabled="loading">{{ $t("message.forgotPassword") }}?</a>
                             </v-row>
                         </v-form>
