@@ -180,7 +180,7 @@ export default {
             ],
 
             providers: [],
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             deleteDialog: false,
             deleteItem: null,
             manageDialog: false,

@@ -109,7 +109,7 @@ export default {
             all: true,
             vendors: [],
             departments: [],
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             headers: [{
                     text: this.$t("message.no"),
                     value: "no",

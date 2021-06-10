@@ -195,7 +195,7 @@ export default {
       loading: false,
       orders: [],
       search: "",
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       headers: [
         {
           text: this.$t("message.no"),

@@ -88,7 +88,7 @@ export default {
         return {
             loading: false,
             vendor_id: -1,
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             vendor: {
                 images: []
             },

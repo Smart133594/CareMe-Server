@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       searchItems: null,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
     };
   },
   computed: {

@@ -107,7 +107,7 @@ export default {
     return {
       loading: false,
       loadingData: false,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       banners: [],
       categories: [],
       vendors: [],
@@ -170,7 +170,9 @@ export default {
   beforeMount() {
     this.getFrontData();
   },
-  mounted() {},
+  mounted() {
+
+  },
 };
 </script>
 

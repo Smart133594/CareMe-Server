@@ -74,7 +74,7 @@ export default {
         },
       ],
 
-      baseUrl : appConfig.testMode?appConfig.localhost:appConfig.domain
+      baseUrl : appConfig.baseUrl,
     };
   },
   computed: {

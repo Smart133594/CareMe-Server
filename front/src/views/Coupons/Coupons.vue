@@ -108,7 +108,7 @@ export default {
             loading: false,
             valid: false,
             search: "",
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             requireRule: [(v) => !!v || this.$t("message.fieldRequired")],
             dialog: false,
             headers: [{

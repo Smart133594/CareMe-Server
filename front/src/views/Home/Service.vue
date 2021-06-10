@@ -519,7 +519,7 @@ export default {
   data: function () {
     return {
       loading: false,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       service_id: -1,
       service: null,
       requireRule: [(v) => !!v || this.$t("message.fieldRequired")],

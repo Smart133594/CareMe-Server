@@ -563,7 +563,7 @@ export default {
       loading: false,
       bookings: [],
       search: "",
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       headers: [
         {
           text: this.$t("message.no"),

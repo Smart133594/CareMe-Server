@@ -262,7 +262,7 @@ export default {
     return {
       loading: false,
       banners: [],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       dialog: false,
       valid: false,
 

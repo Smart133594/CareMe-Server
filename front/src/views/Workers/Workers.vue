@@ -249,7 +249,7 @@ export default {
           align: "center",
         },
       ],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       totalServicies: [],
     };
   },

@@ -91,7 +91,7 @@ export default {
     return {
       loading: false,
       vendors: [],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       products: [],
       path: "",
     };

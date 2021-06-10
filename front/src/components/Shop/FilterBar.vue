@@ -166,7 +166,7 @@ export default {
       settings: {
         maxScrollbarLength: 160,
       },
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       loading: false,
       cities: [],
       categories: [],

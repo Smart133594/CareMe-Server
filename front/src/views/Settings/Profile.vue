@@ -87,7 +87,7 @@ export default {
     return {
       loading: false,
       valid: false,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       tempUser: null,
       requireRule: [(v) => !!v || this.$t("message.fieldRequired")],
       emailRules: [

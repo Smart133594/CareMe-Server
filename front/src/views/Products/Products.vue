@@ -268,7 +268,7 @@ export default {
         "Name": "en_name",
       },
 
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             selectedItem: null,
             deleteDialog: false,
       filteredProducts:[],

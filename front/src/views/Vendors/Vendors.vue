@@ -223,7 +223,7 @@ export default {
                     image: null
                 },
             ],
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
             requireRule: [(v) => !!v || this.$t("message.fieldRequired")],
             numberRule: [
                 (v) => !!v || this.$t("message.fieldRequired"),

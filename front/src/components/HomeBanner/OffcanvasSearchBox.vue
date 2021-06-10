@@ -140,7 +140,7 @@ export default {
       vendors: [],
       servicies: [],
       products: [],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
     };
   },
   methods: {

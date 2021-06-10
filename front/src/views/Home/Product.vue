@@ -137,7 +137,7 @@ export default {
   data: function () {
     return {
       loading: false,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       product_id: -1,
       product: null,
       quantity: 1,

@@ -155,7 +155,7 @@ export default {
             passwordRules: [(v) => !!v || this.$t("passwordRequired")],
             forgot: false,
             showResetDialog: false,
-            baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+            baseUrl: appConfig.baseUrl,
         };
     },
     methods: {

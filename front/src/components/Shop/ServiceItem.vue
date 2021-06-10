@@ -118,7 +118,7 @@ export default {
   data() {
     return {
       loading: false,
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
     };
   },
   computed: {

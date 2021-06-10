@@ -223,7 +223,7 @@ export default {
       ],
 
       categories: [],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       deleteDialog: false,
       deleteItem: null,
     };

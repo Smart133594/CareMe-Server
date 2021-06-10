@@ -109,7 +109,7 @@ export default {
     return {
       loading: false,
       clients: [],
-      baseUrl: appConfig.testMode ? appConfig.localhost : appConfig.domain,
+      baseUrl: appConfig.baseUrl,
       search: "",
       headers: [
         {
