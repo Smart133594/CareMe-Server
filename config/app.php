@@ -133,11 +133,15 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
+    //TEST
+    // 'THAWANI_SECRET_KEY' => "uDwxsSOqDBB3qjTD6kZfvkGlzKvPBv",
+    // 'THAWANI_PUBLIC_KEY' => "nTFkb94A6HUKTojVerBVlDs8ucMhrX",
+    // 'THAWANI_BASE_URL' => 'https://uatcheckout.thawani.om/api/v1',
 
-    'THAWANI_SECRET_KEY' => "uDwxsSOqDBB3qjTD6kZfvkGlzKvPBv",
-    'THAWANI_PUBLIC_KEY' => "nTFkb94A6HUKTojVerBVlDs8ucMhrX",
-    'THAWANI_BASE_URL' => 'https://uatcheckout.thawani.om/api/v1',
-
+    //RELEASE
+    'THAWANI_SECRET_KEY' => "G6nSyUJoCs2PizGZcJtzDznxBqg2Hu",
+    'THAWANI_PUBLIC_KEY' => "jDf6yrgcNb4Gj0h47cmGfpIvkGCwkL",
+    'THAWANI_BASE_URL' => 'https://checkout.thawani.om/api/v1',
     'providers' => [
 
         /*
