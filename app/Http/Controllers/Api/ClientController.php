@@ -198,7 +198,10 @@ class ClientController extends Controller
         $result = [];
         foreach($vendors as $vendor){
             $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng);
-            array_push($result, $distance);
+            if($distance < 4000){
+                $vendor->distance = $distance;
+                array_push($result, $vendor)
+            }
         }
         return response()->json([
             'success' => true,
