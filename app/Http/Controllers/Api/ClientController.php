@@ -197,7 +197,7 @@ class ClientController extends Controller
         $vendors = DB::table('vendors')->where('vendors.active', true)->get();
         $result = [];
         foreach($vendors as $vendor){
-            $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng, 40000);
+            $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng, 20000);
             array_push($result, $distance);
         }
         return response()->json([
