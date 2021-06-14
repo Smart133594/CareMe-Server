@@ -192,8 +192,8 @@ class ClientController extends Controller
 
     public function getNearVendors(Request $request){
         $location = $request->location;
-        $latitudeFrom = $location['latitude'];
-        $longitudeFrom = $location['longitude'];
+        $latitudeFrom =  $request->latitude;
+        $longitudeFrom = $request->longitude; 
         $vendors = DB::table('vendors')->where('vendors.active', true)->get();
         $result = [];
         foreach($vendors as $vendor){
