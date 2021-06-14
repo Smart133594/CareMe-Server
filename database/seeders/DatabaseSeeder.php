@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'phone' => '+96898765432',
             'password' => bcrypt('123456'),
             'role' => 'provider',
+            'roles' => [],
             'active' => true,
         ]);
 

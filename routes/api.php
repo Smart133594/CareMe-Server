@@ -33,6 +33,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
     Route::get('getService/{service_id}', 'ClientController@getService');
     Route::get('getProduct/{product_id}', 'ClientController@getProduct');
     Route::post('getCarts', 'ClientController@getCarts');
+    Route::post('getNearVendors', 'ClientController@getNearVendors');
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], function () {

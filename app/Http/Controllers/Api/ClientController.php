@@ -175,6 +175,37 @@ class ClientController extends Controller
         ]);
     }
 
+    public function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000){
+        // convert from degrees to radians
+        $latFrom = deg2rad($latitudeFrom);
+        $lonFrom = deg2rad($longitudeFrom);
+        $latTo = deg2rad($latitudeTo);
+        $lonTo = deg2rad($longitudeTo);
+      
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+      
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+          cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        return $angle * $earthRadius;
+      }
+
+    public function getNearVendors(Request $request){
+        $location = $request->location;
+        $latitudeFrom = $location['latitude'];
+        $longitudeFrom = $location['longitude'];
+        $vendors = DB::table('vendors')->where('vendors.active', true)->get();
+        $result = [];
+        foreach($vendors as $vendor){
+            $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng, 40000);
+            array_push($result, $distance);
+        }
+        return response()->json([
+            'success' => true,
+            'data' => $result
+        ]);
+    }
+
     public function getVendors(Request $request)
     {
 
