@@ -200,7 +200,7 @@ class ClientController extends Controller
             $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng);
             if($distance < 4000){
                 $vendor->distance = $distance;
-                array_push($result, $vendor)
+                array_push($result, $vendor);
             }
         }
         return response()->json([
