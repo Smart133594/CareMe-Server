@@ -750,5 +750,6 @@ export default {
     invoice: "الفاتورة ",
     orderingSuccess: "تم الطلب بنجاح ، يمكنك متابعة الطلب من حسابك",
     orderingFailed: "عذرا ،فشل الطلب ، يمكنك المحاولة مرة اخرى ",
-    sessionError: "عذرا لم تنجح عملية الدفع ، الرجاء المحاولة مجددا "
+    sessionError: "عذرا لم تنجح عملية الدفع ، الرجاء المحاولة مجددا ",
+    inputEmail:"Please input your email."
 }

@@ -31,11 +31,11 @@
       <!-- vendor swiper -->
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
-          {{ $t("message.recommended") }} {{ $t("message.vendors") }}
+          {{$t("message.vendors") }}
         </h5>
         <div class="spacer"></div>
         <h6 class="font-weight--bold wow move-up text-warning show-all" @click="viewAllVendors">
-          {{ $t("message.viewAll") }}
+          {{$t("message.viewAll") }}
         </h6>
       </div>
       <v-divider />
@@ -43,11 +43,11 @@
       <!-- servicies swiper -->
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
-          {{ $t("message.recommended") }} {{ $t("message.servicies") }}
+          {{$t("message.servicies") }}
         </h5>
         <div class="spacer"></div>
         <h6 class="font-weight--bold wow move-up text-warning show-all" @click="viewAllServicies">
-          {{ $t("message.viewAll") }}
+          {{$t("message.viewAll") }}
         </h6>
       </div>
       <v-divider />
@@ -55,11 +55,11 @@
       <!-- product swiper -->
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
-          {{ $t("message.recommended") }} {{ $t("message.products") }}
+         {{ $t("message.products") }}
         </h5>
         <div class="spacer"></div>
         <h6 class="font-weight--bold wow move-up text-warning show-all" @click="viewAllProducts">
-          {{ $t("message.viewAll") }}
+          {{$t("message.viewAll") }}
         </h6>
       </div>
       <v-divider />
@@ -70,7 +70,7 @@
         class="align-center mt-40"
       >
         <h5 class="font-weight--bold wow move-up text-purple show-title">
-          {{ $t("message.recommended") }} {{ $t("message.hotDeals") }}
+          {{$t("message.hotDeals")}}
         </h5>
       </div>
       <v-divider />

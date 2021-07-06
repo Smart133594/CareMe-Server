@@ -216,7 +216,14 @@ export default {
                     text: this.$t("message.phoneNumber"),
                 });
                 return;
-            } else if (this.password == "") {
+            } else if (this.email == "") {
+                Vue.notify({
+                    group: "loggedIn",
+                    type: "error",
+                    text: this.$t("message.inputEmail"),
+                });
+                return;
+            }else if (this.password == "") {
                 Vue.notify({
                     group: "loggedIn",
                     type: "error",

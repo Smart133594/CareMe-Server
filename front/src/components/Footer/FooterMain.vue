@@ -239,21 +239,22 @@ export default {
 
 .whats-button {
   position: fixed;
-  bottom: 30px;
+  bottom: 15px;
   left: 30px;
   background-color: $whatsapp !important;
 }
 
 .cart-button {
   position: fixed;
-  bottom: 80px;
+  bottom: 75px;
   left: 30px;
 }
 
 .top-button {
   position: fixed;
-  bottom: 30px;
+  bottom: 15px;
   right: 30px;
 }
+
 </style>
 
