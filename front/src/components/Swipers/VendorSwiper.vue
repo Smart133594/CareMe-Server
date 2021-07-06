@@ -7,7 +7,7 @@
             <swiper :options="swiperOption">
               <div
                 class="swiper-slide"
-                v-for="(item, index) in items"
+                v-for="(item, index) in filterItem"
                 :key="`${index}_item_vendor`"
               >
                 <vendor-item :vendor="item"></vendor-item>
@@ -36,12 +36,24 @@ export default {
     items: {
       require: true,
     },
+    filter: {
+      require: false,
+      default:null,
+    },
     baseUrl: {
       require: true,
     },
   },
   computed: {
     ...mapGetters(["selectedLocale"]),
+
+    filterItem(){
+      if(this.filter == null){
+        return this.items
+      } else{
+        return this.items.filter(item => item.category_id == this.filter.id)
+      }
+    }
   },
   data() {
     return {

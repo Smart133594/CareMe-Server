@@ -570,7 +570,7 @@ export default {
     getServiceSession(){
       let model={
         cancel_url:`${this.baseUrl}service/${this.service_id}/2`,
-        success_url:`${this.baseUrl}service/${this.service_id}/3`,
+        success_url:`${this.baseUrl}`,
         service_id: this.service_id,
         worker_id: this.worker_id,
         date: this.selected_date,
@@ -823,6 +823,8 @@ export default {
             this.selected_times = [];
             this.quantity = 1;
             this.selected_date = null;
+
+            this.$router.push("/");
           } else {
             Vue.notify({
               group: "center",

@@ -21,6 +21,7 @@
       v-if="!loadingData"
     >
       <!-- Category swiper -->
+      <!--
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
           {{ $t("message.our") }} {{ $t("message.categories") }}
@@ -28,7 +29,9 @@
       </div>
       <v-divider />
       <category-swiper :baseUrl="baseUrl" :items="categories" class="mb-20" />
+      -->
       <!-- vendor swiper -->
+      <!--
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
           {{$t("message.vendors") }}
@@ -40,6 +43,22 @@
       </div>
       <v-divider />
       <vendor-swiper :baseUrl="baseUrl" :items="vendors" class="mb-20" />
+      -->
+
+      <div v-for="(category, index) in categories" :key="`${index}_category`">
+        <div style="display: flex; flex-direction: row" class="align-center">
+          <h5 class="font-weight--bold wow move-up text-purple show-title">
+            {{category[selectedLocale.locale == "en"? "en_name" : "ar_name"]}}
+          </h5>
+          <div class="spacer"></div>
+          <h6 class="font-weight--bold wow move-up text-warning show-all" @click="viewAllVendorsByCategory(category)">
+            {{$t("message.viewAll") }}
+          </h6>
+        </div>
+        <vendor-swiper :baseUrl="baseUrl" :items="vendors" :filter="category" class="mb-20" />
+        <v-divider />
+      </div>
+
       <!-- servicies swiper -->
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
@@ -156,7 +175,11 @@ export default {
     },
 
     viewAllVendors(){
-        this.$router.push(`/vendors/-1/-1`);
+      this.$router.push(`/vendors/-1/-1`);
+    },
+
+    viewAllVendorsByCategory(category){
+      this.$router.push(`/vendors/${category.id}/-1`);
     },
 
     viewAllServicies(){
