@@ -11,10 +11,7 @@
                 v-for="(item, index) in items"
                 :key="`${index}_item_category`"
               >
-                <div
-                  class="single-flexible-slider wow move-up border"
-                  @click="selectedItem(item)"
-                >
+                <div class="single-flexible-slider wow move-up border" @click="selectedItem(item)">
                   <figure class="img-wrapper mb-0" >
                     <v-img
                       :src="`${baseUrl}uploads/categories/${item.image}`"
@@ -34,6 +31,15 @@
                       </h6>
                     </figcaption>
                   </figure>
+                  <h6 class="font-weight--bold text-purple mt-1 ml-1">
+                    {{
+                      item[
+                        selectedLocale.locale == "en"
+                          ? "en_name"
+                          : "ar_name"
+                      ]
+                    }}
+                  </h6>
                 </div>
               </div>
             </swiper>

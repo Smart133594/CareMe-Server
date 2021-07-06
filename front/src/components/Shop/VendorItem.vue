@@ -27,6 +27,12 @@
         ></v-rating>
       </figcaption>
     </figure>
+     <h6
+        class="font-weight--bold mt-1 ml-1 text-purple item-title"
+        :class="{ small: small }"
+      >
+        {{ vendor[selectedLocale.locale == "en" ? "en_name" : "ar_name"] }}
+      </h6>
   </div>
 </template>
 

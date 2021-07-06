@@ -216,7 +216,7 @@ export default {
                     text: this.$t("message.phoneNumber"),
                 });
                 return;
-            } else if (this.email == "") {
+            } else if (this.email == "" && this.tab == "tab-2") {
                 Vue.notify({
                     group: "loggedIn",
                     type: "error",
