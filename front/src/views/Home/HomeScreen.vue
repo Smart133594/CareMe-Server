@@ -21,7 +21,6 @@
       v-if="!loadingData"
     >
       <!-- Category swiper -->
-      <!--
       <div style="display: flex; flex-direction: row" class="align-center">
         <h5 class="font-weight--bold wow move-up text-purple show-title">
           {{ $t("message.our") }} {{ $t("message.categories") }}
@@ -29,7 +28,6 @@
       </div>
       <v-divider />
       <category-swiper :baseUrl="baseUrl" :items="categories" class="mb-20" />
-      -->
       <!-- vendor swiper -->
       <!--
       <div style="display: flex; flex-direction: row" class="align-center">
@@ -44,7 +42,6 @@
       <v-divider />
       <vendor-swiper :baseUrl="baseUrl" :items="vendors" class="mb-20" />
       -->
-
       <div v-for="(category, index) in categories" :key="`${index}_category`">
         <div style="display: flex; flex-direction: row" class="align-center">
           <h5 class="font-weight--bold wow move-up text-purple show-title">
@@ -55,8 +52,8 @@
             {{$t("message.viewAll") }}
           </h6>
         </div>
-        <vendor-swiper :baseUrl="baseUrl" :items="vendors" :filter="category" class="mb-20" />
         <v-divider />
+        <vendor-swiper :baseUrl="baseUrl" :items="vendors" :filter="category" class="mb-20" />
       </div>
 
       <!-- servicies swiper -->
