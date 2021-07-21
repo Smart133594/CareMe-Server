@@ -823,7 +823,6 @@ export default {
             this.selected_times = [];
             this.quantity = 1;
             this.selected_date = null;
-
             this.$router.push("/");
           } else {
             Vue.notify({
