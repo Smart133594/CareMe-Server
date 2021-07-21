@@ -4,45 +4,25 @@
       <div class="container">
         <div class="row footer-widget-wrapper" style="align-items: top">
           <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">WHAT'S HOT</h6>
+            <h6 class="footer-widget__title mb-20">{{$t('message.companyInformation')}}</h6>
             <ul class="footer-widget__list p-0">
               <li>
-                <router-link to="/">Apparel</router-link>
+                <router-link to="/aboutus">{{$t('message.aboutUs')}}</router-link>
               </li>
               <li>
-                <router-link to="/">Footwear</router-link>
+                <router-link to="/policy">{{$t('message.privacyPolicy')}}</router-link>
               </li>
               <li>
-                <router-link to="/">Sports</router-link>
+                <router-link to="/delivery-terms">{{$t('message.deliveryTerms')}}</router-link>
               </li>
               <li>
-                <router-link to="/">Arabic Fragrances</router-link>
-              </li>
-            </ul>
-          </v-col>
-          <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">COMPANY INFORMATION</h6>
-            <ul class="footer-widget__list p-0">
-              <li>
-                <router-link to="/">About Us</router-link>
-              </li>
-              <li>
-                <router-link to="/">Privacy Policy</router-link>
-              </li>
-              <li>
-                <router-link to="/">Delivery Terms</router-link>
-              </li>
-              <li>
-                <router-link to="/">Terms and conditions</router-link>
-              </li>
-              <li>
-                <router-link to="/">Newsroom</router-link>
+                <router-link to="/terms-and-conditions">{{$t('message.termsAndConditions')}}</router-link>
               </li>
             </ul>
           </v-col>
           <v-col sm="12">
             <h6 class="footer-widget__title mb-20">
-              EXPERIENCE BOUTIQAAT APP ON MOBILE
+              {{$t('message.appOnMobile')}}
             </h6>
             <ul class="footer-widget__logo p-0">
               <li>
@@ -65,49 +45,36 @@
                   />
                 </router-link>
               </li>
+            </ul>
+          </v-col>
+          <v-col sm="12">
+            <h6 class="footer-widget__title mb-20">{{$t('message.support')}}</h6>
+            <ul class="footer-widget__list p-0">
               <li>
-                <router-link to="/">
-                  <img
-                    src="/static/img/app-callery.png"
-                    alt="site logo"
-                    width="108"
-                    height="32"
-                  />
-                </router-link>
+                <router-link to="/exchange-and-returns">{{$t('message.exchangeAndReturns')}}</router-link>
+              </li>
+              <li>
+                <router-link to="/customer-service">{{$t('message.customerService')}}</router-link>
+              </li>
+              <li>
+                <router-link to="/how-register-order">{{$t('message.howToOrder')}}</router-link>
+              </li>
+              <li>
+                <router-link to="/faq">{{$t("message.faq") }}</router-link>
               </li>
             </ul>
           </v-col>
           <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">SUPPORT</h6>
+            <h6 class="footer-widget__title mb-20">{{$t("message.contactUs")}}</h6>
             <ul class="footer-widget__list p-0">
               <li>
-                <router-link to="/">Exchange and returns</router-link>
+                <a href="tel:+96595940026">{{$t("message.call")}}: +965 95940026</a>
               </li>
               <li>
-                <router-link to="/">Customer Service</router-link>
-              </li>
-              <li>
-                <router-link to="/">How to order</router-link>
-              </li>
-              <li>
-                <router-link to="/faq">{{ $t("message.faq") }}</router-link>
-              </li>
-              <li>
-                <router-link to="/">Newsroom</router-link>
-              </li>
-            </ul>
-          </v-col>
-          <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">CONTACT US</h6>
-            <ul class="footer-widget__list p-0">
-              <li>
-                <a href="tel:+96595940026">Call: +965 95940026</a>
-              </li>
-              <li>
-                <a href="mailto:support@careme.om">Email: support@careme.om</a>
+                <a href="mailto:support@careme.om">{{$t("message.email")}}: support@careme.om</a>
               </li>
               <ul class="footer-widget__contact p-0">
-                <h6 class="footer-widget__title my-4">FOLLOW US ON</h6>
+                <h6 class="footer-widget__title my-4">{{$t("message.followUs")}}</h6>
                 <li style="margin-right: 0.55rem">
                   <router-link to="/">
                     <span class="icon-style" style="font-size: 26px">
@@ -147,7 +114,7 @@
         <div class="align-items-center foot-bottom">
           <app-logo></app-logo>
           <span class="copyright-text">
-            &copy; 2021 <b>CareMe </b> All Rights Reserved.
+            &copy; 2021 <b>{{$t("message.careMe")}} </b> {{$t("message.allRightReserved")}}
           </span>
           <img
             src="/static/img/payments.png"

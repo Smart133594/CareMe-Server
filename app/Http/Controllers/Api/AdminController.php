@@ -26,6 +26,14 @@ use App\Models\Booking;
 use App\Models\WishList;
 use App\Models\Coupon;
 use App\Mail\BookingMail;
+use App\Models\AboutUs;
+use App\Models\Policy;
+use App\Models\DeliveryTerm;
+use App\Models\TermsAndCondition;
+use App\Models\ExchangeAndReturn;
+use App\Models\CustomerService;
+use App\Models\HowRegisterOrder;
+use App\Models\SystemSetting;
 
 use App\Traits\CommonHelper;
 use File;
@@ -35,6 +43,18 @@ use DB;
 class AdminController extends Controller{
     use CommonHelper;
     //getProviders
+
+    public function saveSystemSettings(Request $request){
+        $all = $request->all();
+        foreach ($all as $setting) {
+            SystemSetting::where('key', $setting['key'])->delete();
+            SystemSetting::create($setting);
+        }
+        return response()->json([
+            'success'=>true,
+        ]);
+    }
+
     public function getProviders(Request $request){
         $users = User::where('role', 'provider')->orderBy('id')->get();
         $result = ['users'=>$users];
@@ -139,7 +159,6 @@ class AdminController extends Controller{
             'success'=>true,
         ]);
     }
-
 
     ///Categories
     public function addCategory(Request $request){
@@ -806,6 +825,72 @@ class AdminController extends Controller{
 
         return response()->json([
             'success'=>true,
+        ]);
+    }
+
+
+    ///AbouUS
+
+    public function saveAboutUS(Request $request){
+        $all = $request->all();
+        $about = AboutUs::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$about,
+        ]);
+    }
+
+    public function savePolicy(Request $request){
+        $all = $request->all();
+        $item = Policy::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
+        ]);
+    }
+
+    public function saveDeliveryTerms(Request $request){
+        $all = $request->all();
+        $item = DeliveryTerm::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
+        ]);
+    }
+
+    public function saveTermsAndConditions(Request $request){
+        $all = $request->all();
+        $item = TermsAndCondition::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
+        ]);
+    }
+
+    public function saveExchangeAndReturns(Request $request){
+        $all = $request->all();
+        $item = ExchangeAndReturn::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
+        ]);
+    }
+
+    public function saveCustomerServices(Request $request){
+        $all = $request->all();
+        $item = CustomerService::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
+        ]);
+    }
+    
+    public function saveHowRegisterOrders(Request $request){
+        $all = $request->all();
+        $item = HowRegisterOrder::updateOrCreate(['id' => $all['id']], $all);
+        return response()->json([
+            'success'=>true,
+            'data'=>$item,
         ]);
     }
 

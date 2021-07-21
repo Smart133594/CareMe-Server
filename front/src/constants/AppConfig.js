@@ -2,6 +2,7 @@
  * App Config File
  */
 const testMode = true
+// const dev_domain = 'http://localhost/'	                    			
 const dev_domain = 'http://dev.careme.om/'	                    			
 const domain = 'https://careme.om/'		
 

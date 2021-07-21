@@ -24,6 +24,15 @@ use App\Models\Ordering;
 use App\Models\User;
 use App\Models\Coupon;
 use App\Models\Transaction;
+use App\Models\AboutUs;
+use App\Models\Policy;
+use App\Models\DeliveryTerm;
+use App\Models\TermsAndCondition;
+use App\Models\ExchangeAndReturn;
+use App\Models\CustomerService;
+use App\Models\HowRegisterOrder;
+use App\Models\SystemSetting;
+
 use PDF;
 use File;
 use DB;
@@ -38,6 +47,15 @@ class ClientController extends Controller
 
     public function __construct()
     {
+    }
+
+    public function getSystemSettings()
+    {
+        $data = SystemSetting::get();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     public function getSearchItems(Request $request)
@@ -109,8 +127,6 @@ class ClientController extends Controller
     // Banners
     public function getFrontData(Request $request)
     {
-
-
         $today = date("Y-m-d");
         $rows = Banner::where(['active' => true])->whereDate('start_date', '<=', $today)->whereDate('expire_date', '>=', $today)->orderBy('id')->select('image')->get();
         $banners = $rows->pluck('image');
@@ -175,6 +191,63 @@ class ClientController extends Controller
         ]);
     }
 
+    public function getAboutUs(){
+        $data = AboutUs::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getPolicy(){
+        $data = Policy::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getDeliveryTerms(){
+        $data = DeliveryTerm::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getTermsAndConditions(){
+        $data = TermsAndCondition::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getExchangeAndReturns(){
+        $data = ExchangeAndReturn::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getCustomerServices(){
+        $data = CustomerService::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    
+    public function getHowRegisterOrders(){
+        $data = HowRegisterOrder::first();
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+    
     public function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000){
         // convert from degrees to radians
         $latFrom = deg2rad($latitudeFrom);

@@ -16,8 +16,8 @@
             ><span>{{ $t("message.dashboard") }}</span></b-nav-item
           >
 
-          <b-nav-item href="/contactUs" class="scroll"
-            ><span>{{ $t("message.contactUs") }}</span></b-nav-item
+          <b-nav-item href="/aboutus" class="scroll"
+            ><span>{{ $t("message.aboutUs") }}</span></b-nav-item
           >
 
           <b-nav-item href="/faq" class="scroll"

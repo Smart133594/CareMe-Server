@@ -34,6 +34,14 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
     Route::get('getProduct/{product_id}', 'ClientController@getProduct');
     Route::post('getCarts', 'ClientController@getCarts');
     Route::post('getNearVendors', 'ClientController@getNearVendors');
+    Route::get('getAboutUs', 'ClientController@getAboutUs');
+    Route::get('getPolicy', 'ClientController@getPolicy');
+    Route::get('getDeliveryTerms', 'ClientController@getDeliveryTerms');
+    Route::get('getTermsAndConditions', 'ClientController@getTermsAndConditions');
+    Route::get('getExchangeAndReturns', 'ClientController@getExchangeAndReturns');
+    Route::get('getCustomerServices', 'ClientController@getCustomerServices');
+    Route::get('getHowRegisterOrders', 'ClientController@getHowRegisterOrders');
+    Route::get('getSystemSettings', 'ClientController@getSystemSettings');
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], function () {
@@ -45,7 +53,6 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::post('cancelBooking', 'ClientController@cancelBooking');
     Route::post('checkCoupon', 'ClientController@checkCoupon');
     Route::post('getServiceSession', 'ClientController@getServiceSession');
-
     Route::post('getProductSession', 'ClientController@getProductSession');
     Route::get('getMyOrders', 'ClientController@getMyOrders');
 });
@@ -118,6 +125,17 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
 
     // Orders
     Route::get('getOrders', 'AdminController@getOrders');
+
+    //Footer Part
+    Route::post('saveAboutUs', 'AdminController@saveAboutUs');
+    Route::post('savePolicy', 'AdminController@savePolicy');
+    Route::post('saveDeliveryTerms', 'AdminController@saveDeliveryTerms');
+    Route::post('saveTermsAndConditions', 'AdminController@saveTermsAndConditions');
+    Route::post('saveExchangeAndReturns', 'AdminController@saveExchangeAndReturns');
+    Route::post('saveCustomerServices', 'AdminController@saveCustomerServices');
+    Route::post('saveHowRegisterOrders', 'AdminController@saveHowRegisterOrders');
+    
+    Route::post('saveSystemSettings', 'AdminController@saveSystemSettings');
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api'], 'prefix'=>'client'], function () {

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('users')->insert([
             'full_name' => "CareMe",
             'first_name' => "CareMe",
@@ -23,19 +24,6 @@ class DatabaseSeeder extends Seeder
             'phone' => '+96897135701',
             'password' => bcrypt('root'),
             'role' => 'admin',
-            'active' => true,
-        ]);
-
-        DB::table('users')->insert([
-            'full_name' => "Bognar Vojislav",
-            'first_name' => "Bognar",
-            'last_name' => "Vojislav",
-            'email' => "bognarvojislav791@gmail.com",
-            'email_verified_at' => now(),
-            'phone' => '+96898765432',
-            'password' => bcrypt('123456'),
-            'role' => 'provider',
-            'roles' => [],
             'active' => true,
         ]);
 

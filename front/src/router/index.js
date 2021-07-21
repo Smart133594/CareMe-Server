@@ -15,6 +15,14 @@ const Products = () => import('Views/Home/Products');
 const Product = () => import('Views/Home/Product');
 const Wishes = () => import('Views/Home/Wishes');
 const Carts = () => import('Views/Home/Carts');
+const AboutScreen = () => import('Views/Home/About');
+const FaqScreen = () => import('Views/Home/Faq');
+const PolicyScreen = () => import('Views/Home/Policy');
+const DeliveryTerms = () => import('Views/Home/DeliveryTerms');
+const TermsAndConditions = () => import('Views/Home/TermsAndConditions');
+const ExchangeAndReturns = () => import('Views/Home/ExchangeAndReturns');
+const CustomerServices = () => import('Views/Home/CustomerServices');
+const HowToRegisterOrders = () => import('Views/Home/HowToRegisterOrders');
 const Page404 = () => import('Views/Page404');
 Vue.use(Router)
 
@@ -33,6 +41,40 @@ export default new Router({
                     path: '/homepage',
                     component: HomeScreen,
                 },
+                {
+                    path: '/aboutus',
+                    component: AboutScreen,
+                },
+                {
+                    path: '/faq',
+                    component: FaqScreen,
+                },
+                {
+                    path: '/policy',
+                    component: PolicyScreen,
+                },
+                {
+                    path: '/delivery-terms',
+                    component: DeliveryTerms,
+                },
+
+                {
+                    path: '/terms-and-conditions',
+                    component: TermsAndConditions,
+                },
+                {
+                    path: '/exchange-and-returns',
+                    component: ExchangeAndReturns,
+                },
+                {
+                    path: '/customer-service',
+                    component: CustomerServices,
+                },
+                {
+                    path: '/how-register-order',
+                    component: HowToRegisterOrders,
+                },
+               
                 {
                     path: '/vendors/:category_id/:city_id',
                     component: Vendors,
