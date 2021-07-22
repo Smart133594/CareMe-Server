@@ -1100,7 +1100,7 @@ class ClientController extends Controller
                 $coupon_amount = ($price * $coupon_percent) / 100;
 
                 $item['id'] = $id;
-                $item['name'] = $product->en_name . "(+ tax -coupon)";
+                $item['name'] = $product->en_name . "(+ tax - coupon)";
 
                 $item['unit_amount'] = (float)number_format(($price + $tax - $coupon_amount) * 1000, 2, '.', '');
                 $item['quantity'] = $quantity;
@@ -1109,9 +1109,19 @@ class ClientController extends Controller
                 $item_meta['quantity'] = $quantity;
                 array_push($products, $item);
                 array_push($meta_products, $item_meta);
+            }else{
+                $price = $cart['price'];
+                $item['id'] = $id;
+                $item['name'] = $cart['name'];
+                $item['unit_amount'] = (float)number_format(($price) * 1000, 2, '.', '');
+                $item['quantity'] = $quantity;
+
+                $item_meta['id'] = $id;
+                $item_meta['quantity'] = $quantity;
+                array_push($products, $item);
+                array_push($meta_products, $item_meta);
             }
         }
-
 
         $user = Auth::user();
         $fields['client_reference_id'] = $user->id;

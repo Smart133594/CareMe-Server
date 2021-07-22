@@ -1,40 +1,35 @@
 <template>
-  <html>
-    <head> </head>
-    <body>
-      <div class="card center">
-        <div
-          id="main-image"
-          :style="{ backgroundImage: `url(${this.imageUrl})` }"
-        >
-          <div id="inner-div"></div>
-        </div>
-        <div id="content-container">
-          <div class="app-title bold">CareMe</div>
-          <div class="card-title light">CareMe</div>
-          <div class="app-content light">
-            #1 Social Commerce platform in the Middle East
-          </div>
-          <div class="input-container">
-            <div class="input-label light">
-              Enter your phone number to download the app
-            </div>
-            <form>
-              <input placeholder="+96887654321" v-model="phone" type="text" class="light" />
-              <button type="button" @click="submit()" class="light">Send</button>
-            </form>
-
-            <p class="input-footnote light">
-              By entering your phone number, you consent to the use of your
-              phone number to send you a link to the app, and to the use of your
-              phone number in accordance with the app's privacy policy. Standard
-              rates apply.
-            </p>
-          </div>
-        </div>
+  <div class="card center">
+    <div
+      id="main-image"
+      :style="{ backgroundImage: `url(${this.imageUrl})` }"
+    >
+      <div id="inner-div"></div>
+    </div>
+    <div id="content-container">
+      <div class="app-title bold">CareMe</div>
+      <div class="card-title light">CareMe</div>
+      <div class="app-content light">
+        #1 Social Commerce platform in the Middle East
       </div>
-    </body>
-  </html>
+      <div class="input-container">
+        <div class="input-label light">
+          Enter your phone number to download the app
+        </div>
+        <form>
+          <input placeholder="+96887654321" v-model="phone" type="text" class="light" />
+          <button type="button" @click="submit()" class="light">Send</button>
+        </form>
+
+        <p class="input-footnote light">
+          By entering your phone number, you consent to the use of your
+          phone number to send you a link to the app, and to the use of your
+          phone number in accordance with the app's privacy policy. Standard
+          rates apply.
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -134,6 +129,15 @@ body {
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
   -moz-flex-direction: row;
+}
+@media (max-width: 767px){
+  .card {
+    width: 100%;
+    flex-direction: column !important;
+    -webkit-flex-direction: column !important;
+    -ms-flex-direction: column !important;
+    -moz-flex-direction: column !important;
+  }
 }
 #main-image {
   width: 360px;
