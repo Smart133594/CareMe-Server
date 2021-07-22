@@ -1394,7 +1394,6 @@ class ClientController extends Controller
         }
 
         $delivery_fee = 2;
-
         $systemSettings = SystemSetting::get();
         foreach ($systemSettings as $setting) {
             if($setting->key == "delivery_fee"){
