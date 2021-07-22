@@ -23,6 +23,7 @@ const TermsAndConditions = () => import('Views/Home/TermsAndConditions');
 const ExchangeAndReturns = () => import('Views/Home/ExchangeAndReturns');
 const CustomerServices = () => import('Views/Home/CustomerServices');
 const HowToRegisterOrders = () => import('Views/Home/HowToRegisterOrders');
+const Share = () => import('Views/Home/Share');
 const Page404 = () => import('Views/Page404');
 Vue.use(Router)
 
@@ -107,11 +108,17 @@ export default new Router({
                     path: '/carts/:type',
                     component: Carts,
                 },
+               
                 {
                     path: '/404',
                     component: Page404,
                 },
             ]
         },
+
+        {
+            path: '/share',
+            component: Share,
+        }
     ]
 })

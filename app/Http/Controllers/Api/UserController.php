@@ -231,4 +231,27 @@ class UserController extends Controller{
             'data'=>$user
         ]);
     }
+
+    public function sendAppUrl(Request $request)
+    {
+        $phone = $request->phone;
+        // try {
+        //     $basic  = new \Nexmo\Client\Credentials\Basic("4228b62e", "aNN21mqPwYTSFH4b");
+        //     $client = new \Nexmo\Client($basic);
+        //     $message = "Welcome to CareMe System. You can download our app from this url. https://";
+        //     $message = $client->message()->send([
+        //         'to' => $phone,
+        //         'from' => 'CareMe System',
+        //         'text' => $message
+        //     ]);
+        //     return $randomNumber;
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         'success'=>false,
+        //     ]);
+        // }
+        return response()->json([
+            'success'=>true,
+        ]);
+    }
 }

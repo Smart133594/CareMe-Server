@@ -20,6 +20,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
     Route::post('signup', 'UserController@signup');
     Route::post('signin', 'UserController@signin');
     Route::post('resetPassword', 'UserController@resetPassword');
+    Route::post('sendAppUrl', 'UserController@sendAppUrl');
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
