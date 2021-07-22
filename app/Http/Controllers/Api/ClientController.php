@@ -1373,6 +1373,13 @@ class ClientController extends Controller
                 array_push($items, $item);
                 $sub_amount += $price_sub;
                 $tax_amount += $tax;
+            }else{
+                $price_sub = $cart['price'];
+                $item['title'] = $cart['name'];
+                $item['price'] = number_format($price_sub, 2, '.', '');
+                $item['quantity'] = $quantity;
+                $item['price_sub'] =  number_format($price_sub, 2, '.', '');
+                array_push($items, $item);
             }
         }
 
@@ -1386,7 +1393,16 @@ class ClientController extends Controller
             }
         }
 
-        $total_amount = $sub_amount + $tax_amount - $coupon_amount;
+        $delivery_fee = 2;
+
+        $systemSettings = SystemSetting::get();
+        foreach ($systemSettings as $setting) {
+            if($setting->key == "delivery_fee"){
+                $delivery_fee = $setting->value;
+            }
+        }
+
+        $total_amount = $sub_amount + $tax_amount - $coupon_amount + $delivery_fee;
 
         $user = User::find($user_id);
 
