@@ -352,7 +352,7 @@ class ClientController extends Controller
             ->where('categories.active', true)
             ->where('vendors.active', true)
             ->select('vendors.*')
-            ->get();
+            ->get()->toArray();
 
         foreach ($vendors as $vendor) {
             $departments = Department::where('vendor_id', $vendor->id)->get();
