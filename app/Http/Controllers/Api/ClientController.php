@@ -1107,6 +1107,9 @@ class ClientController extends Controller
 
                 $item_meta['id'] = $id;
                 $item_meta['quantity'] = $quantity;
+                $item_meta['name'] = $product->en_name . "(+ tax - coupon)";
+                $item_meta['price'] = (float)number_format(($price + $tax - $coupon_amount) * 1000, 2, '.', '');
+
                 array_push($products, $item);
                 array_push($meta_products, $item_meta);
             }else{
@@ -1117,6 +1120,8 @@ class ClientController extends Controller
                 $item['quantity'] = $quantity;
 
                 $item_meta['id'] = $id;
+                $item_meta['name'] = $cart['name'];
+                $item_meta['price'] = $cart['price'];
                 $item_meta['quantity'] = $quantity;
                 array_push($products, $item);
                 array_push($meta_products, $item_meta);
@@ -1441,8 +1446,6 @@ class ClientController extends Controller
             File::makeDirectory($path, 0777, true, true);
         }
         $pdf->save($pdf_name);
-
-
 
         $ordering = DB::table('orderings')
             ->leftJoin('users', 'users.id', "orderings.user_id")
