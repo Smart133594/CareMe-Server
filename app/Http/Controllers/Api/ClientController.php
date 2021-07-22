@@ -1397,7 +1397,7 @@ class ClientController extends Controller
         $systemSettings = SystemSetting::get();
         foreach ($systemSettings as $setting) {
             if($setting->key == "delivery_fee"){
-                $delivery_fee = $setting->value;
+                $delivery_fee = number_format($setting->value, 2, '.', '');
             }
         }
 
