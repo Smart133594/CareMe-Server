@@ -1191,8 +1191,14 @@ class ClientController extends Controller
             $products = [];
             foreach ($carts as $cart) {
                 $product = Product::find($cart['id']);
-                $product->quantity = $cart['quantity'];
-                array_push($products, $product);
+                if($product){
+                    $product->quantity = $cart['quantity'];
+                    array_push($products, $product);
+                }else{
+                    $cart['en_name'] = $cart['name'];
+                    $cart['ar_name'] = $cart['name'];
+                    array_push($products, $cart);
+                }
             }
             $ordering->carts = $products;
         }
