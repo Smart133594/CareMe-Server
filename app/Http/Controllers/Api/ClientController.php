@@ -348,7 +348,7 @@ class ClientController extends Controller
             ->get();
 
         foreach ($categories as $category) {
-            $vendors = $category->vendors;
+            $vendors = Vendor::where('category_id', $category->id)->get();
             foreach ($vendors as $vendor) {
                 $vendor->departments;
             }
