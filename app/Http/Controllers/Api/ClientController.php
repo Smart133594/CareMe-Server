@@ -347,17 +347,23 @@ class ClientController extends Controller
             ->select('cities.*')
             ->get();
 
-        $vendors = DB::table('vendors')
+        foreach ($categories as $category) {
+
+            $vendors = DB::table('vendors')
             ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
             ->where('categories.active', true)
             ->where('vendors.active', true)
+            ->where('categories.id', $category->id)
             ->select('vendors.*')
             ->get();
 
-        foreach ($vendors as $vendor) {
-            $departments = Department::where('vendor_id', $vendor->id)->get();
-            $vendor->departments = $departments;
+            foreach ($vendors as $vendor) {
+                $departments = Department::where('vendor_id', $vendor->id)->get();
+                $vendor->departments = $departments;
+            }
+            $category->vendors = $vendors;
         }
+
         $result = ['cities' => $cities, 'categories' => $categories];
         return response()->json([
             'success' => true,
