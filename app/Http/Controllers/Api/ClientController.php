@@ -355,9 +355,9 @@ class ClientController extends Controller
             ->get();
 
         foreach ($vendors as $vendor) {
+            $departments = Department::where('vendor_id', $vendor->id)->get();
             $vendor->departments;
         }
-
         $result = ['cities' => $cities, 'categories' => $categories];
         return response()->json([
             'success' => true,
