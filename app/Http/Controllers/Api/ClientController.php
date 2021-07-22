@@ -60,7 +60,8 @@ class ClientController extends Controller
 
     public function getSearchItems(Request $request)
     {
-        $categories = Category::where('active', true)->orderBy('id')->get();
+        $temps = Category::where('active', true)->orderBy('id')->get();
+
         $vendors = DB::table('vendors')
             ->leftJoin('categories', 'categories.id', '=', 'vendors.category_id')
             ->leftJoin('vendor_galleries', 'vendor_galleries.vendor_id', '=', 'vendors.id')
@@ -71,6 +72,16 @@ class ClientController extends Controller
             ->orderBy('rating', 'desc')
             ->orderBy('id')
             ->get();
+
+        $categories = [];
+
+        foreach ($vendors as $vendor) {
+            foreach ($temps as $temp) {
+                if($temp->id == $vendor->category_id){
+                    $categories.push($temp);
+                }
+            }
+        }    
 
         $departments = DB::table('departments')
             ->leftJoin('vendors', 'vendors.id', '=', 'departments.vendor_id')
