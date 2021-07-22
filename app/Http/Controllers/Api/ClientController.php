@@ -284,14 +284,14 @@ class ClientController extends Controller
         $latitudeFrom =  $request->latitude;
         $longitudeFrom = $request->longitude; 
         $vendors = DB::table('vendors')->where('vendors.active', true)->get();
-        $result = [];
-        foreach($vendors as $vendor){
-            $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng);
-            if($distance < 8000){
-                $vendor->distance = $distance;
-                array_push($result, $vendor);
-            }
-        }
+        $result = $vendors;
+        // foreach($vendors as $vendor){
+        //     $distance = $this->haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $vendor->lat, $vendor->lng);
+        //     if($distance < 8000){
+        //         $vendor->distance = $distance;
+        //         array_push($result, $vendor);
+        //     }
+        // }
         return response()->json([
             'success' => true,
             'data' => $result
