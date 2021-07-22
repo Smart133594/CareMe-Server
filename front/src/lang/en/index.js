@@ -811,4 +811,5 @@ export default {
     
     systemSetting:"System Setting",
     deliveryFee:"DeliveryFee",
+    shareOn:"Share On"
 }

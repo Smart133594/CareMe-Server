@@ -86,6 +86,25 @@
               {{ product.phone }}
             </h6>
           </div>
+          <div class="shareOn mt-4 mb-3">
+            <ul class="footer-widget__contact p-0" style="display:flex; flex-direction:row; align-items:center; justify-content:between">
+              <h4 class="my-4 mr-5">{{$t("message.shareOn")}}</h4>
+              <li style="margin-right: 0.55rem; ">
+                <a  target="_blank" :href="`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`" style="color:black">
+                  <span class="icon-style" style="font-size: 26px">
+                    <i class="ti-facebook"></i>
+                  </span>
+                </a>
+              </li>
+              <li style="margin-right: 0.55rem;">
+                <a  target="_blank" :href="`https://twitter.com/home?status=${fullUrl}`" style="color:black">
+                  <span class="icon-style" style="font-size: 26px">
+                    <i class="ti-twitter-alt"></i>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
           <h5 class="font-weight--bold mt-2 text-purple mt-5">
             {{ $t("message.description") }}
           </h5>
@@ -141,6 +160,8 @@ export default {
       product_id: -1,
       product: null,
       quantity: 1,
+      fullUrl:"",
+
     };
   },
   methods: {
@@ -223,6 +244,7 @@ export default {
   beforeMount() {
     let product_id = this.$route.params.product_id;
     this.product_id = product_id;
+    this.fullUrl = this.baseUrl+this.$route.path
     this.getProduct();
   },
 };

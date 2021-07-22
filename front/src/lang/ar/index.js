@@ -806,5 +806,7 @@ export default {
     accountAnswer2_5:"Fill in the required fields",
     accountAnswer2_6:"Press the Save button.",
     systemSetting:"System Setting",
-    deliveryFee:"DeliveryFee"
+    deliveryFee:"DeliveryFee",
+    shareOn:"مشاركه فى"
+
 }
