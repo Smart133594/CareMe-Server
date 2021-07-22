@@ -12,11 +12,14 @@
           />
         </v-col>
         <v-col xl="6" lg="6" md="6" sm="12" cols="12" class="shop-wrapper px-5">
-          <h5 class="mt-2 text-purple" style="font-size:26px; font-weight:700">
+          <h5
+            class="mt-2 text-purple"
+            style="font-size: 26px; font-weight: 700"
+          >
             {{ product[selectedLocale.locale == "en" ? "en_name" : "ar_name"] }}
           </h5>
           <h6 class="font-weight--bold mt-2 text-purple">
-            {{ $t('message.currency') }}
+            {{ $t("message.currency") }}
             {{ product.price }}
           </h6>
           <v-rating
@@ -27,7 +30,15 @@
             color="orange"
           ></v-rating>
           <div class="cart-wrapper">
-            <div class="control-box d-flex flex-row align-items-center product-item">
+            <div
+              class="
+                control-box
+                d-flex
+                flex-row
+                align-items-center
+                product-item
+              "
+            >
               <v-btn
                 text
                 class="control-button border"
@@ -65,8 +76,11 @@
               itemExistOnCart ? $t("message.viewCart") : $t("message.add2Cart")
             }}</v-btn>
           </div>
-
-          <div class="d-custom-flex align-items-center mt-5">
+          <a
+            target="_blink"
+            :href="`https://www.google.com/maps/dir/?api=1&origin=${getAddress}&destination=${location.address}&key=${google_key}`"
+            class="d-custom-flex align-items-center mt-5"
+          >
             <span class="icon-style" style="font-size: 20px">
               <i class="ti-location-pin"></i>
             </span>
@@ -77,7 +91,7 @@
                 ]
               }}
             </h6>
-          </div>
+          </a>
           <div class="d-custom-flex align-items-center mt-2">
             <span class="icon-style" style="font-size: 20px">
               <i class="zmdi zmdi-phone"></i>
@@ -87,17 +101,33 @@
             </h6>
           </div>
           <div class="shareOn mt-4 mb-3">
-            <ul class="footer-widget__contact p-0" style="display:flex; flex-direction:row; align-items:center; justify-content:between">
-              <h4 class="my-4 mr-5">{{$t("message.shareOn")}}</h4>
-              <li style="margin-right: 0.55rem; ">
-                <a  target="_blank" :href="`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`" style="color:black">
+            <ul
+              class="footer-widget__contact p-0"
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: between;
+              "
+            >
+              <h4 class="my-4 mr-5">{{ $t("message.shareOn") }}</h4>
+              <li style="margin-right: 0.55rem">
+                <a
+                  target="_blank"
+                  :href="`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`"
+                  style="color: black"
+                >
                   <span class="icon-style" style="font-size: 26px">
                     <i class="ti-facebook"></i>
                   </span>
                 </a>
               </li>
-              <li style="margin-right: 0.55rem;">
-                <a  target="_blank" :href="`https://twitter.com/home?status=${fullUrl}`" style="color:black">
+              <li style="margin-right: 0.55rem">
+                <a
+                  target="_blank"
+                  :href="`https://twitter.com/home?status=${fullUrl}`"
+                  style="color: black"
+                >
                   <span class="icon-style" style="font-size: 26px">
                     <i class="ti-twitter-alt"></i>
                   </span>
@@ -108,13 +138,15 @@
           <h5 class="font-weight--bold mt-2 text-purple mt-5">
             {{ $t("message.description") }}
           </h5>
-          <div class="font-weight--bold mt-2 text-purple">{{
-            product[
-              selectedLocale.locale == "en"
-                ? "en_description"
-                : "ar_description"
-            ]
-          }}</div>
+          <div class="font-weight--bold mt-2 text-purple">
+            {{
+              product[
+                selectedLocale.locale == "en"
+                  ? "en_description"
+                  : "ar_description"
+              ]
+            }}
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -152,6 +184,11 @@ export default {
       }
       return false;
     },
+    getAddress() {
+      return this.product[
+        this.selectedLocale.locale == "en" ? "en_address" : "ar_address"
+      ];
+    },
   },
   data: function () {
     return {
@@ -160,8 +197,9 @@ export default {
       product_id: -1,
       product: null,
       quantity: 1,
-      fullUrl:"",
-
+      fullUrl: "",
+      location: {},
+      google_key: appConfig.googleApiKey,
     };
   },
   methods: {
@@ -231,20 +269,40 @@ export default {
     },
 
     increaseQuantity() {
-        this.quantity ++;
+      this.quantity++;
     },
 
     decreaseQuantity() {
-        if(this.quantity != 1){
-            this.quantity --
-        }
+      if (this.quantity != 1) {
+        this.quantity--;
+      }
     },
   },
   mounted() {},
   beforeMount() {
+    try {
+      this.$getLocation(
+        {
+          enableHighAccuracy: false, //defaults to false
+          timeout: Infinity, //defaults to Infinity
+          maximumAge: 0, //defaults to 0
+        },
+        false
+      ).then((coordinates) => {
+        this.$geocoder.send(coordinates, (response) => {
+          this.location = {
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+            address: response.results[0].formatted_address,
+          };
+        });
+
+        console.log(coordinates);
+      });
+    } catch (error) {}
     let product_id = this.$route.params.product_id;
     this.product_id = product_id;
-    this.fullUrl = this.baseUrl+this.$route.path
+    this.fullUrl = this.baseUrl + this.$route.path;
     this.getProduct();
   },
 };

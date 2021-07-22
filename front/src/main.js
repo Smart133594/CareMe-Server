@@ -24,7 +24,7 @@ import BootstrapVue from 'bootstrap-vue'
 import GlobalComponents from './globalComponents'
 // router
 import router from './router'
-
+import Geocoder from "@pderas/vue2-geocoder";
 // store
 import { store } from './store/store';
 
@@ -106,6 +106,12 @@ Vue.use(Croppa);
 Vue.use(BootstrapVue)
 Vue.use(VueGeolocation);
 Vue.use(VueAwesomeSwiper)
+Vue.use(Geocoder, {
+    defaultCountryCode: null,
+    defaultLanguage:    null, 
+    defaultMode:        'lat-lng',
+    googleMapsApiKey:    appConfig.googleApiKey,
+});
 
 Vue.use(VueGoogleMaps, {
     load: {

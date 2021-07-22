@@ -71,7 +71,11 @@
               >{{ $t("message.booking") }}</v-btn
             >
           </div>
-          <div class="d-custom-flex align-items-center mt-5">
+          <a
+            target="_blink"
+            :href="`https://www.google.com/maps/dir/?api=1&origin=${getAddress}&destination=${location.address}&key=${google_key}`"
+            class="d-custom-flex align-items-center mt-5"
+          >
             <span class="icon-style" style="font-size: 20px">
               <i class="ti-location-pin"></i>
             </span>
@@ -82,7 +86,7 @@
                 ]
               }}
             </h6>
-          </div>
+          </a>
           <div class="d-custom-flex align-items-center mt-2">
             <span class="icon-style" style="font-size: 20px">
               <i class="zmdi zmdi-phone"></i>
@@ -92,17 +96,33 @@
             </h6>
           </div>
           <div class="shareOn mt-4 mb-3">
-            <ul class="footer-widget__contact p-0" style="display:flex; flex-direction:row; align-items:center; justify-content:between">
-              <h4 class="my-4 mr-5">{{$t("message.shareOn")}}</h4>
-              <li style="margin-right: 0.55rem; ">
-                <a  target="_blank" :href="`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`" style="color:black">
+            <ul
+              class="footer-widget__contact p-0"
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: between;
+              "
+            >
+              <h4 class="my-4 mr-5">{{ $t("message.shareOn") }}</h4>
+              <li style="margin-right: 0.55rem">
+                <a
+                  target="_blank"
+                  :href="`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`"
+                  style="color: black"
+                >
                   <span class="icon-style" style="font-size: 26px">
                     <i class="ti-facebook"></i>
                   </span>
                 </a>
               </li>
-              <li style="margin-right: 0.55rem;">
-                <a  target="_blank" :href="`https://twitter.com/home?status=${fullUrl}`" style="color:black">
+              <li style="margin-right: 0.55rem">
+                <a
+                  target="_blank"
+                  :href="`https://twitter.com/home?status=${fullUrl}`"
+                  style="color: black"
+                >
                   <span class="icon-style" style="font-size: 26px">
                     <i class="ti-twitter-alt"></i>
                   </span>
@@ -256,7 +276,13 @@
               <div class="d-flex flex-direction-column px-5">
                 <div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.price") }}</h6>
                     <h6>
@@ -265,20 +291,38 @@
                     </h6>
                   </div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.times") }}</h6>
                     <h6>{{ selected_times.length }}</h6>
                   </div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.quantity") }}</h6>
                     <h6>{{ quantity }}</h6>
                   </div>
                   <v-divider />
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.subTotal") }}</h6>
                     <h6>
@@ -287,7 +331,13 @@
                     </h6>
                   </div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.tax") }}</h6>
                     <h6>
@@ -296,7 +346,13 @@
                     </h6>
                   </div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>
                       {{ $t("message.coupons") }}{{ `(${coupon_percent} %)` }}
@@ -304,7 +360,13 @@
                     <h6>- {{ $t("message.currency") }} {{ getCoupons }}</h6>
                   </div>
                   <div
-                    class="d-flex flex-direction-row align-items-center justify-content-between m-2"
+                    class="
+                      d-flex
+                      flex-direction-row
+                      align-items-center
+                      justify-content-between
+                      m-2
+                    "
                   >
                     <h6>{{ $t("message.total") }}</h6>
                     <h6>
@@ -534,6 +596,12 @@ export default {
           parseFloat(this.getCoupons)
       ).toFixed(2);
     },
+
+    getAddress() {
+      return this.service[
+        this.selectedLocale.locale == "en" ? "en_address" : "ar_address"
+      ];
+    },
   },
   data: function () {
     return {
@@ -557,7 +625,7 @@ export default {
       image1: null,
       coupon: "",
       coupon_percent: 0,
-      fullUrl:"",
+      fullUrl: "",
       formData: {
         cardName: "",
         cardNumber: "",
@@ -565,6 +633,8 @@ export default {
         cardYear: "",
         cardCvv: "",
       },
+      location: {},
+      google_key: appConfig.googleApiKey,
     };
   },
   methods: {
@@ -587,10 +657,10 @@ export default {
         });
     },
 
-    getServiceSession(){
-      let model={
-        cancel_url:`${this.baseUrl}service/${this.service_id}/2`,
-        success_url:`${this.baseUrl}`,
+    getServiceSession() {
+      let model = {
+        cancel_url: `${this.baseUrl}service/${this.service_id}/2`,
+        success_url: `${this.baseUrl}`,
         service_id: this.service_id,
         worker_id: this.worker_id,
         date: this.selected_date,
@@ -599,7 +669,7 @@ export default {
         coupon: this.coupon_percent > 0 ? this.coupon : "",
         type: "service",
         lang: this.selectedLocale.locale == "ar" ? "ar" : "en",
-      }
+      };
 
       this.loading = true;
       api
@@ -613,18 +683,18 @@ export default {
           if (response.data.success) {
             let session_id = response.data.data;
             let url = "";
-            if(appConfig.payment_test){
-              url = "https://uatcheckout.thawani.om/pay/"
-            }else{
-              url = "https://checkout.thawani.om/pay/"
+            if (appConfig.payment_test) {
+              url = "https://uatcheckout.thawani.om/pay/";
+            } else {
+              url = "https://checkout.thawani.om/pay/";
             }
-            window.location.href=`${url}${session_id}?key=${appConfig.payment_public_key}`
-          }else{
-              Vue.notify({
-                group: "center",
-                type: "error",
-                text: this.$t("message.sessionError"),
-              });
+            window.location.href = `${url}${session_id}?key=${appConfig.payment_public_key}`;
+          } else {
+            Vue.notify({
+              group: "center",
+              type: "error",
+              text: this.$t("message.sessionError"),
+            });
           }
         })
         .finally(() => {
@@ -866,7 +936,7 @@ export default {
         });
     },
 
-    gotoPay(){
+    gotoPay() {
       if (this.getUser.role != "client") {
         Vue.notify({
           group: "center",
@@ -941,7 +1011,7 @@ export default {
   },
   mounted() {
     let type = this.$route.params.type;
-    if(type == "3"){
+    if (type == "3") {
       Vue.notify({
         group: "center",
         type: "success",
@@ -950,9 +1020,29 @@ export default {
     }
   },
   beforeMount() {
+    try {
+      this.$getLocation(
+        {
+          enableHighAccuracy: false, //defaults to false
+          timeout: Infinity, //defaults to Infinity
+          maximumAge: 0, //defaults to 0
+        },
+        false
+      ).then((coordinates) => {
+        this.$geocoder.send(coordinates, (response) => {
+          this.location = {
+            lat: coordinates.lat,
+            lng: coordinates.lng,
+            address: response.results[0].formatted_address,
+          };
+        });
+
+        console.log(coordinates);
+      });
+    } catch (error) {}
     let service_id = this.$route.params.service_id;
     this.service_id = service_id;
-    this.fullUrl = this.baseUrl+this.$route.path
+    this.fullUrl = this.baseUrl + this.$route.path;
     this.getService();
   },
   watch: {
