@@ -352,11 +352,11 @@ class ClientController extends Controller
             ->where('categories.active', true)
             ->where('vendors.active', true)
             ->select('vendors.*')
-            ->get()->toArray();
+            ->get();
 
         foreach ($vendors as $vendor) {
             $departments = Department::where('vendor_id', $vendor->id)->get();
-            $vendor['departments'] = $departments;
+            $vendor->departments = $departments;
         }
         $result = ['cities' => $cities, 'categories' => $categories];
         return response()->json([
