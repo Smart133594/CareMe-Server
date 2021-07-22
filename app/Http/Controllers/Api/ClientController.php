@@ -74,11 +74,19 @@ class ClientController extends Controller
             ->get();
 
         $categories = [];
+        $cities = [];
+        $city_temps = City::orderBy('id')->get();
 
         foreach ($vendors as $vendor) {
             foreach ($temps as $temp) {
                 if($temp->id == $vendor->category_id){
-                    $categories.push($temp);
+                    array_push($categories, $temp);
+                }
+            }
+
+            foreach ($city_temps as $city_temp) {
+                if($city_temp->id == $vendor->city_id){
+                    array_push($cities, $city_temp);
                 }
             }
         }    
@@ -118,10 +126,7 @@ class ClientController extends Controller
             ->orderBy('rating', 'desc')
             ->orderBy('id')
             ->get();
-
-        $cities = City::orderBy('id')->get();
-        
-            $result = [
+        $result = [
             'categories' => $categories,
             'vendors' => $vendors,
             'servicies' => $servicies,
@@ -327,8 +332,21 @@ class ClientController extends Controller
 
     public function getFilterData(Request $request)
     {
-        $categories = Category::where('active', true)->orderBy('id')->get();
-        $cities = City::orderBy('id')->get();
+        $categories = DB::table('categories')
+            ->leftJoin('vendors', 'categories.id', '=', 'vendors.category_id')
+            ->where('vendors.active', true)
+            ->where('categories.active', true)
+            ->whereNotNull('vendors.id')
+            ->select('categories.*')
+            ->get();
+
+        $cities = DB::table('cities')
+            ->leftJoin('vendors', 'cities.id', '=', 'vendors.city_id')
+            ->where('vendors.active', true)
+            ->whereNotNull('vendors.id')
+            ->select('cities.*')
+            ->get();
+
         foreach ($categories as $category) {
             $vendors = $category->vendors;
             foreach ($vendors as $vendor) {
