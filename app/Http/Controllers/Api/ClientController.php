@@ -1194,10 +1194,6 @@ class ClientController extends Controller
                 if($product){
                     $product->quantity = $cart['quantity'];
                     array_push($products, $product);
-                }else{
-                    $cart['en_name'] = $cart['name'];
-                    $cart['ar_name'] = $cart['name'];
-                    array_push($products, $cart);
                 }
             }
             $ordering->carts = $products;
@@ -1384,13 +1380,6 @@ class ClientController extends Controller
                 array_push($items, $item);
                 $sub_amount += $price_sub;
                 $tax_amount += $tax;
-            }else{
-                $price_sub = $cart['price'];
-                $item['title'] = $cart['name'];
-                $item['price'] = number_format($price_sub, 2, '.', '');
-                $item['quantity'] = $quantity;
-                $item['price_sub'] =  number_format($price_sub, 2, '.', '');
-                array_push($items, $item);
             }
         }
 
@@ -1441,6 +1430,7 @@ class ClientController extends Controller
         $data['sub_total'] = number_format($sub_amount, 2, '.', '');
         $data['tax'] = number_format($tax_amount, 2, '.', '');
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
+        $data['delivery_fee'] = number_format($delivery_fee, 2, '.', '');
         $data['amount_paid'] = '0.00';
         $data['items'] = $items;
         $data['id'] = $ordering->id;

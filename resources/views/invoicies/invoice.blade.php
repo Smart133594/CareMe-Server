@@ -190,6 +190,14 @@
                 </tr>
                 <tr>
                     <th style="text-align: left; font-size: 15px; padding: 5px 10px;">
+                        <span contenteditable>@lang('invoice.delivery_fee')</span>
+                    </th>
+                    <td style="text-align: right; font-size: 15px; padding: 5px 10px;">
+                        <span>- @lang('invoice.currency') {{$delivery_fee}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="text-align: left; font-size: 15px; padding: 5px 10px;">
                         <span contenteditable>@lang('invoice.total')</span>
                     </th>
                     <td style="text-align: right; font-size: 15px; padding: 5px 10px;">

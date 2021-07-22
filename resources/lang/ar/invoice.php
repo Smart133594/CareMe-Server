@@ -20,4 +20,5 @@ return [
     "tax"=>"ضريبة",
     "coupon"=>"الكوبونات",
     "vendor_name"=>"Vendor Name",
+    "delivery_fee"=>"Delivery Fee",
 ];

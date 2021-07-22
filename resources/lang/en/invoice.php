@@ -20,4 +20,5 @@ return [
     "tax"=>"Tax",
     "coupon"=>"Coupon",
     "vendor_name"=>"Vendor Name",
+    "delivery_fee"=>"Delivery Fee",
 ];
