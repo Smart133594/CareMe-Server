@@ -254,6 +254,7 @@ export default {
         },
         {
           text: this.$t("message.settings"),
+          value:"setting"
         },
       ],
 
@@ -392,7 +393,7 @@ export default {
         id : item.id
       }
       api
-        .get("deliveredOrder", JSON.stringify(model), {
+        .post("deliveredOrder", JSON.stringify(model), {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.getUser.token}`,
