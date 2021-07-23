@@ -34,6 +34,7 @@ use App\Models\ExchangeAndReturn;
 use App\Models\CustomerService;
 use App\Models\HowRegisterOrder;
 use App\Models\SystemSetting;
+use App\Models\SocialLink;
 
 use App\Traits\CommonHelper;
 use File;
@@ -50,6 +51,15 @@ class AdminController extends Controller{
             SystemSetting::where('key', $setting['key'])->delete();
             SystemSetting::create($setting);
         }
+        return response()->json([
+            'success'=>true,
+        ]);
+    }
+
+    public function saveSocialLinks(Request $request){
+        $all = $request->all();
+        SocialLink::delete();
+        SocialLink::create($all);
         return response()->json([
             'success'=>true,
         ]);

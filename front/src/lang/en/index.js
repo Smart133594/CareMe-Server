@@ -811,5 +811,11 @@ export default {
     
     systemSetting:"System Setting",
     deliveryFee:"DeliveryFee",
-    shareOn:"Share On"
+    shareOn:"Share On",
+    socialLinks:"Social Links",
+    instagram:"Instagram",
+    facebook:"Facebook",
+    twitter:"Twitter",
+    pinterest:"Pinterest",
+    
 }

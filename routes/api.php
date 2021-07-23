@@ -43,6 +43,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors']],function (){
     Route::get('getCustomerServices', 'ClientController@getCustomerServices');
     Route::get('getHowRegisterOrders', 'ClientController@getHowRegisterOrders');
     Route::get('getSystemSettings', 'ClientController@getSystemSettings');
+    Route::get('getSocialLinks', 'ClientController@getSocialLinks');
 });
 
 Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], function () {
@@ -135,7 +136,7 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::post('saveExchangeAndReturns', 'AdminController@saveExchangeAndReturns');
     Route::post('saveCustomerServices', 'AdminController@saveCustomerServices');
     Route::post('saveHowRegisterOrders', 'AdminController@saveHowRegisterOrders');
-    
+    Route::post('saveSocialLinks', 'AdminController@saveSocialLinks');
     Route::post('saveSystemSettings', 'AdminController@saveSystemSettings');
 });
 

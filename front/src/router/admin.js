@@ -20,6 +20,7 @@ const TermsAndConditions = () => import('Views/Settings/TermsAndConditions');
 const ExchangeAndReturns = () => import('Views/Settings/ExchangeAndReturns');
 const CustomerServices = () => import('Views/Settings/CustomerServices');
 const HowToRegisterOrders = () => import('Views/Settings/HowToRegisterOrders');
+const SocialLinks = () => import('Views/Settings/SocialLinks');
 const SystemSettings = () => import('Views/Settings/SystemSettings');
 
 export default {
@@ -352,6 +353,25 @@ export default {
                 ]
             }
         },
+        {
+            path: '/admin/settings/social-links',
+            component: SocialLinks,
+            meta: {
+                requiresRole: true,
+                role: 'admin',
+                title: 'message.socialLinks',
+                breadcrumb: [
+                    {
+                        breadcrumbInactive: 'Timelines /'
+                    },
+                    {
+                        breadcrumbActive: "Icon Dots"
+                    }
+                ]
+            }
+        },
+
+        
         {
             path: '/admin/settings/system-setting',
             component: SystemSettings,

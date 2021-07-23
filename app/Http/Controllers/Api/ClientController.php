@@ -32,6 +32,7 @@ use App\Models\ExchangeAndReturn;
 use App\Models\CustomerService;
 use App\Models\HowRegisterOrder;
 use App\Models\SystemSetting;
+use App\Models\SocialLink;
 
 use PDF;
 use File;
@@ -54,6 +55,14 @@ class ClientController extends Controller
         $data = SystemSetting::get();
         return response()->json([
             'success' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getSocialLinks(Request $request){
+        $data = SocialLink::first();
+        return response()->json([
+            'success'=>true,
             'data' => $data
         ]);
     }

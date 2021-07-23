@@ -4,25 +4,35 @@
       <div class="container">
         <div class="row footer-widget-wrapper" style="align-items: top">
           <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">{{$t('message.companyInformation')}}</h6>
+            <h6 class="footer-widget__title mb-20">
+              {{ $t("message.companyInformation") }}
+            </h6>
             <ul class="footer-widget__list p-0">
               <li>
-                <router-link to="/aboutus">{{$t('message.aboutUs')}}</router-link>
+                <router-link to="/aboutus">{{
+                  $t("message.aboutUs")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/policy">{{$t('message.privacyPolicy')}}</router-link>
+                <router-link to="/policy">{{
+                  $t("message.privacyPolicy")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/delivery-terms">{{$t('message.deliveryTerms')}}</router-link>
+                <router-link to="/delivery-terms">{{
+                  $t("message.deliveryTerms")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/terms-and-conditions">{{$t('message.termsAndConditions')}}</router-link>
+                <router-link to="/terms-and-conditions">{{
+                  $t("message.termsAndConditions")
+                }}</router-link>
               </li>
             </ul>
           </v-col>
           <v-col sm="12">
             <h6 class="footer-widget__title mb-20">
-              {{$t('message.appOnMobile')}}
+              {{ $t("message.appOnMobile") }}
             </h6>
             <ul class="footer-widget__logo p-0">
               <li>
@@ -48,60 +58,76 @@
             </ul>
           </v-col>
           <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">{{$t('message.support')}}</h6>
+            <h6 class="footer-widget__title mb-20">
+              {{ $t("message.support") }}
+            </h6>
             <ul class="footer-widget__list p-0">
               <li>
-                <router-link to="/exchange-and-returns">{{$t('message.exchangeAndReturns')}}</router-link>
+                <router-link to="/exchange-and-returns">{{
+                  $t("message.exchangeAndReturns")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/customer-service">{{$t('message.customerService')}}</router-link>
+                <router-link to="/customer-service">{{
+                  $t("message.customerService")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/how-register-order">{{$t('message.howToOrder')}}</router-link>
+                <router-link to="/how-register-order">{{
+                  $t("message.howToOrder")
+                }}</router-link>
               </li>
               <li>
-                <router-link to="/faq">{{$t("message.faq") }}</router-link>
+                <router-link to="/faq">{{ $t("message.faq") }}</router-link>
               </li>
             </ul>
           </v-col>
           <v-col sm="12">
-            <h6 class="footer-widget__title mb-20">{{$t("message.contactUs")}}</h6>
+            <h6 class="footer-widget__title mb-20">
+              {{ $t("message.contactUs") }}
+            </h6>
             <ul class="footer-widget__list p-0">
               <li>
-                <a href="tel:+96595940026">{{$t("message.call")}}: +965 95940026</a>
+                <a href="tel:+96595940026"
+                  >{{ $t("message.call") }}: +965 95940026</a
+                >
               </li>
               <li>
-                <a href="mailto:support@careme.om">{{$t("message.email")}}: support@careme.om</a>
+                <a href="mailto:support@careme.om"
+                  >{{ $t("message.email") }}: support@careme.om</a
+                >
               </li>
               <ul class="footer-widget__contact p-0">
-                <h6 class="footer-widget__title my-4">{{$t("message.followUs")}}</h6>
+                <h6 class="footer-widget__title my-4">
+                  {{ $t("message.followUs") }}
+                </h6>
                 <li style="margin-right: 0.55rem">
-                  <router-link to="/">
+                  <a target="_blink" :href="social.instagram">
                     <span class="icon-style" style="font-size: 26px">
                       <i class="ti-instagram"></i>
                     </span>
-                  </router-link>
+                  </a>
                 </li>
                 <li style="margin-right: 0.55rem">
-                  <router-link to="/">
+                  <a target="_blink" :href="social.facebook">
                     <span class="icon-style" style="font-size: 26px">
                       <i class="ti-facebook"></i>
                     </span>
-                  </router-link>
+                  </a>
                 </li>
                 <li style="margin-right: 0.55rem">
-                  <router-link to="/">
+                  <a target="_blink" :href="social.twitter">
                     <span class="icon-style" style="font-size: 26px">
                       <i class="ti-twitter-alt"></i>
                     </span>
-                  </router-link>
+                  </a>
                 </li>
                 <li>
-                  <router-link to="/">
+                  <a target="_blink" :href="social.pinterest">
                     <span class="icon-style" style="font-size: 26px">
                       <i class="ti-pinterest"></i>
                     </span>
-                  </router-link>
+                  </a>
                 </li>
               </ul>
             </ul>
@@ -114,7 +140,8 @@
         <div class="align-items-center foot-bottom">
           <app-logo></app-logo>
           <span class="copyright-text">
-            &copy; 2021 <b>{{$t("message.careMe")}} </b> {{$t("message.allRightReserved")}}
+            &copy; 2021 <b>{{ $t("message.careMe") }} </b>
+            {{ $t("message.allRightReserved") }}
           </span>
           <img
             src="/static/img/payments.png"
@@ -154,23 +181,30 @@
 import AppLogo from "Components/AppLogo/AppLogo";
 import $ from "jquery";
 import { mapGetters } from "vuex";
-
+import api from "Api";
+import Vue from "vue";
 export default {
   name: "FooterMain",
   props: ["FooterStyle"],
   computed: {
     ...mapGetters(["cart"]),
-    existCarts(){
-        return this.cart.length
-    }
+    existCarts() {
+      return this.cart.length;
+    },
   },
   components: {
     AppLogo,
   },
-  data(){
-      return {
-          scrolled: false,
-      }
+  data() {
+    return {
+      scrolled: false,
+      social: {
+        instagram: "http://asdf",
+        facebook: "",
+        twitter: "",
+        pinterest: "",
+      },
+    };
   },
   methods: {
     goToWhatsapp() {
@@ -186,9 +220,35 @@ export default {
       this.scrolled = currentScroll > 100;
     },
 
-    go2Carts(){
-        this.$router.push('/carts/-1')
-    }
+    go2Carts() {
+      this.$router.push("/carts/-1");
+    },
+
+    getSocialLinks() {
+      this.loading = true;
+      api
+        .get("getSocialLinks", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            if (response.data.data != null) {
+              this.social = response.data.data;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+  },
+  beforeMount() {
+    this.getSocialLinks();
   },
   created() {
     document.addEventListener("scroll", this.handleScroll, true);
@@ -222,6 +282,5 @@ export default {
   bottom: 15px;
   right: 30px;
 }
-
 </style>
 

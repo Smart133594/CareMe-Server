@@ -807,6 +807,10 @@ export default {
     accountAnswer2_6:"Press the Save button.",
     systemSetting:"System Setting",
     deliveryFee:"DeliveryFee",
-    shareOn:"مشاركه فى"
-
+    shareOn:"مشاركه فى",
+    socialLinks:"Social Links",
+    instagram:"Instagram",
+    facebook:"Facebook",
+    twitter:"Twitter",
+    pinterest:"Pinterest",
 }

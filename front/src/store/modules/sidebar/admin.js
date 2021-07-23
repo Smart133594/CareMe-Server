@@ -1,15 +1,6 @@
 // Sidebar Routers
 export const admins = {
     'message.general': [
-        // {
-        //     action: 'zmdi-view-dashboard',
-        //     title: 'message.dashboard',
-        //     active: true,
-        //     path: '/dashboard',
-        //     items: null,
-        //     label: 'Old'
-        // },
-
         {
             action: 'ti-bookmark-alt',
             title: 'message.bookings',
@@ -18,7 +9,6 @@ export const admins = {
             items: null,
             label: 'Old'
         },
-
         {
             action: 'ti-write',
             title: 'message.orders',
@@ -107,84 +97,67 @@ export const admins = {
 
     'message.settings': [
         {
-            action: 'ti-layout-slider',
-            title: 'message.banners',
-            active: false,
-            label: 'Old',
-            path: '/settings/banners',
-            items: null,
-        },
-        {
-            action: 'zmdi-accounts-alt',
-            title: 'message.aboutUs',
-            active: false,
-            label: 'Old',
-            path: '/settings/aboutus',
-            items: null,
-        },
-        {
-            action: 'zmdi-check-circle',
-            title: 'message.privacyPolicy',
-            active: false,
-            label: 'Old',
-            path: '/settings/policy',
-            items: null,
-        },
-        {
-            action: 'zmdi-car-taxi',
-            title: 'message.deliveryTerms',
-            active: false,
-            label: 'Old',
-            path: '/settings/delivery-terms',
-            items: null,
-        },
-        {
-            action: 'zmdi-flash',
-            title: 'message.termsAndConditions',
-            active: false,
-            label: 'Old',
-            path: '/settings/terms-and-conditions',
-            items: null,
-        },
-        {
-            action: 'zmdi-arrow-merge',
-            title: 'message.exchangeAndReturns',
-            active: false,
-            label: 'Old',
-            path: '/settings/exchange-and-returns',
-            items: null,
-        },
-        {
-            action: 'zmdi-nature-people',
-            title: 'message.customerService',
-            active: false,
-            label: 'Old',
-            path: '/settings/customer-service',
-            items: null,
-        },
-        {
-            action: 'zmdi-library',
-            title: 'message.howToOrder',
-            active: false,
-            label: 'Old',
-            path: '/settings/how-register-order',
-            items: null,
-        },
-        {
-            action: 'zmdi-portable-wifi-changes',
-            title: 'message.systemSetting',
-            active: false,
-            label: 'Old',
-            path: '/settings/system-setting',
-            items: null,
-        },
-        {
-            action: 'ti-user',
-            title: 'message.profile',
-            active: false,
-            label: 'Old',
-            path: '/settings/profile',
-            items: null,
-        },
+			action: 'zmdi-portable-wifi-changes',
+			title: 'message.systemSetting',
+			active: false,
+			label: 'Old',
+			items: [
+				{
+                    title: 'message.banners',
+                    label: 'Old',
+                    path: '/settings/banners',
+                },
+                {
+                    title: 'message.aboutUs',
+                    label: 'Old',
+                    path: '/settings/aboutus',
+                },
+                {
+                    title: 'message.privacyPolicy',
+                    label: 'Old',
+                    path: '/settings/policy',
+                },
+                {
+                    title: 'message.deliveryTerms',
+                    label: 'Old',
+                    path: '/settings/delivery-terms',
+                },
+                {
+                    title: 'message.termsAndConditions',
+                    label: 'Old',
+                    path: '/settings/terms-and-conditions',
+                },
+                {
+                    title: 'message.exchangeAndReturns',
+                    label: 'Old',
+                    path: '/settings/exchange-and-returns',
+                },
+                {
+                    title: 'message.customerService',
+                    label: 'Old',
+                    path: '/settings/customer-service',
+                },
+                {
+                    title: 'message.howToOrder',
+                    label: 'Old',
+                    path: '/settings/how-register-order',
+                },
+                {
+                    title: 'message.socialLinks',
+                    label: 'Old',
+                    path: '/settings/social-links',
+                },
+                {
+                    title: 'message.systemSetting',
+                    label: 'Old',
+                    path: '/settings/system-setting',
+                },
+                {
+                    title: 'message.profile',
+                    label: 'Old',
+                    path: '/settings/profile',
+                },
+			]
+		},
     ],
 }
