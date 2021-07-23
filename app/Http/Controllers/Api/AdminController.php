@@ -1189,7 +1189,7 @@ class AdminController extends Controller{
         $all = $request->all();
         Booking::updateOrCreate(['id'=>$all['id']], $all);
         return response()->json([
-            'success'=>false,
+            'success'=>true,
         ]);
     }
 

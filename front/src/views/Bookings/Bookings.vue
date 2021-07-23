@@ -1017,9 +1017,10 @@ export default {
         });
         return
       }
+      this.editDialog = false;
       this.loading = true;
       api
-        .get("editBooking", JSON.stringify(this.selectedItem), {
+        .post("editBooking", JSON.stringify(this.selectedItem), {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.getUser.token}`,
@@ -1034,6 +1035,7 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+
     },
 
     checkExist(item) {
