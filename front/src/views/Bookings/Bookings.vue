@@ -155,7 +155,14 @@
                         <v-btn text block @click="view(item)">{{
                           $t("message.view")
                         }}</v-btn>
-                        <!--<v-btn text block @click="edit(item)" class="mt-1">{{$t("message.edit")}}</v-btn>!-->
+
+                        <v-btn
+                          v-if="getUser.role == 'provider'"
+                          text
+                          block
+                          @click="edit(item)"
+                          >{{ $t("message.editing") }}</v-btn
+                        >
                         <v-btn
                           text
                           block
@@ -490,6 +497,57 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="editDialog" max-width="700px">
+      <v-card v-if="service != null" class="m2 p-3">
+        <v-card-text>
+          <v-row>
+            <v-col xl="6" lg="6" md="6" sm="12" cols="12">
+              <v-date-picker
+                v-model="selectedItem.date"
+                :allowed-dates="mydate"
+              ></v-date-picker>
+            </v-col>
+            <v-col xl="6" lg="6" md="6" sm="12" cols="12">
+              <v-btn
+                @click="selectTime(item)"
+                color="primary"
+                :outlined="!checkExist(item)"
+                v-for="(item, index) in service.times"
+                :key="`${index}time`"
+                class="mt-2"
+                block
+              >
+                {{ item.from_time }} ~ {{ item.to_time }}
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col xl="8" lg="8" md="8" sm="8" cols="8">
+              <v-select
+                :label="$t('message.worker')"
+                item-text="full_name"
+                v-model="selectedItem.worker_id"
+                item-value="id"
+                :items="service.workers"
+              ></v-select>
+            </v-col>
+            <v-col xl="4" lg="4" md="4" sm="4" cols="4">
+              <img
+                :src="getImage"
+                class="rounded-circle"
+                width="50px"
+                height="50px"
+              />
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="error" @click.stop="editDialog = false">Close</v-btn>
+          <v-btn color="success" @click.stop="editBooking()">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -557,6 +615,25 @@ export default {
       });
       return vendors;
     },
+
+    getImage() {
+      if (this.service == null) {
+        return "";
+      }
+      let workers = this.service.workers.filter(
+        (worker) => worker.id == this.selectedItem.worker_id
+      );
+
+      if (this.selectedItem.worker_id != -1) {
+        let image = workers[0].image;
+        if (image) {
+          return `${this.baseUrl}uploads/workers/${image}`;
+        } else {
+          return `${this.baseUrl}static/avatars/male.png`;
+        }
+      }
+      return `${this.baseUrl}static/avatars/male.png`;
+    },
   },
   data: function () {
     return {
@@ -564,6 +641,7 @@ export default {
       bookings: [],
       search: "",
       baseUrl: appConfig.baseUrl,
+      editDialog: false,
       headers: [
         {
           text: this.$t("message.no"),
@@ -618,7 +696,6 @@ export default {
           text: this.$t("message.settings"),
         },
       ],
-
       excel_headers: {
         "Vendor Name": "vendor_en_name",
         "Invoice Url": {
@@ -642,21 +719,21 @@ export default {
         "Client Name": "full_name",
         "Worker Name": "worker_name",
         Amount: "amount",
-        Type:  {
+        Type: {
           field: "type",
           callback: (value) => {
             let stringValue = value.toUpperCase();
             return stringValue;
           },
         },
-        Payment:  {
+        Payment: {
           field: "payment_status",
           callback: (value) => {
             let stringValue = value.toUpperCase();
             return stringValue;
           },
         },
-        Status:  {
+        Status: {
           field: "state",
           callback: (value) => {
             let stringValue = value.toUpperCase();
@@ -664,11 +741,9 @@ export default {
           },
         },
       },
-
       selectedItem: {},
       imageUrl: "",
       dialog: false,
-
       vendors: [],
       payment_type: [
         {
@@ -720,13 +795,13 @@ export default {
           value: "rejected",
         },
       ],
-
-      filterBookings:[],
-
+      filterBookings: [],
       vendor_value: "",
       payment_type_value: "",
       payment_status_value: "",
       states_value: "",
+      service: null,
+      selectedTimeCount: 0,
     };
   },
   methods: {
@@ -758,11 +833,29 @@ export default {
     },
     view(item) {
       this.selectedItem = item;
+
       this.dialog = true;
     },
     edit(item) {
       this.selectedItem = item;
-      this.dialog = true;
+      this.selectedTimeCount = item.times.length;
+      this.loading = true;
+      this.editDialog = true;
+      api
+        .get(`getService/${item.service_id}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            let service = response.data.data;
+            this.service = service;
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     confirmBooking(item) {
       this.loading = true;
@@ -868,6 +961,102 @@ export default {
         amount += parseFloat(element.amount);
       });
       return amount.toFixed(2);
+    },
+
+    mydate(date) {
+      var today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      today.setMilliseconds(0);
+
+      date = new Date(date);
+      date.setHours(0);
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+
+      if (today > date) {
+        return false;
+      }
+      if (this.service.offdays.length > 0) {
+        let day = date.getDay();
+        if (this.service.offdays.includes(day)) {
+          return false;
+        }
+      }
+      if (this.service.holidays.length > 0) {
+        for (let index = 0; index < this.service.holidays.length; index++) {
+          const holiday = this.service.holidays[index];
+          let starting_date = new Date(holiday.starting_date);
+          starting_date.setHours(0);
+          starting_date.setMinutes(0);
+          starting_date.setSeconds(0);
+          starting_date.setMilliseconds(0);
+
+          let ending_date = new Date(holiday.ending_date);
+          ending_date.setHours(0);
+          ending_date.setMinutes(0);
+          ending_date.setSeconds(0);
+          ending_date.setMilliseconds(0);
+
+          if (date >= starting_date && date <= ending_date) {
+            return false;
+          }
+        }
+      }
+      return true;
+    },
+
+    editBooking() {
+      if(this.selectedTimeCount != this.selectedItem.times.length){
+        Vue.notify({
+          group: "loggedIn",
+          type: "error",
+          text: "You cant edit quantity, please check times correctly. you have to select same time count as before.",
+        });
+        return
+      }
+      this.loading = true;
+      api
+        .get("editBooking", JSON.stringify(this.selectedItem), {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.getUser.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            this.getBookings();
+          }
+        })
+        .catch((error) => {})
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+
+    checkExist(item) {
+      let check = false;
+      this.selectedItem.times.forEach((element) => {
+        if (element.id == item.id) {
+          check = true;
+        }
+      });
+      return check;
+    },
+
+    selectTime(item) {
+      if (this.checkExist(item)) {
+        this.selectedItem.times = this.selectedItem.times.filter(
+          (time) => time.id != item.id
+        );
+      } else {
+        if (this.service.multiple_bookings != 1) {
+          this.selectedItem.times = [];
+        }
+        this.selectedItem.times.push(item);
+      }
     },
   },
   mounted() {},

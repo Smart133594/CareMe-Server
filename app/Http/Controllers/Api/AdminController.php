@@ -1083,7 +1083,7 @@ class AdminController extends Controller{
                     $transaction->payment_status = 'refund';
                     $transaction->save();
                 }
-                $this->sendOrderingMailWithPDF($booking);
+                $this->sendOrderingMailWithPDF($order);
                 return response()->json([
                     'success'=>true,
                 ]);
@@ -1186,6 +1186,11 @@ class AdminController extends Controller{
     }
 
     public function editBooking(Request $request){
+        $all = $request->all();
+        Booking::updateOrCreate(['id'=>$all['id']], $all);
+        return response()->json([
+            'success'=>false,
+        ]);
     }
 
     public function sendBookingMail($booking){
