@@ -58,7 +58,7 @@ class AdminController extends Controller{
 
     public function saveSocialLinks(Request $request){
         $all = $request->all();
-        SocialLink::delete();
+        DB::table('social_links')->delete();
         SocialLink::create($all);
         return response()->json([
             'success'=>true,

@@ -9,15 +9,15 @@
         ></v-text-field>
         <v-text-field
           :label="$t('message.facebook')"
-          v-model="social.instagram"
+          v-model="social.facebook"
         ></v-text-field>
         <v-text-field
           :label="$t('message.twitter')"
-          v-model="social.instagram"
+          v-model="social.twitter"
         ></v-text-field>
         <v-text-field
           :label="$t('message.pinterest')"
-          v-model="social.instagram"
+          v-model="social.pinterest"
         ></v-text-field>
       </v-form>
       <v-btn color="success" @click="save()">{{ $t("message.save") }}</v-btn>
