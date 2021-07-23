@@ -118,8 +118,10 @@ export default {
     let image = type + name + "." + extension;
     if (type == "product") {
       type = "products";
-    } else {
+    } else if (type == "service"){
       type = "servicies";
+    }else{
+      type = "vendors";
     }
     this.imageUrl = `${this.baseUrl}uploads/${type}/${image}`;
   },

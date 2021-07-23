@@ -136,6 +136,14 @@
                           class="mt-1"
                           >{{ $t("message.delivered") }}</v-btn
                         >
+                        <v-btn
+                          text
+                          block
+                          @click="rejectOrder(item)"
+                          v-if="item.state == 'pending'"
+                          class="mt-1"
+                          >{{ $t("message.reject") }}</v-btn
+                        >
                       </v-list>
                     </v-menu>
                   </td>
@@ -394,6 +402,29 @@ export default {
       }
       api
         .post("deliveredOrder", JSON.stringify(model), {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.getUser.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            this.getOrders()
+          }
+        })
+        .catch((error) => {})
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+
+    rejectOrder(item){
+      this.loading = true;
+      let model = {
+        id : item.id
+      }
+      api
+        .post("rejectOrder", JSON.stringify(model), {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.getUser.token}`,

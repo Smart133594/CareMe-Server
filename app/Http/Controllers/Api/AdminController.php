@@ -26,6 +26,7 @@ use App\Models\Booking;
 use App\Models\WishList;
 use App\Models\Coupon;
 use App\Mail\BookingMail;
+use App\Mail\OrderingMail;
 use App\Models\AboutUs;
 use App\Models\Policy;
 use App\Models\DeliveryTerm;
@@ -1070,7 +1071,27 @@ class AdminController extends Controller{
     }
 
     public function rejectOrder(Request $request){
-        
+        $order = Ordering::find($request->id);
+        if($order){
+            if($order->state!="delivered"){
+                $order->state = "rejected";
+                $order->reason = "Provider rejected";
+                $order->save();
+                $transaction = $order->transaction;
+                if($transaction->payment_status == 'paid'){
+                    $feedback = $this->refundPayment($transaction->payment_id);
+                    $transaction->payment_status = 'refund';
+                    $transaction->save();
+                }
+                $this->sendOrderingMailWithPDF($booking);
+                return response()->json([
+                    'success'=>true,
+                ]);
+            }
+        }
+        return response()->json([
+            'success'=>false,
+        ]);
     }
 
     public function refundPayment($payment_id){
@@ -1170,4 +1191,10 @@ class AdminController extends Controller{
     public function sendBookingMail($booking){
         Mail::to($booking->email)->send(new BookingMail($booking));
     }
+
+    public function sendOrderingMailWithPDF($ordering)
+    {
+        Mail::to($ordering->email)->send(new OrderingMail($ordering, $ordering->invoice));
+    }
+
 }
