@@ -124,9 +124,12 @@ Route::Group(['namespace'=>'Api', 'middleware' => ['cors', 'auth:api']], functio
     Route::post('rejectBooking', 'AdminController@rejectBooking');
     Route::post('payBooking', 'AdminController@payBooking');
     Route::post('confirmBooking', 'AdminController@confirmBooking');
+    Route::post('editBooking', 'AdminController@editBooking');
 
     // Orders
     Route::get('getOrders', 'AdminController@getOrders');
+    Route::post('deliveredOrder', 'AdminController@deliveredOrder');
+    Route::post('rejectOrder', 'AdminController@rejectOrder');
 
     //Footer Part
     Route::post('saveAboutUs', 'AdminController@saveAboutUs');

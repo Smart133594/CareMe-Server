@@ -18,7 +18,7 @@
             </v-text-field>
             <v-spacer></v-spacer>
             <download-excel :data="filterOrders" :fields="excel_headers">
-                <v-btn text>Export</v-btn>
+              <v-btn text>Export</v-btn>
             </download-excel>
           </v-card-title>
 
@@ -102,8 +102,8 @@
                       :value="false"
                       class="p-2"
                       :class="{
-                        error: item.payment != 'paid',
-                        success: item.payment == 'paid',
+                        error: item.payment_status != 'paid',
+                        success: item.payment_status == 'paid',
                       }"
                       >{{ item.payment_status }}</v-badge
                     >
@@ -119,6 +119,25 @@
                       }"
                       >{{ item.state }}</v-badge
                     >
+                  </td>
+                  <td>
+                    <v-menu bottom left>
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon v-on="on">
+                          <v-icon>more_vert</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list style="cursor: pointer">
+                        <v-btn
+                          text
+                          block
+                          @click="deliveredOrder(item)"
+                          v-if="item.state == 'pending'"
+                          class="mt-1"
+                          >{{ $t("message.delivered") }}</v-btn
+                        >
+                      </v-list>
+                    </v-menu>
                   </td>
                 </tr>
                 <tr>
@@ -233,20 +252,23 @@ export default {
         {
           text: this.$t("message.state"),
         },
+        {
+          text: this.$t("message.settings"),
+        },
       ],
 
       excel_headers: {
-          "Vendor Name":"vendor_en_name",
-          "Invoice Url": {
+        "Vendor Name": "vendor_en_name",
+        "Invoice Url": {
           field: "invoice",
           callback: (value) => {
             return `${this.baseUrl}${value}`;
           },
         },
-         Date: "created_at",
-          
-         "Client Name": "full_name",
-         Item: {
+        Date: "created_at",
+
+        "Client Name": "full_name",
+        Item: {
           field: "carts",
           callback: (value) => {
             let stringValue = "";
@@ -256,15 +278,15 @@ export default {
             return stringValue;
           },
         },
-         Amount: "amount",
-        Payment:  {
+        Amount: "amount",
+        Payment: {
           field: "payment_status",
           callback: (value) => {
             let stringValue = value.toUpperCase();
             return stringValue;
           },
         },
-        Status:  {
+        Status: {
           field: "state",
           callback: (value) => {
             let stringValue = value.toUpperCase();
@@ -273,7 +295,7 @@ export default {
         },
       },
 
-      filterOrders:[],
+      filterOrders: [],
 
       vendors: [],
       payment_type: [
@@ -363,6 +385,29 @@ export default {
       });
       return amount.toFixed(2);
     },
+
+    deliveredOrder(item){
+      this.loading = true;
+      let model = {
+        id : item.id
+      }
+      api
+        .get("deliveredOrder", JSON.stringify(model), {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.getUser.token}`,
+          },
+        })
+        .then((response) => {
+          if (response.data.success) {
+            this.getOrders()
+          }
+        })
+        .catch((error) => {})
+        .finally(() => {
+          this.loading = false;
+        });
+    }
   },
   mounted() {},
   beforeMount() {

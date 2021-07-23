@@ -813,4 +813,5 @@ export default {
     facebook:"Facebook",
     twitter:"Twitter",
     pinterest:"Pinterest",
+    delivered:"Delivered"
 }

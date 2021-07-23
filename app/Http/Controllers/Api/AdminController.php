@@ -1057,6 +1057,21 @@ class AdminController extends Controller{
         ]);
     }
 
+    public function deliveredOrder(Request $request){
+        $id = $request->id;
+        $order = Ordering::find(id);
+        $all['state'] = 'pending';
+        $order->state = 'delivered';
+        $order->save();
+        return response()->json([
+            'success'=>true,
+        ]);
+    }
+
+    public function rejectOrder(Request $request){
+        
+    }
+
     public function refundPayment($payment_id){
         $baseUrl = config('app.THAWANI_BASE_URL');
         $user = Auth::user();
@@ -1146,6 +1161,9 @@ class AdminController extends Controller{
         return response()->json([
             'success'=>false,
         ]);
+    }
+
+    public function editBooking(Request $request){
     }
 
     public function sendBookingMail($booking){
