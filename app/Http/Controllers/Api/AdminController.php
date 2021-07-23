@@ -1060,7 +1060,7 @@ class AdminController extends Controller{
 
     public function deliveredOrder(Request $request){
         $id = $request->id;
-        $order = Ordering::find(id);
+        $order = Ordering::find($id);
         $all['state'] = 'pending';
         $order->state = 'delivered';
         $order->save();
