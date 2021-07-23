@@ -113,7 +113,7 @@
                       :value="false"
                       class="p-2"
                       :class="{
-                        info: item.state == 'confirmed',
+                        info: item.state == 'delivered',
                         error:
                           item.state == 'pending' || item.state == 'rejected',
                       }"

@@ -1,10 +1,10 @@
 <template>
   <div class="language-bar">
     <v-btn @click="changeLanguage()" text large class="ml-2 v-step-3">
-      <img
+      <!--<img
         class="img-responsive"
         :src="selectedLocale.locale == 'en' ? '/static/flag-icons/om.png' : '/static/flag-icons/uk.png'"
-      />
+      />-->
       <p style="color:white; margin-left:5px; margin-right:5px">{{selectedLocale.locale == "en" ? "العربية":"English"}}</p>
     </v-btn>
   </div>

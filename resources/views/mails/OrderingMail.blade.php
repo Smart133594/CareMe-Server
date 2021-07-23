@@ -34,7 +34,7 @@
                                 <div class="text-gray-600 text-sm">
                                     @if($ordering->state == 'pending')
                                         Your ordering is received. Please wait for Admins confirmation on your ordering!
-                                    @elseif($ordering->state == 'accepted')
+                                    @elseif($ordering->state == 'delivered')
                                         Your ordering has been confirmed. Please confirm products details from invoice.
                                     @elseif($ordering->state == 'rejected')
                                         Your ordering has been rejected.

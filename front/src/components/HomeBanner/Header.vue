@@ -40,23 +40,15 @@
           <b-nav-item href="/products/-1/-1/-1/-1/0,0/0,0" class="scroll"
             ><span>{{ $t("message.products") }}</span></b-nav-item
           >
-          <b-nav-item
-            v-for="language in languages"
-            :key="language.name"
-            @click="changeLanguage(language)"
-            class="scroll language-nav"
-          >
-           <div v-if="language.locale != selectedLocale.locale">
-              <img
-                class="img-responsive mr-3"
-                :src="`/static/flag-icons/${language.icon}.png`"
-              />
-              <span>{{ language.name }}</span>
-           </div>
+          <b-nav-item >
+           <CountryProvider/>
+          </b-nav-item>
+          <b-nav-item @click="changeLanguage(language)">
+            <span>{{ language.name }}</span>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
-      <language-provider></language-provider>
+      
       <b-btn-group class="header-config-wrapper">
         <b-btn class="header-config" @click="toggleClass('addClass', 'active')"
           ><i class="far fa-search"></i
@@ -69,6 +61,7 @@
 
 <script>
 import LanguageProvider from "../Header/LanguageProvider";
+import CountryProvider from "./CountryProvider";
 import Vue from "vue";
 import { mapGetters } from "vuex";
 import AppLogo from "Components/AppLogo/AppLogo";
@@ -79,6 +72,7 @@ import appConfig from "Constants/AppConfig";
 export default {
   components: {
     LanguageProvider,
+    CountryProvider,
     AppLogo,
     OffcanvasSearchBox,
   },
@@ -90,6 +84,16 @@ export default {
   },
   computed: {
     ...mapGetters(["getUser", "languages", "selectedLocale"]),
+
+    language(){
+      let language = null;
+      this.languages.forEach(element => {
+        if(element.locale != this.selectedLocale.locale){
+          language = element
+        }
+      });
+      return language
+    }
   },
   mounted() {
     // (function () {

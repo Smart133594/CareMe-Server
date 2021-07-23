@@ -35,7 +35,7 @@
                                     @if($booking->state == 'pending')
                                         Your booking is received. Please wait for Admins confirmation on your booking!
                                         Please confirm service details from invoice.
-                                    @elseif($booking->state == 'accepted')
+                                    @elseif($booking->state == 'confirmed')
                                         Your booking has been confirmed.
                                     @elseif($booking->state == 'rejected')
                                         Your booking has been rejected.

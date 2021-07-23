@@ -72,6 +72,37 @@
    }
 }
 
+.country-dropdown {
+   background-color: $base-light;
+   .dropdown-content {
+      .dropdown-top {
+         padding: 1rem 1.25rem;
+      }
+      .dropdown-list {
+         background: transparent !important;
+			.v-list-item{
+				// display: inline-flex;
+				justify-content: flex-start;
+				align-items: center;
+            // width: 46.5%;
+            box-shadow: 0 3px 2px 0 rgba(0, 0, 0, 0.02);
+            margin: 0.3125rem;
+				background-color: $light;
+				span {
+					font-size: $font-size-sm;
+					transition: color 0.3s ease;
+				}
+				&:hover {
+					span {
+						color: $primary !important;
+					}
+					background-color: $light !important;
+				}
+			}
+      }
+   }
+}
+
 .notification-dropdown {
    .dropdown-list {
       .v-list-item{

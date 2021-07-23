@@ -1,9 +1,6 @@
 <template>
   <div class="card center">
-    <div
-      id="main-image"
-      :style="{ backgroundImage: `url(${this.imageUrl})` }"
-    >
+    <div id="main-image" :style="{ backgroundImage: `url(${this.imageUrl})` }">
       <div id="inner-div"></div>
     </div>
     <div id="content-container">
@@ -13,20 +10,31 @@
         #1 Social Commerce platform in the Middle East
       </div>
       <div class="input-container">
-        <div class="input-label light">
-          Enter your phone number to download the app
-        </div>
-        <form>
-          <input placeholder="+96887654321" v-model="phone" type="text" class="light" />
-          <button type="button" @click="submit()" class="light">Send</button>
-        </form>
+        <div v-if="!mobile">
+          <div class="input-label light">
+            Enter your phone number to download the app
+          </div>
+          <form>
+            <input
+              placeholder="+96887654321"
+              v-model="phone"
+              type="text"
+              class="light"
+            />
+            <button type="button" @click="submit()" class="light">Send</button>
+          </form>
 
-        <p class="input-footnote light">
-          By entering your phone number, you consent to the use of your
-          phone number to send you a link to the app, and to the use of your
-          phone number in accordance with the app's privacy policy. Standard
-          rates apply.
-        </p>
+          <p class="input-footnote light">
+            By entering your phone number, you consent to the use of your phone
+            number to send you a link to the app, and to the use of your phone
+            number in accordance with the app's privacy policy. Standard rates
+            apply.
+          </p>
+        </div>
+        <div v-else>
+            <div class="app-title bold">See this content immediately after install</div>
+            <button style="width:100%; margin-top:10px"  type="button" @click="openApp()" class="light">Get The App</button>
+        </div>
       </div>
     </div>
   </div>
@@ -36,6 +44,8 @@
 import appConfig from "Constants/AppConfig";
 import api from "Api";
 import Vue from "vue";
+import device from "vue-device-detector";
+Vue.use(device);
 export default {
   components: {},
 
@@ -45,23 +55,24 @@ export default {
       baseUrl: appConfig.baseUrl,
       imageUrl: "",
       phone: "",
+      mobile: true,
     };
   },
   computed: {},
   methods: {
-    submit(){
-        let model = {
-          phone: this.phone
-        }
-        if(this.phone == ""){
-          Vue.notify({
-            group: "loggedIn",
-            type: "error",
-            text: "Please try again with a valid phone number",
-          });
-          return
-        }
-        api
+    submit() {
+      let model = {
+        phone: this.phone,
+      };
+      if (this.phone == "") {
+        Vue.notify({
+          group: "loggedIn",
+          type: "error",
+          text: "Please try again with a valid phone number",
+        });
+        return;
+      }
+      api
         .post("sendAppUrl", JSON.stringify(model), {
           headers: {
             "Content-Type": "application/json",
@@ -74,7 +85,7 @@ export default {
               type: "success",
               text: "Message sent correctly",
             });
-          }else{
+          } else {
             Vue.notify({
               group: "loggedIn",
               type: "error",
@@ -89,12 +100,17 @@ export default {
             text: "Message failed to send, please try again with a valid phone number",
           });
         })
-        .finally(() => {
-        });
+        .finally(() => {});
+    },
+
+    openApp(){
+      window.open(" https://play.google.com/store/apps/details?id=com.spokko.witchermonsterslayer","_self")
+     
     }
   },
 
   beforeMount() {
+    this.mobile = this.$device.mobile;
     let query = this.$route.query;
     let type = query.t;
     let name = query.n;
@@ -130,7 +146,7 @@ body {
   -ms-flex-direction: row;
   -moz-flex-direction: row;
 }
-@media (max-width: 767px){
+@media (max-width: 767px) {
   .card {
     width: 100%;
     flex-direction: column !important;
@@ -204,6 +220,7 @@ button {
   color: #fff;
   line-height: 27px;
   cursor: pointer;
+  padding: 8px;
 }
 .input-container > form {
   flex-direction: row;

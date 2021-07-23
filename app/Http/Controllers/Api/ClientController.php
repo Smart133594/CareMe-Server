@@ -1308,7 +1308,7 @@ class ClientController extends Controller
         $all['type'] = 'card';
         $all['state'] = 'pending';
         if ($auto_accept) {
-            $all['state'] = 'confirmed';
+            $all['state'] = 'delivered';
         }
 
         $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
@@ -1425,7 +1425,7 @@ class ClientController extends Controller
         $all['carts'] =  $carts;
         $pdf_name = 'uploads/invoicies/' . time() . "_invoice.pdf";
         $all['invoice'] = $pdf_name;
-        $all['state'] = 'confirmed';
+        $all['state'] = 'pending';
 
         $ordering = Ordering::create($all);
 

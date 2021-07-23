@@ -20,7 +20,7 @@ class CreateOrderingsTable extends Migration
             $table->boolean('delivery')->default(false);
             $table->integer('vendor_id');
             $table->text('carts')->nullable();
-            $table->enum('state', array('pending', 'confirmed', 'completed', 'rejected'))->default('pending');
+            $table->enum('state', array('pending', 'delivered', 'completed', 'rejected'))->default('pending');
             $table->string('reason')->nullable();
             $table->string('invoice')->nullable();
             $table->timestamps();

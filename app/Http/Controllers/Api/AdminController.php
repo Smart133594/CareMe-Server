@@ -1043,8 +1043,10 @@ class AdminController extends Controller{
             $products = [];
             foreach ($carts as $cart) {
                 $product = Product::find($cart['id']);
-                $product->quantity = $cart['quantity'];
-                array_push($products, $product);
+                if($product){
+                    $product->quantity = $cart['quantity'];
+                    array_push($products, $product);
+                }
             }
             $ordering->carts = $products;
         }
