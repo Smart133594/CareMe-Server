@@ -831,6 +831,7 @@ class ClientController extends Controller
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
         $data['amount_paid'] = '0.00';
         $data['items'] = $items;
+        $data['delivery_fee'] = number_format(0, 2, '.', '');
         $data['id'] = $booking->id;
         $department = $service->department;
         $vendor = $department->vendor;
