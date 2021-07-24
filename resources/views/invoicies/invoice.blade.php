@@ -194,7 +194,7 @@
                     </th>
                     @if($booking == false)
                         <td style="text-align: right; font-size: 15px; padding: 5px 10px;">
-                            <span>- @lang('invoice.currency') {{$delivery_fee}}</span>
+                            <span>@lang('invoice.currency') {{$delivery_fee}}</span>
                         </td>
                     @endif
                 </tr>
