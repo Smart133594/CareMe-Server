@@ -1330,6 +1330,7 @@ class ClientController extends Controller
         $data['tax'] = number_format($tax_amount, 2, '.', '');
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
         $data['amount_paid'] = '0.00';
+        $data['booking'] = true;
         $data['items'] = $items;
 
         App::setlocale($lang);
@@ -1440,6 +1441,7 @@ class ClientController extends Controller
         $data['tax'] = number_format($tax_amount, 2, '.', '');
         $data['coupon'] = number_format($coupon_amount, 2, '.', '');
         $data['delivery_fee'] = number_format($delivery_fee, 2, '.', '');
+        $data['booking'] = false;
         $data['amount_paid'] = '0.00';
         $data['items'] = $items;
         $data['id'] = $ordering->id;
