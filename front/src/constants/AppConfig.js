@@ -1,7 +1,7 @@
 /**
  * App Config File
  */
-const testMode = true
+const testMode = false
 // const dev_domain = 'http://localhost/'	                    			
 const dev_domain = 'http://dev.careme.om/'	                    			
 const domain = 'https://careme.om/'		
@@ -15,7 +15,7 @@ export default {
 	enableUserTour: process.env.NODE_ENV === 'production' ? true : false,   // Enable User Tour
 	googleApiKey: 'AIzaSyDHtGrrdXAMG6hAVxjuY5Pit5V8AHLwjyg',				// weather APi key,
 	baseUrl:testMode?dev_domain:domain,
-	payment_test: true,														// PAYMENT APi key,
-	payment_public_key: 'nTFkb94A6HUKTojVerBVlDs8ucMhrX',					// PAYMENT APi key, TEST
-	// payment_public_key: 'jDf6yrgcNb4Gj0h47cmGfpIvkGCwkL',					// PAYMENT APi key,
+	payment_test: false,														// PAYMENT APi key,
+	// payment_public_key: 'nTFkb94A6HUKTojVerBVlDs8ucMhrX',					// PAYMENT APi key, TEST
+	payment_public_key: 'jDf6yrgcNb4Gj0h47cmGfpIvkGCwkL',					// PAYMENT APi key,
 }

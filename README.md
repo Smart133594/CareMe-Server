@@ -20,3 +20,21 @@ caremeom@gmail.com
 Ommmmmm@909090
 
 
+-----------------------
+Install node.js, install xampp, install composer.
+xampp config file set your local server path.
+In your local paht run cmd command composer install.
+After that php artisan key:generate, after thta php artisan passport:install.
+all done for server.
+
+For the app, in your app, run cmd command npm install and then npm start.
+Also you have to install android studio for emulator and build.
+
+
+
+
+
+
+
+
+
